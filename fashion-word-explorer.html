@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Word Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Basic Reset & Setup --- */
+        :root {
+            --canvas-size: 76vh;
+            --border-color: #ddd;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --header-color: #222;
+            --tooltip-bg: #111;
+            --tooltip-text: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* --- Page Structure --- */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--header-color);
+        }
+
+        header p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: #666;
+            margin-top: 5px;
+        }
+
+        main {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Canvas Area --- */
+        canvas {
+            width: var(--canvas-size);
+            height: var(--canvas-size);
+            max-width: 800px;
+            max-height: 800px;
+            border: 1px dashed var(--border-color);
+            background-color: #fff;
+            border-radius: 8px;
+            cursor: crosshair;
+        }
+
+        /* --- Tooltip --- */
+        #tooltip {
+            position: fixed; /* Use fixed to stay within viewport */
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            pointer-events: none; /* Prevent tooltip from capturing mouse events */
+            opacity: 0;
+            transform: translate(-50%, -120%); /* Position above the cell */
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* --- Footer --- */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🧵 Fashion Word Explorer</h1>
+            <p>Explore the language of fashion. Hover over the silhouette.</p>
+        </header>
+    
+        <main>
+            <canvas id="fashionCanvas"></canvas>
+            <div id="tooltip"></div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; Beyond Dictionary, 2025</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA: 300+ Fashion Terms ---
+            const fashionWords = ["dress", "lively", "whatAcut", "walk", "pretty", "shiny clothes", "pink shoes", "fashion show", "color fun", "doll gown", "style", "shirt", "jeans", "Tees", "leather jackets", "cool trendy clothes", "What Makes You", "fashion week", "new shoes", "cotton", "#TheQueenWalks", "shorts", "sandals", "boots", "top model", "The Brilliant Looks", "fancy pants", "vibe", "brand", "fit", "runway look", "fashion trends", "fulltoStyle", "Walk Tall", "Jute bag", "silk scraf", "online haul", "Run Like A Bolt", "street style", "#SHEISBEST", "style icons", "Tuxedo", "Sari", "aesthetic", "culture", "undergarments", "identity", "personal expression", "avant garde", "haute couture", "design evolution", "fashion theory", "saree", "kurta", "Diwali looks", "infant wear", "ethnic wear", "belt", "Bollywood style", "jean jacket", "local boutique", "dupatta flair", "wedding suit", "kidswear", "fashion accessories", "kimono", "silk", "cute", "Harajuku fashion", "kawaii trends", "casual wear", "school uniform", "anime cosplay", "cardigan", "hat", "tech wear", "scarf", "chic", "punk", "Paris runway", "Milan fashion", "vintage store", "royal hat", "fashionista guide", "print", "tribe", "dance", "bead fashion", "colorful fabrics", "Everyday Freedom", "Jaisa Tum Chaho", "local designs", "Ab Stylish Dikho", "wax print", "head wraps", "jeans", "pop", "glam", "embroidery", "streetwear brand", "celeb outfit", "weddingwear", "thrift store", "cowboy boots", "sportswear culture", "Apna Niraala Andaaj", "trend", "clothing", "comfywear", "apparel", "outfit", "couture", "elegance", "fashion", "wardrobe", "look", "flair", "garment", "attire", "Shaan Ki Pehen", "wear", "vogue", "accessory", "feel the softness", "fashion icon", "designer wear", "elegant dress", "bold look", "glam outfit", "Bindaas Chalo", "Textile", "Sequin", "Silhouette", "Bespoke", "Velvet", "#DressCodeCreative", "#TheArtOfStyle", "#SustainableChic", "#RunwayToReality", "#OutfitOfTheDayInspo", "#VogueVibes", "The Boss Code", "Denim", "Bodice", "Glimmer", "Dapper", "Edgy", "Minimalist", "Bohemian", "Glamour", "Palette", "Motif", "Unstitched", "Loom", "Drapery", "Ornament", "Brocade", "Capsule Wardrobe", "Fast Fashion", "Color Palette", "Personal Shopper", "Fashion House", "Ready-to-Wear", "Sustainable Style", "Runway Model", "Mood Board", "Style Guide", "Look Book", "Graphic Tee", "Statement Piece", "Power Dressing", "Athleisure Wear", "Designer Label", "Pattern Making", "Textile Design", "Fashionista Vibe", "Style Setter", "Dress to express", "Your style your story", "Beyond the trend", "Wear your ambition", "Elegance is an attitude", "Define your own fashion", "Style is eternal", "Confidence is the best outfit", "Crafted for you", "Live your runway", "Dress like you're famous", "The art of dressing", "Find your flair", "Fashion for every moment", "Simply beautifully you", "Own your look", "Threads of confidence", "Where style begins", "More than just clothes", "Express your inner icon", "#WearYourStory", "#ThreadsOfJoy", "#MyStyleNarrative", "#FashionForwardThinking", "#CoutureCulture", "#StreetStyleSaga", "#ChicHappens", "#FabricFantasy", "#GlamGoals", "#StyleSculptor", "#EthnicElegance", "#DenimDiaries", "#BespokeBeauty", "#FashionFrame", "style evolution", "vintage flair", "casual chic", "runway debut", "fabric texture", "bold prints", "seasonal vibe"];
+
+            // --- Canvas & DOM Elements ---
+            const canvas = document.getElementById('fashionCanvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const tooltip = document.getElementById('tooltip');
+
+            // --- Configuration ---
+            const GRID_SIZE = 50; // 50x50 grid
+            let currentEmoji = '👗'; // Default, can be changed
+            let imageDataCache = null;
+            let canvasRect;
+
+            /**
+             * Sets up the canvas, draws the emoji, and caches its pixel data.
+             * This function is responsive and redraws on window resize.
+             */
+            function setupCanvas() {
+                // Get the actual size of the canvas from CSS (e.g., 76vh)
+                const size = canvas.getBoundingClientRect().width;
+                
+                // Set the canvas drawing buffer size to match its display size to avoid distortion
+                canvas.width = size;
+                canvas.height = size;
+                canvasRect = canvas.getBoundingClientRect();
+
+                // Clear canvas before drawing
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Configure font for drawing the emoji
+                // The font size is proportional to the canvas size to fill it
+                const fontSize = canvas.width * 0.85; 
+                ctx.font = `${fontSize}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // Draw the emoji in the center
+                ctx.fillText(currentEmoji, canvas.width / 2, canvas.height / 2);
+
+                // Cache the pixel data for fast lookups on mousemove
+                // This is the key to silhouette detection
+                try {
+                    imageDataCache = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                } catch (e) {
+                    console.error("Could not get image data:", e);
+                    // This can happen due to cross-origin issues if the canvas is tainted,
+                    // but is unlikely here since we are drawing the emoji ourselves.
+                }
+            }
+            
+            /**
+             * Handles the mousemove event on the canvas to show/hide tooltips.
+             * @param {MouseEvent} e - The mouse event.
+             */
+            function handleMouseMove(e) {
+                if (!imageDataCache) return;
+
+                // Get mouse coordinates relative to the canvas
+                const x = e.clientX - canvasRect.left;
+                const y = e.clientY - canvasRect.top;
+
+                // Ensure the mouse is within the canvas bounds
+                if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) {
+                    tooltip.style.opacity = '0';
+                    return;
+                }
+
+                // Check the alpha of the pixel under the cursor
+                // Each pixel is 4 values (R,G,B,A) in the data array
+                const pixelIndex = (Math.floor(y) * canvas.width + Math.floor(x)) * 4;
+                const alpha = imageDataCache.data[pixelIndex + 3];
+
+                // If pixel is transparent (not part of the emoji), hide tooltip
+                if (alpha < 50) { // Using a threshold to be safe
+                    tooltip.style.opacity = '0';
+                    return;
+                }
+                
+                // --- If pixel is visible, show and position the tooltip ---
+
+                // Calculate which grid cell the mouse is in
+                const cellWidth = canvas.width / GRID_SIZE;
+                const cellHeight = canvas.height / GRID_SIZE;
+                const cellX = Math.floor(x / cellWidth);
+                const cellY = Math.floor(y / cellHeight);
+
+                // Get the word for that cell using the repeating modulo pattern
+                const wordIndex = (cellY * GRID_SIZE + cellX) % fashionWords.length;
+                tooltip.textContent = fashionWords[wordIndex];
+
+                // Position the tooltip at the top-center of the hovered cell
+                // We use clientX/clientY for positioning relative to viewport
+                const tooltipX = canvasRect.left + (cellX * cellWidth) + (cellWidth / 2);
+                const tooltipY = canvasRect.top + (cellY * cellHeight);
+
+                tooltip.style.left = `${tooltipX}px`;
+                tooltip.style.top = `${tooltipY}px`;
+                tooltip.style.opacity = '1';
+            }
+            
+            /**
+             * Hides the tooltip when the mouse leaves the canvas.
+             */
+            function handleMouseLeave() {
+                tooltip.style.opacity = '0';
+            }
+
+
+            // --- Event Listeners ---
+            window.addEventListener('resize', setupCanvas);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseleave', handleMouseLeave);
+
+            // --- Initial Setup ---
+            setupCanvas();
+        });
+    </script>
+
+</body>
+</html>
