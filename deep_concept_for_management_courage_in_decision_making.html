@@ -1,0 +1,2280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Courage in Management: Building Everyday Courage for Better Decisions | Beyond Dictionary</title>
+  <meta name="description" content="Master the art of everyday courage in management: develop intellectual, creative, and physical courage to lead with integrity while navigating organizational politics and cultural dynamics." />
+  <meta name="keywords" content="management courage, leadership development, intellectual courage, creative courage, physical courage, decision making, organizational behavior, cross-cultural management" />
+  <meta property="og:title" content="Courage in Management: Building Everyday Courage for Better Decisions" />
+  <meta property="og:description" content="Transform from risk-averse manager to courageous leader. The practical guide to developing three types of courage that drive better decisions and stronger teams." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://www.beyonddictionary.com/articles/courage-in-management" />
+  <meta property="og:image" content="https://www.beyonddictionary.com/assets/courage-management-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Courage in Management: Building Everyday Courage for Better Decisions" />
+  <meta name="twitter:description" content="Develop intellectual, creative, and physical courage for better management decisions. Practical frameworks for everyday courage across cultures and contexts." />
+  <meta name="twitter:image" content="https://www.beyonddictionary.com/assets/courage-management-card.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --text:#212529; --bg:#fff; --muted:#f8f9fa; --border:#e9ecef;
+      --accent:#fd7e14; --accent-2:#e87312; --header-bg:#212529; --header-fg:#f8f9fa;
+      --ok:#198754; --ok-soft:#d1e7dd; --bad:#dc3545; --bad-soft:#f8d7da;
+      --myth-color: #6c757d; --myth-soft: #e9ecef;
+      
+      /* Keep some management-specific colors but using Python's base scheme */
+      --primary-courage: #fd7e14;
+      --secondary-wisdom: #198754;
+      --accent-growth: #6f42c1;
+      --text-primary: #212529;
+      --text-secondary: #495057;
+      --text-muted: #6c757d;
+      --border-light: #e9ecef;
+      --border-medium: #dee2e6;
+      --background-white: #ffffff;
+      --background-gray: #f8f9fa;
+      --background-light: #f8f9fa;
+      --success-action: #198754;
+      --warning-caution: #ffc107;
+      --danger-fear: #dc3545;
+      --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.1);
+      --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-size: 15px;
+    }
+
+    /* ================= Header / Footer / Breadcrumbs ================= */
+    .site-header,.site-footer{background:var(--header-bg);color:var(--header-fg);padding:14px 24px}
+    .site-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+    .logo{font-weight:700;font-size:1.15rem;color:#fff;text-decoration:none}
+    .site-header nav{display:flex;gap:14px} 
+    .site-header nav a{color:#ced4da;text-decoration:none} 
+    .site-header nav a:hover{color:#fff}
+    .site-footer{text-align:center;margin-top:50px;padding:40px}
+    .breadcrumbs{margin-bottom:24px;font-size:0.9rem;color:#6c757d;padding:0 24px} 
+    .breadcrumbs a{color:var(--accent);text-decoration:none}
+    .breadcrumbs a:hover{text-decoration:underline}
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+      background: var(--bg);
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding: 1.5rem 0 1rem 0;
+      background: var(--background-white);
+      border-radius: 8px;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .main-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--accent-growth);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .byline-container {
+      height: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .byline {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .byline.active {
+      opacity: 1;
+    }
+
+    .main-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .story-intro {
+      background: linear-gradient(135deg, rgba(194, 65, 12, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border-left: 4px solid var(--primary-courage);
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .story-highlight {
+      font-style: normal;
+      color: var(--primary-courage);
+      font-weight: 700;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 2px solid rgba(194, 65, 12, 0.1);
+    }
+
+    .law-overview {
+      background: linear-gradient(135deg, rgba(194, 65, 12, 0.03) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border: 1px solid rgba(194, 65, 12, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .law-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-courage);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .law-quote {
+      font-size: 1.2rem;
+      color: var(--accent-growth);
+      margin-bottom: 1rem;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    /* Image Frame */
+    .img-frame {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      overflow: hidden;
+      border-radius: 12px;
+      background: transparent;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .img-frame img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .story-section {
+      background: rgba(194, 65, 12, 0.02);
+      padding: 1.2rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+      border-left: 3px solid var(--primary-courage);
+    }
+
+    .story-section p {
+      margin-bottom: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .story-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .story-dialogue {
+      font-style: italic;
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border-medium);
+    }
+
+    .interactive-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 1.2rem;
+      box-shadow: var(--shadow-subtle);
+      margin: 1.5rem 0;
+    }
+
+    .interactive-card h3 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .poll-options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .poll-option {
+      padding: 0.7rem;
+      margin: 0.4rem 0;
+      background: var(--background-gray);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .poll-option:hover {
+      border-color: var(--secondary-wisdom);
+      background: rgba(5, 150, 105, 0.1);
+    }
+
+    .poll-option.selected {
+      background: rgba(253, 126, 20, 0.1) !important;
+      border-color: var(--accent) !important;
+      font-weight: bold;
+    }
+
+    .poll-option input:checked + label {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .poll-option input[type="radio"], .poll-option input[type="checkbox"] {
+      margin-right: 1.2rem;
+      accent-color: var(--primary-courage);
+    }
+
+    .slider-container {
+      padding: 1rem 0;
+    }
+
+    .slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border-light);
+      outline: none;
+      appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-courage);
+      cursor: pointer;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .slider-value {
+      text-align: center;
+      margin-top: 0.6rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .feedback-message {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+      font-style: italic;
+      opacity: 0;
+      transition: all 0.3s ease;
+      min-height: 20px;
+    }
+
+    .feedback-message.show {
+      opacity: 1;
+    }
+
+    .feedback-positive {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border-left: 3px solid var(--success-action);
+      color: var(--text-secondary);
+    }
+
+    .feedback-supportive {
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border-left: 3px solid var(--secondary-wisdom);
+      color: var(--text-secondary);
+    }
+
+    .feedback-encouraging {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border-left: 3px solid var(--accent-growth);
+      color: var(--text-secondary);
+    }
+
+    .courage-meter {
+      background: linear-gradient(135deg, rgba(5, 150, 105, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border: 1px solid rgba(5, 150, 105, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .meter-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--secondary-wisdom);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .courage-scale {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .courage-level {
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .courage-level:nth-child(1) { background: #fef3c7; color: #92400e; }
+    .courage-level:nth-child(2) { background: #fed7aa; color: #c2410c; }
+    .courage-level:nth-child(3) { background: #fdba74; color: #ea580c; }
+    .courage-level:nth-child(4) { background: #fb923c; color: #c2410c; }
+    .courage-level:nth-child(5) { background: #f97316; color: white; }
+
+    .courage-level:hover, .courage-level.selected {
+      border-color: var(--secondary-wisdom);
+      transform: translateY(-2px);
+    }
+
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .question-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-deep);
+    }
+
+    .question-card.expanded {
+      background: linear-gradient(135deg, rgba(194, 65, 12, 0.02) 0%, var(--background-white) 100%);
+    }
+
+    .question-number {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary-courage);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .question-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 0.8rem;
+      padding-right: 40px;
+      line-height: 1.3;
+    }
+
+    .question-content {
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .question-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .question-card.expanded .question-details {
+      max-height: 800px;
+    }
+
+    .question-content ul {
+      margin: 0.8rem 0;
+      padding-left: 1.2rem;
+    }
+
+    .question-content li {
+      margin-bottom: 0.4rem;
+    }
+
+    .question-content strong {
+      color: var(--text-primary);
+    }
+
+    .use-case {
+      background: rgba(194, 65, 12, 0.05);
+      padding: 0.8rem;
+      border-radius: 4px;
+      margin: 0.8rem 0;
+      border-left: 3px solid var(--primary-courage);
+    }
+
+    .use-case h5 {
+      color: var(--primary-courage);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .use-case ul {
+      margin: 0;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    /* Quiz Styles */
+    .quiz-container {
+      margin: 20px 0;
+    }
+    .quiz-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--background-gray);
+      border-radius: 8px;
+    }
+    .nav-btn {
+      background: var(--primary-courage);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: #9a3412;
+    }
+    .nav-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .question-counter {
+      font-weight: bold;
+      color: var(--primary-courage);
+      font-size: 16px;
+    }
+    .quiz-container .quiz {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      background: var(--background-white);
+      display: none;
+      visibility: hidden;
+    }
+    .quiz-container .quiz.active {
+      display: block !important;
+      visibility: visible !important;
+    }
+    .quiz.correct {
+      border-color: var(--success-action);
+      background: #e8f5e9;
+    }
+    .quiz.wrong {
+      border-color: var(--danger-fear);
+      background: #fce4e4;
+    }
+    .quiz p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .quiz label {
+      display: block;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      cursor: pointer;
+      background: var(--background-gray);
+      transition: all 0.3s ease;
+    }
+    .quiz label:hover {
+      background: #f0f0f0;
+      border-color: var(--primary-courage);
+    }
+    .quiz input[type="radio"] {
+      margin-right: 12px;
+      transform: scale(1.2);
+      accent-color: var(--primary-courage);
+    }
+    .explanation {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: var(--background-gray);
+      border-left: 4px solid var(--primary-courage);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .quiz.show .explanation {
+      display: block;
+    }
+    .quiz label.selected {
+      font-weight: bold;
+      background: rgba(194, 65, 12, 0.1);
+      border-color: var(--primary-courage);
+    }
+    .quiz label.correct-answer {
+      background: var(--ok-soft) !important;
+      border-color: var(--ok) !important;
+      color: var(--ok) !important;
+      font-weight: bold;
+    }
+    .quiz label.wrong-answer {
+      background: var(--bad-soft) !important;
+      border-color: var(--bad) !important;
+      color: var(--bad) !important;
+      font-weight: bold;
+    }
+
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .case-study-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 1rem;
+      box-shadow: var(--shadow-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .case-study-card:hover {
+      border-color: var(--primary-courage);
+      box-shadow: var(--shadow-card);
+    }
+
+    .case-study-card.selected {
+      border-color: var(--primary-courage);
+      background: linear-gradient(135deg, rgba(194, 65, 12, 0.03) 0%, var(--background-white) 100%);
+    }
+
+    .case-title {
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 0.5rem;
+    }
+
+    .case-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .courage-types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .courage-type-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .courage-type-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-deep);
+    }
+
+    .type-icon {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+    }
+
+    .intellectual-card .type-icon {
+      background: var(--accent-growth);
+    }
+
+    .creative-card .type-icon {
+      background: var(--secondary-wisdom);
+    }
+
+    .physical-card .type-icon {
+      background: var(--primary-courage);
+    }
+
+    .type-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      padding-right: 60px;
+      line-height: 1.3;
+    }
+
+    .intellectual-card .type-title {
+      color: var(--accent-growth);
+    }
+
+    .creative-card .type-title {
+      color: var(--secondary-wisdom);
+    }
+
+    .physical-card .type-title {
+      color: var(--primary-courage);
+    }
+
+    .type-definition {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .type-examples {
+      list-style: none;
+      padding: 0;
+    }
+
+    .type-examples li {
+      background: rgba(0, 0, 0, 0.02);
+      padding: 0.5rem 0.8rem;
+      margin: 0.4rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      border-left: 3px solid var(--border-light);
+    }
+
+    .intellectual-card .type-examples li {
+      border-left-color: var(--accent-growth);
+    }
+
+    .creative-card .type-examples li {
+      border-left-color: var(--secondary-wisdom);
+    }
+
+    .physical-card .type-examples li {
+      border-left-color: var(--primary-courage);
+    }
+
+    .warning-signs {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .warning-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--danger-fear);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .signs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.6rem;
+      margin: 1rem 0;
+    }
+
+    .sign-item {
+      background: var(--background-white);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 4px;
+      padding: 0.7rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-align: center;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .sign-item:hover {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: var(--danger-fear);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 0.8rem;
+      }
+      
+      .main-card {
+        padding: 1rem;
+      }
+      
+      .main-title {
+        font-size: 1.8rem;
+      }
+      
+      .questions-grid, .case-studies-grid, .courage-types-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .courage-scale {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="#" class="logo">Beyond Dictionary</a>
+    <nav><a href="#">What's New</a><a href="#">Learning</a><a href="#">Games & Quizzes</a><a href="#">Blog</a></nav>
+</header>
+
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#">Management</a> > <a href="#">Leadership</a> > <a href="#">Decision Making</a> > Courage in Management</nav>
+
+<div class="container">
+    <header class="page-header">
+      <h1 class="main-title">Courage in Management</h1>
+      <div class="subtitle">Building Everyday Courage for Better Decisions</div>
+      <div class="byline-container">
+        <div class="byline active">How to develop intellectual, creative, and physical courage that drives better management decisions.</div>
+        <div class="byline">From risk-averse manager to courageous leader who models integrity under pressure.</div>
+        <div class="byline">The practical guide to building courage that transforms teams and outcomes.</div>
+        <div class="byline">When better decisions require the courage to question, experiment, and show up.</div>
+        <div class="byline">Developing the daily courage habits that separate good managers from great leaders.</div>
+      </div>
+    </header>
+
+    <!-- Hero Image -->
+    <div class="img-frame">
+      <img src="courage-management-card.png" alt="Illustration representing Courage in Management showing a diverse group of managers from different cultural backgrounds demonstrating intellectual courage through questioning, creative courage through experimentation, and physical courage through presence during difficult moments.">
+    </div>
+
+    <main class="main-card">
+      <div class="story-intro">
+        Rajesh had been the operations manager at the Gurugram manufacturing plant for three years when he faced the pattern. <span class="story-highlight">Every monthly review, the same quality issues surfaced, but no one questioned why the root cause analysis kept pointing to "operator error."</span> His boss wanted quick fixes, the floor supervisors insisted their methods worked, and corporate demanded better numbers. <span class="story-highlight">The day a major client threatened to switch suppliers, Rajesh realized something fundamental: management courage wasn't about heroic moments—it was about the daily choice to question assumptions, test better approaches, and show up for difficult conversations</span>. The question wasn't whether he had the answers, but whether he had the courage to ask the right questions and act on what he discovered.
+      </div>
+
+      <div class="law-overview">
+        <div class="law-title">Courage in Management</div>
+        <div class="law-quote">"Courage is not the absence of fear, but action in spite of it."</div>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.5;">The practice of developing intellectual courage to question assumptions, creative courage to test new approaches, and physical courage to be present in difficult moments. Master the daily habits that transform fear-based management into values-driven leadership.</p>
+      </div>
+
+      <section class="section">
+        <h2 class="section-title">🎯 The Three Types of Management Courage</h2>
+        <div class="story-section">
+          <p><strong>🌏 Universal Yet Personal:</strong> From Mumbai to São Paulo, Stockholm to Lagos, managers face the same fundamental challenge—how to lead with courage when fear feels safer. The contexts change, but the need for intellectual honesty, creative risk-taking, and physical presence remains constant across cultures.</p>
+        </div>
+
+        <div class="courage-types-grid">
+          <div class="courage-type-card intellectual-card">
+            <div class="type-icon">🧠</div>
+            <h3 class="type-title">Intellectual Courage</h3>
+            <div class="type-definition">
+              The willingness to question your own assumptions, admit when you're wrong, and change your mind based on new evidence. It's about separating your ego from your ideas.
+            </div>
+            <ul class="type-examples">
+              <li>Asking "What am I missing?" in team meetings</li>
+              <li>Publicly updating decisions when data changes</li>
+              <li>Inviting dissent and celebrating being corrected</li>
+              <li>Questioning successful processes for improvement</li>
+            </ul>
+          </div>
+
+          <div class="courage-type-card creative-card">
+            <div class="type-icon">🎨</div>
+            <h3 class="type-title">Creative Courage</h3>
+            <div class="type-definition">
+              The boldness to test new ideas through small experiments, treating failure as learning data rather than personal defeat. It's about backing innovation despite uncertainty.
+            </div>
+            <ul class="type-examples">
+              <li>Running "bad idea" brainstorms to unlock thinking</li>
+              <li>Piloting new approaches on small scales</li>
+              <li>Supporting team experiments with clear learning goals</li>
+              <li>Asking "What did we learn?" instead of "Did it work?"</li>
+            </ul>
+          </div>
+
+          <div class="courage-type-card physical-card">
+            <div class="type-icon">🏃</div>
+            <h3 class="type-title">Physical Courage</h3>
+            <div class="type-definition">
+              The commitment to show up in person during difficult moments, spending unscripted time with your team when things get uncomfortable. It's about presence over delegation.
+            </div>
+            <ul class="type-examples">
+              <li>Walking the floor during crisis situations</li>
+              <li>Attending difficult conversations instead of sending emails</li>
+              <li>Being visible when team morale is low</li>
+              <li>Taking frontline shifts when teams are overwhelmed</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🌍 Choose Your Management Context</h2>
+        <div class="story-section">
+          <p><strong>🌐 Cultural Context Matters:</strong> Courage manifests differently across cultures, but the core principles remain universal. Your approach must adapt to local dynamics while maintaining authentic leadership presence.</p>
+        </div>
+
+        <div class="case-studies-grid" id="contextCards">
+          <div class="case-study-card" data-context="manufacturing" onclick="selectContext(this, 'manufacturing')">
+            <div class="case-title">🏭 Manufacturing & Operations</div>
+            <div class="case-description">
+              <strong>Priya (Chennai)</strong> needed to challenge safety procedures that "had always worked" after a near-miss incident. Her team respected hierarchy, but lives were at stake.
+              <br><br><strong>Your Challenge:</strong> Questioning established processes while maintaining team respect and operational continuity.
+            </div>
+          </div>
+
+          <div class="case-study-card" data-context="technology" onclick="selectContext(this, 'technology')">
+            <div class="case-title">💻 Technology & Innovation</div>
+            <div class="case-description">
+              <strong>Alex (Bangalore)</strong> saw that their "best practices" were actually slowing down delivery. The engineering team feared changing what wasn't obviously broken.
+              <br><br><strong>Your Challenge:</strong> Driving innovation when success creates comfort with status quo approaches.
+            </div>
+          </div>
+
+          <div class="case-study-card" data-context="healthcare" onclick="selectContext(this, 'healthcare')">
+            <div class="case-title">🏥 Healthcare & Services</div>
+            <div class="case-description">
+              <strong>Dr. Sarah (Mumbai)</strong> noticed patterns in patient complaints that protocols didn't address. Speaking up might imply criticism of senior colleagues.
+              <br><br><strong>Your Challenge:</strong> Advocating for improvement in life-critical environments with complex hierarchies.
+            </div>
+          </div>
+
+          <div class="case-study-card" data-context="education" onclick="selectContext(this, 'education')">
+            <div class="case-title">📚 Education & Development</div>
+            <div class="case-description">
+              <strong>Maria (São Paulo)</strong> realized traditional teaching methods weren't reaching her diverse students. Parents expected conventional approaches.
+              <br><br><strong>Your Challenge:</strong> Innovating in environments where stakeholders have strong expectations about "how things should be done."
+            </div>
+          </div>
+
+          <div class="case-study-card" data-context="finance" onclick="selectContext(this, 'finance')">
+            <div class="case-title">💰 Finance & Banking</div>
+            <div class="case-description">
+              <strong>Ahmed (Dubai)</strong> identified risk patterns that existing models missed. Challenging quantitative systems required exceptional evidence and political skill.
+              <br><br><strong>Your Challenge:</strong> Questioning analytical frameworks when numbers seem objective but context is missing.
+            </div>
+          </div>
+
+          <div class="case-study-card" data-context="retail" onclick="selectContext(this, 'retail')">
+            <div class="case-title">🛍️ Retail & Customer Service</div>
+            <div class="case-description">
+              <strong>Lisa (Berlin)</strong> watched customer behavior that contradicted corporate assumptions about shopping preferences. Data told one story, daily observation another.
+              <br><br><strong>Your Challenge:</strong> Balancing corporate direction with frontline insights and customer reality.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">⚡ Your Courage Assessment</h2>
+        <div class="courage-meter">
+          <div class="meter-title">How do you typically respond when management decisions require courage?</div>
+          <div class="courage-scale" id="courageScale">
+            <div class="courage-level" data-level="1">
+              <div>Avoidant</div>
+              <small>Postpone difficult decisions</small>
+            </div>
+            <div class="courage-level" data-level="2">
+              <div>Reactive</div>
+              <small>Act only when forced by crisis</small>
+            </div>
+            <div class="courage-level" data-level="3">
+              <div>Measured</div>
+              <small>Balance risks with stakeholder needs</small>
+            </div>
+            <div class="courage-level" data-level="4">
+              <div>Proactive</div>
+              <small>Address issues before they escalate</small>
+            </div>
+            <div class="courage-level" data-level="5">
+              <div>Courageous</div>
+              <small>Model integrity despite discomfort</small>
+            </div>
+          </div>
+          <div class="feedback-message" id="courageFeedback"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🔥 The Seven Difficult Management Courage Questions</h2>
+        <p style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1rem; line-height: 1.6;">
+          These questions help identify where courage is needed most in your management practice. They reveal the difference between managing from fear and leading with integrity.
+        </p>
+        
+        <div class="questions-grid">
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">1</div>
+            <h3 class="question-title">"What assumption am I protecting instead of testing?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Challenging our own beliefs feels like threatening our competence, especially in front of our teams.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Operations managers, department heads, team leaders responsible for consistent performance</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>When metrics look good but team frustration is growing, or when "best practices" feel increasingly disconnected from current reality.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Ask your team: "What would you change about our process if you could?" Listen without defending current methods.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">2</div>
+            <h3 class="question-title">"Where am I avoiding difficult conversations?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Direct conversations risk conflict, and many management cultures prioritize harmony over honesty.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Middle managers caught between senior expectations and team reality; anyone managing across cultural differences</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>When performance issues persist despite "mentoring," or when team dynamics are affecting outcomes but no one addresses it directly.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Schedule the conversation within 48 hours. Focus on specific behaviors and outcomes, not personality or character.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">3</div>
+            <h3 class="question-title">"What small experiment could test my biggest worry?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Experiments feel risky, but avoiding them is often riskier in the long term.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Managers in regulated industries, traditional organizations, or anywhere innovation feels politically dangerous</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>When you suspect current approaches are suboptimal but stakeholders resist change without "proof it will work better."</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Design a two-week pilot with clear success metrics. Make it so small that failure teaches rather than threatens.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">4</div>
+            <h3 class="question-title">"When do I delegate my discomfort instead of showing up?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Physical presence during difficult times feels inefficient, but its impact on trust and morale is often decisive.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Senior managers, executives, or anyone whose role creates distance from daily operations</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>During layoffs, major changes, crisis response, or when team morale is fragile and leadership visibility matters.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Block time for unstructured presence. Show up without agenda, ask how people are doing, and listen.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">5</div>
+            <h3 class="question-title">"What would I do if I knew I couldn't fail?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> This question reveals how much fear constrains our thinking about what's possible for our teams.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Managers in underperforming departments, teams with untapped potential, or high-pressure environments</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>When your gut tells you the team could achieve more, but risk aversion keeps you from trying new approaches.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Identify one element from your "couldn't fail" vision and test it as a low-stakes experiment.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">6</div>
+            <h3 class="question-title">"How do I model learning from mistakes?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Admitting errors feels like undermining authority, but hiding them undermines trust and learning.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Managers in hierarchical cultures, anyone who feels their credibility depends on being "right"</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>After project setbacks, missed deadlines, or when your initial judgment proves wrong and the team is watching your response.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Share what you learned, what you'll do differently, and thank anyone who helped you see the issue.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" onclick="toggleQuestion(this)">
+            <div class="question-number">7</div>
+            <h3 class="question-title">"What's the cost of my team not seeing me take risks?"</h3>
+            <div class="question-content">
+              <p><strong>Why it's hard:</strong> Safe management feels responsible, but it can teach teams to avoid necessary risks and limit their growth.</p>
+              <div class="question-details">
+                <div class="use-case">
+                  <h5>Typical Context:</h5>
+                  <ul><li>Experienced managers, mentors, or anyone whose team looks to them for examples of professional courage</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Use Case:</h5>
+                  <ul><li>When your team needs to innovate, adapt, or develop but your risk-averse modeling is teaching them to play it safe.</li></ul>
+                </div>
+                <div class="use-case">
+                  <h5>Courage Practice:</h5>
+                  <ul><li>Take a visible, appropriate risk and narrate your thinking so your team learns how to evaluate and take good risks.</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🧠 Test Your Management Courage Mastery</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Navigate these challenging management scenarios to test your understanding of courage in practice:</p>
+        
+        <div class="quiz-container">
+          <div class="quiz-navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeQuestion(-1)">← Previous</button>
+            <span class="question-counter">
+              <span id="currentQ">1</span> of <span id="totalQ">5</span>
+            </span>
+            <button class="nav-btn" id="nextBtn" onclick="changeQuestion(1)">Next →</button>
+          </div>
+
+          <div class="quiz" id="quiz1" data-correct="3" data-explanation="Option C demonstrates intellectual courage by questioning successful processes and inviting team input. This shows willingness to challenge assumptions even when things seem to be working, which is essential for continuous improvement and preventing complacency.">
+            <p><strong>Q1:</strong> Your team consistently hits targets using methods you implemented two years ago. However, you notice other departments achieving similar results faster with different approaches. How do you demonstrate intellectual courage?</p>
+            <label><input type="radio" name="q1" value="1"> Wait until performance drops before considering changes to proven methods</label>
+            <label><input type="radio" name="q1" value="2"> Research other methods privately before making any changes</label>
+            <label><input type="radio" name="q1" value="3"> Ask your team "What would you change about our process if you could?" and genuinely listen</label>
+            <label><input type="radio" name="q1" value="4"> Defend current methods since they deliver results</label>
+            <div class="explanation"><strong>Explanation:</strong> Option C demonstrates intellectual courage by questioning successful processes and inviting team input. This shows willingness to challenge assumptions even when things seem to be working, which is essential for continuous improvement and preventing complacency.</div>
+          </div>
+
+          <div class="quiz" id="quiz2" data-correct="2" data-explanation="Option B shows creative courage by designing a small experiment that tests the new approach without major risk. This demonstrates the courage to try new methods while maintaining responsibility to the team and organization through careful piloting.">
+            <p><strong>Q2:</strong> A team member suggests a radically different approach to your biggest challenge. Your initial reaction is skepticism because it contradicts your experience, but you notice the idea has merit. How do you show creative courage?</p>
+            <label><input type="radio" name="q2" value="1"> Implement the idea immediately to show trust in your team</label>
+            <label><input type="radio" name="q2" value="2"> Design a two-week pilot to test the approach on a small scale</label>
+            <label><input type="radio" name="q2" value="3"> Ask the team member to develop the idea more thoroughly first</label>
+            <label><input type="radio" name="q2" value="4"> Explain why your experience suggests it won't work</label>
+            <div class="explanation"><strong>Explanation:</strong> Option B shows creative courage by designing a small experiment that tests the new approach without major risk. This demonstrates the courage to try new methods while maintaining responsibility to the team and organization through careful piloting.</div>
+          </div>
+
+          <div class="quiz" id="quiz3" data-correct="4" data-explanation="Option D exemplifies physical courage by being present during difficult conversations and taking responsibility for outcomes. This builds trust and demonstrates that you don't delegate uncomfortable situations, which is essential for authentic leadership.">
+            <p><strong>Q3:</strong> Your department needs to implement budget cuts that will affect team roles and responsibilities. Your supervisor suggests handling this through email and individual meetings to "minimize disruption." How do you demonstrate physical courage?</p>
+            <label><input type="radio" name="q3" value="1"> Follow the supervisor's suggestion since they know the organization better</label>
+            <label><input type="radio" name="q3" value="2"> Schedule individual meetings but do them in person rather than email</label>
+            <label><input type="radio" name="q3" value="3"> Delegate the conversations to senior team members who know everyone well</label>
+            <label><input type="radio" name="q3" value="4"> Call a team meeting to explain the situation directly and answer questions in person</label>
+            <div class="explanation"><strong>Explanation:</strong> Option D exemplifies physical courage by being present during difficult conversations and taking responsibility for outcomes. This builds trust and demonstrates that you don't delegate uncomfortable situations, which is essential for authentic leadership.</div>
+          </div>
+
+          <div class="quiz" id="quiz4" data-correct="1" data-explanation="Option A demonstrates intellectual courage by openly acknowledging the error and focusing on learning rather than blame. This creates psychological safety for the team to learn from mistakes and prevents similar issues in the future.">
+            <p><strong>Q4:</strong> You made a decision based on incomplete information that led to wasted resources and missed deadlines. The team is looking to you for response, and senior management wants explanations. How do you model intellectual courage?</p>
+            <label><input type="radio" name="q4" value="1"> Acknowledge the error, explain what you learned, and outline how to prevent similar issues</label>
+            <label><input type="radio" name="q4" value="2"> Focus on the positive outcomes that came from the decision</label>
+            <label><input type="radio" name="q4" value="3"> Emphasize that the information available at the time justified the decision</label>
+            <label><input type="radio" name="q4" value="4"> Identify the systemic issues that led to incomplete information</label>
+            <div class="explanation"><strong>Explanation:</strong> Option A demonstrates intellectual courage by openly acknowledging the error and focusing on learning rather than blame. This creates psychological safety for the team to learn from mistakes and prevents similar issues in the future.</div>
+          </div>
+
+          <div class="quiz" id="quiz5" data-correct="3" data-explanation="Option C shows the integration of all three courage types: intellectual (questioning assumptions), creative (experimenting), and physical (being present). This comprehensive approach demonstrates mature management courage that addresses both immediate needs and long-term development.">
+            <p><strong>Q5:</strong> Your highest-performing team member is showing signs of burnout but insists they can handle their workload. They're critical to upcoming deliverables, and your manager emphasizes the importance of meeting deadlines. How do you demonstrate comprehensive management courage?</p>
+            <label><input type="radio" name="q5" value="1"> Trust their self-assessment and monitor the situation closely</label>
+            <label><input type="radio" name="q5" value="2"> Quietly redistribute some of their work without discussing it</label>
+            <label><input type="radio" name="q5" value="3"> Have a direct conversation about workload, question your assumptions about their capacity, and experiment with support options</label>
+            <label><input type="radio" name="q5" value="4"> Focus on meeting deadlines first, then address the burnout issue afterward</label>
+            <div class="explanation"><strong>Explanation:</strong> Option C shows the integration of all three courage types: intellectual (questioning assumptions), creative (experimenting), and physical (being present). This comprehensive approach demonstrates mature management courage that addresses both immediate needs and long-term development.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Assessment -->
+      <section class="section">
+        <h2 class="section-title">🎯 Your Courage Development Assessment</h2>
+        <div class="interactive-card">
+          <h3>Identify your courage development priorities based on current challenges:</h3>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.8rem;">1. What's your biggest challenge in management decision-making?</div>
+            <ul class="poll-options">
+              <li class="poll-option" data-value="assumptions" onclick="selectAssessment(this, 'q1', 'assumptions')">
+                <input type="radio" name="assessment-q1" value="assumptions">
+                <label>🤔 Questioning my own assumptions and methods</label>
+              </li>
+              <li class="poll-option" data-value="experiments" onclick="selectAssessment(this, 'q1', 'experiments')">
+                <input type="radio" name="assessment-q1" value="experiments">
+                <label>🧪 Testing new approaches when current methods work</label>
+              </li>
+              <li class="poll-option" data-value="presence" onclick="selectAssessment(this, 'q1', 'presence')">
+                <input type="radio" name="assessment-q1" value="presence">
+                <label>👥 Being present for difficult conversations and situations</label>
+              </li>
+              <li class="poll-option" data-value="integration" onclick="selectAssessment(this, 'q1', 'integration')">
+                <input type="radio" name="assessment-q1" value="integration">
+                <label>⚖️ Balancing all three types of courage consistently</label>
+              </li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.8rem;">2. How does your cultural context influence your approach to management courage?</div>
+            <ul class="poll-options">
+              <li class="poll-option" data-value="hierarchy" onclick="selectAssessment(this, 'q2', 'hierarchy')">
+                <input type="radio" name="assessment-q2" value="hierarchy">
+                <label>🏢 Hierarchical respect makes questioning authority difficult</label>
+              </li>
+              <li class="poll-option" data-value="harmony" onclick="selectAssessment(this, 'q2', 'harmony')">
+                <input type="radio" name="assessment-q2" value="harmony">
+                <label>🕊️ Maintaining group harmony limits direct conversations</label>
+              </li>
+              <li class="poll-option" data-value="innovation" onclick="selectAssessment(this, 'q2', 'innovation')">
+                <input type="radio" name="assessment-q2" value="innovation">
+                <label>🚀 Innovation pressure conflicts with risk management</label>
+              </li>
+              <li class="poll-option" data-value="individualism" onclick="selectAssessment(this, 'q2', 'individualism')">
+                <input type="radio" name="assessment-q2" value="individualism">
+                <label>👤 Individual accountability reduces collaborative courage</label>
+              </li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.8rem;">3. What currently prevents you from acting more courageously as a manager?</div>
+            <ul class="poll-options">
+              <li class="poll-option" data-value="consequences" onclick="selectAssessment(this, 'q3', 'consequences')">
+                <input type="radio" name="assessment-q3" value="consequences">
+                <label>⚠️ Fear of negative consequences for career or relationships</label>
+              </li>
+              <li class="poll-option" data-value="competence" onclick="selectAssessment(this, 'q3', 'competence')">
+                <input type="radio" name="assessment-q3" value="competence">
+                <label>🎯 Uncertainty about what the "right" courage looks like</label>
+              </li>
+              <li class="poll-option" data-value="energy" onclick="selectAssessment(this, 'q3', 'energy')">
+                <input type="radio" name="assessment-q3" value="energy">
+                <label>🔋 Emotional exhaustion from constant decision pressure</label>
+              </li>
+              <li class="poll-option" data-value="support" onclick="selectAssessment(this, 'q3', 'support')">
+                <input type="radio" name="assessment-q3" value="support">
+                <label>🤝 Lack of organizational support for courageous decisions</label>
+              </li>
+            </ul>
+          </div>
+
+          <div class="feedback-message" id="assessmentResult"></div>
+        </div>
+      </section>
+
+      <!-- Warning Signs Section -->
+      <section class="section">
+        <h2 class="section-title">🚨 Warning Signs: When Management Courage Is Overdue</h2>
+        <div class="warning-signs">
+          <div class="warning-title">Red Flags That Demand Courageous Management Action</div>
+          <p style="text-align: center; margin-bottom: 1rem; color: var(--text-secondary);">If you recognize multiple signs, your management approach may be constraining team potential and organizational growth:</p>
+          <div class="signs-grid">
+            <div class="sign-item">🔄 Same problems keep recurring despite multiple "solutions"</div>
+            <div class="sign-item">🤐 Team members stop bringing up concerns or new ideas</div>
+            <div class="sign-item">📊 Metrics look good but team morale or engagement is declining</div>
+            <div class="sign-item">🎭 People say what they think you want to hear rather than what they think</div>
+            <div class="sign-item">⏰ You postpone difficult conversations hoping situations will resolve themselves</div>
+            <div class="sign-item">🚪 High-potential team members are leaving for "better opportunities"</div>
+            <div class="sign-item">😶 Meetings are polite but nothing really gets challenged or improved</div>
+            <div class="sign-item">🎯 You avoid trying new approaches because current methods "work well enough"</div>
+            <div class="sign-item">📧 You handle sensitive issues through email rather than face-to-face conversations</div>
+            <div class="sign-item">🔍 You realize you don't really know what your team thinks about your leadership</div>
+            <div class="sign-item">🧪 Team members ask permission for decisions they're capable of making</div>
+            <div class="sign-item">📈 Performance is consistent but innovation and improvement have stagnated</div>
+          </div>
+
+          <!-- Personal Reflection -->
+          <div class="interactive-card">
+            <h3>✏️ Your Courage Development Moment</h3>
+            <p style="margin-bottom: 1.2rem; color: var(--text-secondary); font-size: 1rem; line-height: 1.5;">Describe a situation where you wish you had acted with more courage as a manager:</p>
+            <textarea 
+              placeholder="e.g. Our team's productivity was declining, and I suspected it was due to an unclear process I had implemented. Instead of questioning my own method and asking the team for honest feedback, I kept tweaking small details and hoping things would improve. Looking back, I should have had the intellectual courage to ask 'What am I missing?' and the physical courage to sit with the team to understand their actual experience." 
+              style="min-height: 120px; width: 100%; padding: 0.8rem; border: 1px solid var(--border-light); border-radius: 4px; font-family: inherit; line-height: 1.3; resize: vertical;" 
+              rows="6"
+              id="courageReflection"
+              onchange="updateReflection()"
+            ></textarea>
+            <div class="feedback-message" id="reflectionFeedback"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🌍 Cultural Context for Management Courage</h2>
+        <div class="historical-timeline">
+          <div class="timeline-title">Adapting Management Courage Across Global Contexts</div>
+          
+          <div class="timeline-item">
+            <div class="timeline-era">🟡 India / South Asia</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Respect-based courage: Challenge ideas while honoring relationships.</div>
+              <div class="timeline-context">Management courage requires balancing directness with relationship preservation. Frame challenges as collective learning opportunities. Show respect for experience while introducing new perspectives. Use "we" language and private conversations for sensitive feedback.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-era">🔴 Japan / East Asia</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Consensus-building courage: Lead change through collaborative decision-making.</div>
+              <div class="timeline-context">Management courage means creating safe spaces for input and building agreement gradually. Use nemawashi (informal consultation) before formal discussions. Frame innovation as continuous improvement (kaizen) rather than dramatic change.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-era">🔵 UK / Europe</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Process-oriented courage: Balance innovation with systematic evaluation.</div>
+              <div class="timeline-context">Management courage involves thorough analysis and stakeholder consultation. Document reasoning, consider long-term implications, and ensure compliance. Build courage through careful preparation and transparent communication.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-era">🟦 USA / North America</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Action-oriented courage: Take decisive action with clear accountability.</div>
+              <div class="timeline-context">Management courage emphasizes quick decision-making and personal responsibility. Be direct in feedback, experiment rapidly, and own outcomes. Value individual initiative while supporting team members who take appropriate risks.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-era">🟢 Nigeria / Africa</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Ubuntu-centered courage: Lead with community benefit and collective wisdom.</div>
+              <div class="timeline-context">Management courage focuses on communal benefit and inclusive decision-making. Seek input from experienced team members, emphasize how changes serve everyone, and maintain strong relationships through transparency and care.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-era">🟠 Brazil / Latin America</div>
+            <div class="timeline-content">
+              <div class="timeline-quote">Relationship-rich courage: Balance personal connections with professional decisions.</div>
+              <div class="timeline-context">Management courage requires navigating strong personal relationships while maintaining professional standards. Use warm, personal communication for difficult conversations. Build trust through consistent presence and authentic care for team wellbeing.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Wisdom Across Traditions -->
+      <section class="section">
+        <h2 class="section-title">📜 Wisdom Across Traditions: Management Courage Through History</h2>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">The challenge of leading with courage while maintaining wisdom resonates across human traditions:</p>
+        <div class="quotes-grid">
+          <div class="quote-card">
+            <div class="quote-text">The brave may not live forever, but the cautious do not live at all. Yet true courage balances boldness with wisdom.</div>
+            <div class="quote-source">Leadership wisdom across cultures</div>
+          </div>
+          
+          <div class="quote-card">
+            <div class="quote-text">A manager's courage is measured not by the absence of fear, but by action despite fear when the team needs leadership.</div>
+            <div class="quote-source">Modern management philosophy</div>
+          </div>
+          
+          <div class="quote-card">
+            <div class="quote-text">Ask yourself: Are my decisions based on what I fear will happen or what I hope will happen? Courage chooses hope informed by wisdom.</div>
+            <div class="quote-source">Reflective leadership tradition</div>
+          </div>
+          
+          <div class="quote-card">
+            <div class="quote-text">The manager who has never been wrong has never tried to improve anything. Growth requires the courage to be imperfect publicly.</div>
+            <div class="quote-source">Learning organization principles</div>
+          </div>
+          
+          <div class="quote-card">
+            <div class="quote-text">When facing difficult decisions, remember: your team is watching not just what you decide, but how you decide.</div>
+            <div class="quote-source">Values-based leadership</div>
+          </div>
+          
+          <div class="quote-card">
+            <div class="quote-text">True management courage is contagious—when leaders model integrity under pressure, teams develop the same strength.</div>
+            <div class="quote-source">Organizational behavior research</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">🌊 The Ripple Effects: When Managers Choose Courage</h2>
+        <div class="story-section">
+          <p><strong>🎯 Team Performance Transformation:</strong> When managers consistently demonstrate intellectual, creative, and physical courage, teams develop what researchers call "psychological safety"—the confidence to take appropriate risks, admit mistakes, and innovate without fear of punishment.</p>
+          
+          <p><strong>💡 Cultural Evolution:</strong> Organizations where managers model courage create cultures of continuous learning and adaptation. Problems get solved faster because people surface issues early rather than hoping they'll go away.</p>
+          
+          <p><strong>🌱 Individual Growth:</strong> Team members working under courageous managers develop stronger decision-making skills themselves, as they observe and practice the same courage patterns in their own roles.</p>
+          
+          <p><strong>⚡ Organizational Resilience:</strong> Companies with courageous management at multiple levels adapt faster to market changes, recover more quickly from setbacks, and maintain higher employee engagement during difficult periods.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="faq-header">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">How do I develop courage without appearing weak or uncertain to my team?</div>
+        <div class="faq-answer">
+          <p>True courage actually demonstrates <strong>strength through vulnerability</strong>. When you admit uncertainty or mistakes, you're showing that you prioritize truth and improvement over ego protection.</p>
+          <div class="faq-story">Real example: "A manufacturing manager in Pune regularly said 'I don't know, but let's find out together' when facing new challenges. Rather than appearing weak, this approach built team confidence because they knew he wouldn't make uninformed decisions to protect his image. His willingness to learn alongside them actually increased their respect for his leadership."</div>
+          <p>Frame uncertainty as <strong>intellectual honesty</strong> and involve your team in finding solutions. This builds collective capability rather than dependence on your individual expertise.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What if my attempts at courage backfire and create more problems than they solve?</div>
+        <div class="faq-answer">
+          <p>Courage isn't about perfect outcomes—it's about <strong>values-aligned action despite uncertain results</strong>. When courage-based decisions don't work out, the key is learning and course-correcting rather than abandoning courageous approaches.</p>
+          <div class="faq-story">Learning from setbacks: "A team lead in Jakarta tried a new project management approach despite skepticism from senior staff. When it initially caused confusion, instead of reverting to old methods, she gathered team feedback, adjusted the approach, and eventually created a hybrid system that worked better than either the old or new method alone."</div>
+          <p>Build courage gradually through <strong>small experiments</strong> with clear learning objectives. This reduces the impact of setbacks while building your capacity for larger courageous decisions.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I show courage when my organizational culture punishes risk-taking or dissent?</div>
+        <div class="faq-answer">
+          <p>Even in restrictive environments, you can practice <strong>micro-courage</strong>—small acts that build your capability and gradually shift team dynamics without triggering organizational immune responses.</p>
+          <div class="faq-story">Micro-courage in action: "A supervisor in a hierarchical automotive company couldn't openly challenge senior decisions, but she started asking her team 'What would you do if this were your department?' in private discussions. This built critical thinking skills and identified improvements that she could later present as 'team suggestions' through proper channels."</div>
+          <p>Focus on <strong>process courage</strong> (improving how decisions are made) rather than outcome courage (challenging specific decisions). Ask better questions, seek more input, and model learning from mistakes within your sphere of influence.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I balance courage with cultural respect, especially in hierarchical environments?</div>
+        <div class="faq-answer">
+          <p>Courage must be adapted to cultural context while maintaining authentic leadership. This means <strong>honoring relationship structures while advocating for improvement</strong> through culturally appropriate channels.</p>
+          <div class="faq-story">Cultural adaptation: "A project manager working across Indian and German teams learned to be direct and data-focused with German colleagues while using relationship-building and consensus approaches with Indian team members. Both approaches served the same courageous goal—surfacing truth and improving outcomes—but respected different cultural values about communication and decision-making."</div>
+          <p>Study your cultural context to understand <strong>how courage is respected</strong> rather than whether it's valued. Most cultures honor courage but express it through different behaviors and timing.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">What's the difference between courage and recklessness in management decisions?</div>
+        <div class="faq-answer">
+          <p>Courage involves <strong>calculated risk with clear values alignment</strong>, while recklessness ignores consequences and stakeholder impact. Courageous decisions consider potential outcomes and prepare for multiple scenarios.</p>
+          <div class="faq-story">Courage vs. recklessness: "Two managers faced similar budget cut decisions. The reckless manager immediately laid off the newest hires to meet numbers quickly. The courageous manager spent a weekend analyzing workload distribution, talked to team leads about capacity, and redesigned workflows to maintain service levels with fewer resources. Both took action under pressure, but only one considered stakeholder impact and long-term consequences."</div>
+          <p>Ask three questions: <strong>What am I trying to serve?</strong> (values alignment), <strong>What could go wrong?</strong> (consequence awareness), and <strong>How will I learn and adapt?</strong> (growth mindset).</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I help my team members develop their own courage?</div>
+        <div class="faq-answer">
+          <p>Model courage consistently and <strong>create safe spaces for team members to practice</strong> their own courageous behaviors. Celebrate attempts at courage even when outcomes aren't perfect.</p>
+          <div class="faq-story">Building team courage: "A department head in São Paulo started team meetings with 'assumption challenges'—inviting anyone to question one assumption the team was making about their work. Initially only senior members participated, but over months, newer team members began contributing. The key was celebrating the questions themselves, not just the ones that led to changes."</div>
+          <p>Provide <strong>courage scaffolding</strong>: start with low-stakes decisions, offer support when team members take appropriate risks, and debrief both successes and failures to reinforce learning over perfect performance.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">How do I maintain courage when I'm feeling overwhelmed or burned out?</div>
+        <div class="faq-answer">
+          <p>Sustainable courage requires <strong>energy management and support systems</strong>. When depleted, focus on smaller acts of courage and build support networks that can provide perspective and encouragement.</p>
+          <div class="faq-story">Sustainable courage: "A department manager in Dubai realized that trying to solve every team issue personally was exhausting him and reducing his capacity for important courageous decisions. He started having monthly one-on-ones focused on 'what's one thing you'd change about how we work?' This distributed the cognitive load of improvement across the team while maintaining his leadership role."</div>
+          <p>Recognize that courage is a <strong>renewable resource</strong> that requires rest, reflection, and relationship support. Build systems that don't depend entirely on your individual courage capacity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Glossary Section -->
+    <section class="section">
+      <h2 class="section-title">📚 Management Courage Glossary</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-secondary);">Essential terms for understanding and developing courage in management contexts:</p>
+      <div class="glossary-grid">
+        <div class="glossary-card">
+          <div class="glossary-term">🧠 Intellectual Courage</div>
+          <div class="glossary-definition">The willingness to question your own assumptions, admit mistakes, and change your mind based on new evidence rather than protecting your ego or image.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🎨 Creative Courage</div>
+          <div class="glossary-definition">The boldness to test new ideas through small experiments, treating failure as learning data rather than personal defeat.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🏃 Physical Courage</div>
+          <div class="glossary-definition">The commitment to show up in person during difficult moments, having face-to-face conversations instead of delegating discomfort.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🛡️ Psychological Safety</div>
+          <div class="glossary-definition">A team environment where members feel safe to take risks, make mistakes, and speak up without fear of negative consequences.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">⚡ Micro-Courage</div>
+          <div class="glossary-definition">Small, daily acts of courage that build capability and gradually shift team or organizational dynamics without triggering major resistance.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🎯 Values-Aligned Action</div>
+          <div class="glossary-definition">Making decisions based on stated principles and ethical standards rather than convenience, comfort, or political expediency.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">📊 Assumption Testing</div>
+          <div class="glossary-definition">Actively questioning and validating beliefs about what works, what team members think, or what customers need rather than operating on untested assumptions.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🧪 Pilot Mentality</div>
+          <div class="glossary-definition">Approaching new ideas as experiments with clear learning objectives rather than permanent commitments, reducing fear of failure.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">👥 Presence Leadership</div>
+          <div class="glossary-definition">Leading through physical and emotional availability during challenging times rather than delegation or remote management.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🔄 Learning Recovery</div>
+          <div class="glossary-definition">The ability to extract insights and adjust approach after courage-based decisions don't produce expected results.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🌍 Cultural Courage Adaptation</div>
+          <div class="glossary-definition">Modifying how courage is expressed to respect local values and communication styles while maintaining authentic leadership.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🎪 Courage Theater</div>
+          <div class="glossary-definition">Superficial acts that appear courageous but don't involve real risk or contribute to meaningful improvement—performed for image rather than impact.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🔋 Courage Capacity</div>
+          <div class="glossary-definition">The finite but renewable emotional and mental energy required for courageous decisions—must be managed like any other resource.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">🤝 Courage Scaffolding</div>
+          <div class="glossary-definition">Providing support structures that enable team members to practice courage safely, gradually building their own capacity for risk-taking and truth-telling.</div>
+        </div>
+        
+        <div class="glossary-card">
+          <div class="glossary-term">📈 Courage Contagion</div>
+          <div class="glossary-definition">The phenomenon where courageous behavior by managers spreads throughout teams, creating cultures of honesty, innovation, and accountability.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reflection-section">
+      <h2 class="reflection-title">Your Management Courage Commitment</h2>
+      <div class="interactive-card">
+        <h3>What's your next step in developing management courage?</h3>
+        <ul class="poll-options" id="actionPoll">
+          <li class="poll-option" data-value="intellectual-practice" onclick="selectAction(this, 'intellectual-practice')">
+            <input type="radio" name="action" value="intellectual-practice">
+            <label>Start questioning one assumption about my team or processes each week</label>
+          </li>
+          <li class="poll-option" data-value="creative-experiments" onclick="selectAction(this, 'creative-experiments')">
+            <input type="radio" name="action" value="creative-experiments">
+            <label>Design small experiments to test new management approaches</label>
+          </li>
+          <li class="poll-option" data-value="physical-presence" onclick="selectAction(this, 'physical-presence')">
+            <input type="radio" name="action" value="physical-presence">
+            <label>Commit to having difficult conversations in person rather than avoiding them</label>
+          </li>
+          <li class="poll-option" data-value="team-development" onclick="selectAction(this, 'team-development')">
+            <input type="radio" name="action" value="team-development">
+            <label>Create safe spaces for my team to practice their own courage</label>
+          </li>
+        </ul>
+        <div class="feedback-message" id="actionFeedback"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align: center; margin-top: 3rem; padding: 2rem 0; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border-light);">
+    <div style="color: var(--primary-courage); font-weight: 600; margin-bottom: 0.5rem;">
+      Courage in Management
+    </div>
+    Courage is not the absence of fear, but action in spite of it. — <strong>Beyond Dictionary</strong>
+  </footer>
+
+  <script>
+    // Feedback pools for different interactions (matching template patterns)
+    const feedbackPools = {
+      courage: {
+        1: [
+          "Avoidant management creates team anxiety and missed opportunities. Recognition is the first step toward building proactive courage that serves your team better.",
+          "Postponing difficult decisions often makes them harder and more consequential. Building courage gradually through smaller challenges can help you handle bigger ones when they arise.",
+          "Management avoidance patterns usually stem from past negative experiences. Focus on learning skills that let you approach challenges with greater confidence and preparation."
+        ],
+        2: [
+          "Reactive management can handle crises but misses opportunities for prevention and improvement. Consider how to develop early sensing systems that let you act before situations become urgent.",
+          "Crisis-driven courage shows you can perform under pressure. The next step is building proactive systems that prevent some crises and prepare you for others.",
+          "Your ability to respond when forced demonstrates capability. Channeling this same energy into preventive action can reduce stress and improve outcomes for everyone."
+        ],
+        3: [
+          "Measured management balances stakeholder needs effectively. Look for opportunities to gradually expand your courage comfort zone while maintaining this thoughtful approach.",
+          "Your systematic approach to balancing risks suggests good judgment. Consider identifying one area where slightly more courage could benefit your team without compromising stability.",
+          "Measured courage demonstrates wisdom about timing and context. This foundation gives you credibility to take slightly bolder actions when situations truly warrant them."
+        ],
+        4: [
+          "Proactive management prevents many problems and builds team confidence. Your early intervention skills create foundation for even more impactful leadership.",
+          "Addressing issues before escalation shows excellent management intuition. Continue developing this skill by expanding your sensing network and response repertoire.",
+          "Your proactive approach likely saves significant time and stress for everyone. Focus on teaching these same skills to team members so the capability multiplies."
+        ],
+        5: [
+          "Courageous management that models integrity creates positive ripple effects throughout your organization. Your approach builds not just performance but capability in others.",
+          "Your willingness to maintain values despite discomfort demonstrates authentic leadership that teams trust and respect. This approach creates sustainable high performance.",
+          "Modeling courage under pressure gives your team permission to do the same. This leadership style creates resilient, adaptive organizations that thrive in uncertainty."
+        ]
+      },
+      assessment: {
+        intellectual_focus: {
+          title: '🧠 Intellectual Courage Development Path',
+          text: `Your priority is developing the courage to question assumptions and embrace being wrong as learning. This is foundational to all other forms of management courage.
+                 <br><br><strong>Recommended Practice:</strong> Start each team meeting by questioning one assumption about your work processes. Model changing your mind when presented with better information.
+                 <br><br><strong>Cultural Adaptation:</strong> Frame questions as collective learning rather than individual doubt. Use "we" language: "What might we be missing about this approach?"
+                 <br><br><strong>Success Metrics:</strong> Track how often you update decisions based on team input, and monitor whether team members feel safe challenging your ideas.`
+        },
+        creative_focus: {
+          title: '🎨 Creative Courage Development Path', 
+          text: `Your priority is building confidence to experiment and treat failure as valuable data rather than personal defeat.
+                 <br><br><strong>Recommended Practice:</strong> Design one small two-week experiment each month. Document what you learn regardless of whether it "works" as expected.
+                 <br><br><strong>Cultural Adaptation:</strong> Frame experiments as "continuous improvement" or "optimization" in cultures that prefer incremental change. Emphasize learning over risk-taking.
+                 <br><br><strong>Success Metrics:</strong> Count experiments attempted and insights gained. Celebrate team members who suggest or try new approaches.`
+        },
+        physical_focus: {
+          title: '🏃 Physical Courage Development Path',
+          text: `Your priority is developing the courage to be present during difficult conversations and situations rather than managing from a distance.
+                 <br><br><strong>Recommended Practice:</strong> Block time each week for "unstructured presence"—time spent with your team without specific agenda, especially during stressful periods.
+                 <br><br><strong>Cultural Adaptation:</strong> Respect hierarchical norms while being accessible. In formal cultures, create regular "office hours" or structured check-ins that allow for personal connection.
+                 <br><br><strong>Success Metrics:</strong> Track face-to-face conversations about difficult topics and team feedback about your accessibility during challenging times.`
+        },
+        integration_focus: {
+          title: '⚖️ Integrated Courage Development Path',
+          text: `Your priority is developing consistent practice across all three types of courage and recognizing when each is most needed.
+                 <br><br><strong>Recommended Practice:</strong> Weekly reflection on which type of courage was most needed and used. Identify patterns in your courage strengths and gaps.
+                 <br><br><strong>Cultural Adaptation:</strong> Adapt your courage expression to cultural context while maintaining authentic leadership across all three dimensions.
+                 <br><br><strong>Success Metrics:</strong> Balanced development across intellectual, creative, and physical courage. Team feedback about consistent, values-aligned leadership.`
+        }
+      },
+      reflection: [
+        "Your honest reflection on missed courage opportunities shows self-awareness that's essential for growth. Most managers avoid examining these moments.",
+        "Identifying specific situations where you needed more courage demonstrates the kind of analysis that leads to better decisions in similar future circumstances.",
+        "Writing about management courage challenges shows commitment to growth. Many leaders never engage in this level of honest self-assessment.",
+        "Your detailed analysis of courage gaps suggests you understand that management effectiveness often depends more on character than technique.",
+        "Reflecting on courage development shows leadership maturity. The best managers continuously examine their own growth opportunities."
+      ],
+      action: {
+        'intellectual-practice': [
+          "Regularly questioning assumptions builds team trust and continuous improvement capacity. Start small with low-stakes process questions to build this habit.",
+          "Your focus on intellectual courage development shows understanding that most management problems stem from unexamined assumptions rather than lack of knowledge.",
+          "Systematic assumption testing creates learning organizations. Your commitment to this practice will model intellectual honesty for your team."
+        ],
+        'creative-experiments': [
+          "Designing small experiments builds organizational innovation capacity while managing risk appropriately. Focus on clear learning objectives over perfect outcomes.",
+          "Your emphasis on creative courage shows understanding that management improvement requires experimentation, not just best practice copying.",
+          "Regular experimentation builds team confidence in trying new approaches. This practice creates adaptive organizations that thrive in changing conditions."
+        ],
+        'physical-presence': [
+          "Committing to difficult conversations in person builds trust and resolves issues faster than remote management approaches.",
+          "Your focus on physical courage demonstrates understanding that presence and relationship quality often determine management effectiveness more than technical skills.",
+          "Direct conversation skills create psychological safety and faster problem resolution. This approach builds team resilience and performance."
+        ],
+        'team-development': [
+          "Creating safe spaces for team courage development builds organizational capacity and reduces dependence on individual heroics.",
+          "Your focus on developing others' courage shows systems thinking about leadership. This approach creates sustainable high performance across your area of influence.",
+          "Team courage development multiplies impact and creates cultures where people solve problems proactively rather than waiting for management intervention."
+        ]
+      }
+    };
+
+    // Byline rotation (exactly matching template)
+    function rotateBylines() {
+      const bylines = document.querySelectorAll('.byline');
+      let currentIndex = 0;
+
+      setInterval(() => {
+        bylines[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % bylines.length;
+        bylines[currentIndex].classList.add('active');
+      }, 4000);
+    }
+
+    // Show feedback message (exactly matching template)
+    function showFeedback(elementId, message, type = 'supportive') {
+      const feedbackEl = document.getElementById(elementId);
+      if (feedbackEl) {
+        feedbackEl.textContent = message;
+        feedbackEl.className = `feedback-message feedback-${type} show`;
+      }
+    }
+
+    // Get random feedback from pool (exactly matching template)
+    function getRandomFeedback(pool) {
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    // Context selection functionality
+    function selectContext(element, context) {
+      // Remove previous selections
+      document.querySelectorAll('.case-study-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Add selection to clicked card
+      element.classList.add('selected');
+      
+      // Store selected context for personalization
+      localStorage.setItem('selectedContext', context);
+    }
+
+    // Toggle question details (exactly matching template)
+    function toggleQuestion(questionCard) {
+      questionCard.classList.toggle('expanded');
+    }
+
+    // Setup courage scale (matching template scale pattern)
+    function setupCourageScale() {
+      const courageItems = document.querySelectorAll('.courage-level');
+      
+      courageItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // Remove previous selection
+          courageItems.forEach(c => c.classList.remove('selected'));
+          // Add selection to clicked item
+          this.classList.add('selected');
+          
+          // Show feedback
+          const level = parseInt(this.dataset.level);
+          const message = getRandomFeedback(feedbackPools.courage[level]);
+          showFeedback('courageFeedback', message, 'encouraging');
+        });
+      });
+    }
+
+    // Assessment functionality (exactly matching template)
+    const assessmentAnswers = {};
+
+    function selectAssessment(element, question, value) {
+      // Update radio button
+      const radio = element.querySelector('input[type="radio"]');
+      radio.checked = true;
+      
+      // Visual feedback with classes
+      const questionOptions = element.closest('div').querySelectorAll('.poll-option');
+      questionOptions.forEach(opt => {
+        opt.classList.remove('selected');
+        opt.style.background = '';
+      });
+      element.classList.add('selected');
+      
+      // Store answer
+      assessmentAnswers[question] = value;
+      
+      // Check if all questions answered
+      if (Object.keys(assessmentAnswers).length === 3) {
+        showAssessmentResult();
+      }
+    }
+
+    function showAssessmentResult() {
+      const result = calculateAssessmentStrategy();
+      const resultEl = document.getElementById('assessmentResult');
+      
+      resultEl.innerHTML = `
+        <div style="background: var(--background-white); border-radius: 6px; padding: 1.5rem; border-left: 4px solid var(--primary-courage);">
+          <h4 style="color: var(--primary-courage); margin-bottom: 1rem;">${result.title}</h4>
+          <div style="color: var(--text-secondary); line-height: 1.6;">${result.text}</div>
+        </div>
+      `;
+      resultEl.className = 'feedback-message show';
+    }
+
+    function calculateAssessmentStrategy() {
+      const challenge = assessmentAnswers.q1;
+      const cultural = assessmentAnswers.q2;
+      const barrier = assessmentAnswers.q3;
+      
+      // Strategic assessment logic
+      if (challenge === 'assumptions') {
+        return feedbackPools.assessment.intellectual_focus;
+      }
+      
+      if (challenge === 'experiments') {
+        return feedbackPools.assessment.creative_focus;
+      }
+      
+      if (challenge === 'presence') {
+        return feedbackPools.assessment.physical_focus;
+      }
+      
+      return feedbackPools.assessment.integration_focus;
+    }
+
+    // Quiz functionality (exactly matching template)
+    let currentQuestionIndex = 1;
+    const totalQuestions = 5;
+
+    function initializeQuiz() {
+      const firstQuiz = document.getElementById('quiz1');
+      if (firstQuiz) {
+        firstQuiz.classList.add('active');
+      }
+      updateQuizNavigation();
+      
+      // Add event listeners to all quiz radios
+      for (let i = 1; i <= totalQuestions; i++) {
+        const quiz = document.getElementById(`quiz${i}`);
+        if (!quiz) continue;
+        
+        const radios = quiz.querySelectorAll('input[type="radio"]');
+        
+        radios.forEach(radio => {
+          radio.addEventListener('change', () => {
+            // Show explanation
+            quiz.classList.add('show');
+            
+            // Clear previous states
+            quiz.querySelectorAll('label').forEach(label => {
+              label.classList.remove('selected', 'correct-answer', 'wrong-answer');
+            });
+            quiz.classList.remove('correct', 'wrong');
+            
+            const selectedLabel = radio.parentElement;
+            const correctAnswer = quiz.dataset.correct;
+            const userAnswer = radio.value;
+            
+            // Always highlight the correct answer in green
+            const correctLabel = quiz.querySelector(`input[value="${correctAnswer}"]`).parentElement;
+            correctLabel.classList.add('correct-answer');
+            
+            if (userAnswer === correctAnswer) {
+              // User got it right - green background for whole quiz
+              quiz.classList.add('correct');
+              selectedLabel.classList.add('selected');
+            } else {
+              // User got it wrong - red background for whole quiz
+              quiz.classList.add('wrong');
+              selectedLabel.classList.add('selected', 'wrong-answer');
+              
+              // Update explanation to show correct answer
+              const explanation = quiz.querySelector('.explanation');
+              const correctAnswerText = correctLabel.textContent.trim();
+              explanation.innerHTML = `<strong>Explanation:</strong> ${quiz.dataset.explanation}<br><br><strong>Correct Answer:</strong> ${correctAnswerText}`;
+            }
+            
+            // Disable all radio buttons after selection
+            radios.forEach(r => r.disabled = true);
+          });
+        });
+      }
+    }
+
+    function changeQuestion(direction) {
+      // Hide current question
+      const currentQuiz = document.getElementById(`quiz${currentQuestionIndex}`);
+      if (currentQuiz) {
+        currentQuiz.classList.remove('active');
+      }
+      
+      // Update question index
+      currentQuestionIndex += direction;
+      
+      // Show new question
+      const newQuiz = document.getElementById(`quiz${currentQuestionIndex}`);
+      if (newQuiz) {
+        newQuiz.classList.add('active');
+      }
+      
+      // Update navigation
+      updateQuizNavigation();
+    }
+
+    function updateQuizNavigation() {
+      const currentQEl = document.getElementById('currentQ');
+      const totalQEl = document.getElementById('totalQ');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      
+      if (currentQEl) currentQEl.textContent = currentQuestionIndex;
+      if (totalQEl) totalQEl.textContent = totalQuestions;
+      
+      // Update button states
+      if (prevBtn) {
+        prevBtn.disabled = currentQuestionIndex === 1;
+      }
+      if (nextBtn) {
+        nextBtn.disabled = currentQuestionIndex === totalQuestions;
+      }
+    }
+
+    // Personal reflection (exactly matching template)
+    function updateReflection() {
+      const reflectionText = document.getElementById('courageReflection').value;
+      const feedbackDiv = document.getElementById('reflectionFeedback');
+      
+      if (reflectionText.length > 50) {
+        const message = getRandomFeedback(feedbackPools.reflection);
+        showFeedback('reflectionFeedback', message, 'positive');
+      }
+    }
+
+    // Action selection (exactly matching template)
+    function selectAction(element, value) {
+      // Update radio button
+      const radio = element.querySelector('input[type="radio"]');
+      radio.checked = true;
+      
+      // Visual feedback with classes
+      const allOptions = document.querySelectorAll('#actionPoll .poll-option');
+      allOptions.forEach(opt => {
+        opt.classList.remove('selected');
+        opt.style.background = '';
+      });
+      element.classList.add('selected');
+      
+      // Show encouraging feedback
+      const message = getRandomFeedback(feedbackPools.action[value]);
+      showFeedback('actionFeedback', message, 'encouraging');
+    }
+
+    // FAQ toggle functionality (exactly matching template)
+    function setupFAQ() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          const isOpen = item.classList.contains('open');
+          
+          // Close all other FAQ items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.classList.remove('open');
+            }
+          });
+          
+          // Toggle current item
+          if (isOpen) {
+            item.classList.remove('open');
+          } else {
+            item.classList.add('open');
+          }
+        });
+      });
+    }
+
+    // Make functions globally available (exactly matching template)
+    window.toggleQuestion = toggleQuestion;
+    window.selectContext = selectContext;
+    window.changeQuestion = changeQuestion;
+    window.selectAssessment = selectAssessment;
+    window.selectAction = selectAction;
+    window.updateReflection = updateReflection;
+
+    // Initialize all functionality (exactly matching template)
+    document.addEventListener('DOMContentLoaded', function() {
+      rotateBylines();
+      setupCourageScale();
+      setupFAQ();
+      setTimeout(() => {
+        initializeQuiz();
+      }, 100);
+    });
+  </script>
+
+</div>
+
+<footer class="site-footer">
+  <p class="footer-copy">© 2025 Beyond Dictionary. All Rights Reserved.</p>
+</footer>
+
+  <!-- Missing CSS styles for new sections -->
+  <style>
+    .historical-timeline {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .timeline-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-growth);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .timeline-item {
+      display: flex;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .timeline-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .timeline-era {
+      flex-shrink: 0;
+      width: 120px;
+      font-weight: 600;
+      color: var(--accent-growth);
+      font-size: 0.9rem;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding-left: 1rem;
+    }
+
+    .timeline-quote {
+      font-style: italic;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-context {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .quote-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 1rem;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.2s ease;
+      position: relative;
+      padding-left: 2.5rem;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .quote-card::before {
+      content: '"';
+      position: absolute;
+      left: 0.8rem;
+      top: 0.5rem;
+      color: var(--secondary-wisdom);
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .quote-text {
+      font-style: italic;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .quote-source {
+      font-weight: 600;
+      color: var(--primary-courage);
+      font-size: 0.9rem;
+    }
+
+    .faq-section {
+      margin-top: 2rem;
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .faq-header {
+      background: var(--primary-courage);
+      color: white;
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .faq-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-question {
+      background: var(--background-gray);
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 0, 0, 0.02);
+      border-left-color: var(--accent);
+    }
+
+    .faq-question::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .faq-question:hover::after {
+      color: var(--accent);
+    }
+
+    .faq-item.open .faq-question::after {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background: var(--background-white);
+    }
+
+    .faq-item.open .faq-answer {
+      padding: 1.2rem;
+      max-height: 600px;
+    }
+
+    .faq-story {
+      background: rgba(194, 65, 12, 0.02);
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 0.8rem 0;
+      border-left: 3px solid var(--primary-courage);
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .glossary-card {
+      background: var(--background-white);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 1rem;
+      box-shadow: var(--shadow-subtle);
+      transition: all 0.2s ease;
+    }
+
+    .glossary-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .glossary-term {
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .glossary-definition {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .reflection-section {
+      background: linear-gradient(135deg, rgba(194, 65, 12, 0.05) 0%, var(--background-white) 100%);
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .reflection-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-courage);
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-item {
+        flex-direction: column;
+      }
+      
+      .timeline-era {
+        width: auto;
+        margin-bottom: 0.5rem;
+      }
+      
+      .timeline-content {
+        padding-left: 0;
+      }
+      
+      .faq-section, .reflection-section {
+        padding: 1rem;
+      }
+      
+      .glossary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+</body>
+</html>
