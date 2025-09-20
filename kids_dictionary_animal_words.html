@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Dictionary - Animals Chart Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #0f172a;
+            --accent: #ea7a27;
+            --accent-2: #d46a1e;
+            --ok: #10b981;
+            --ok-soft: #d1fae5;
+            --muted: #f8fafc;
+            --border: #e5e7eb;
+            --text: #1f2937;
+            --bg: #ffffff;
+            --rule-color: #3b82f6; 
+            
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        /* Header */
+        .site-header {
+            background: var(--header-bg); color: white; padding: var(--spacing-md) var(--spacing-lg);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { color: var(--accent); font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+        .header-controls { display: flex; align-items: center; gap: var(--spacing-md); }
+        .lang-selector { display: flex; background-color: #334155; border-radius: var(--spacing-xs); padding: var(--spacing-xs); }
+        .lang-btn {
+            background: transparent; border: none; color: white; padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--spacing-xs); cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: background-color 0.2s;
+        }
+        .lang-btn.active { background-color: var(--accent); }
+        .audio-toggle { background: var(--accent); border: none; padding: var(--spacing-sm); border-radius: var(--spacing-xs); font-size: 1rem; cursor: pointer; }
+
+        /* Help Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); display: none; z-index: 10000; padding: 16px; }
+        .modal-dialog {
+            background: #fff; border-radius: 10px; max-width: 720px; width: 100%; margin: 0 auto;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        .modal-title { font-weight: 700; color: var(--text); font-size: 1.05rem; }
+        .modal-close { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #334155; }
+        .modal-body { padding: 14px 16px; color: var(--text); line-height: 1.45; }
+        .modal-body p { margin-bottom: 10px; }
+        .modal-body ul { margin-left: 18px; margin-bottom: 10px; }
+        .modal-footer { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 16px; border-top: 1px solid var(--border); }
+        .modal-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-weight: 600; }
+        .modal-btn.secondary { background: var(--muted); color: var(--text); border: 1px solid var(--border); }
+        @media (max-width: 600px) { .modal-title { font-size: 1rem; } .modal-body { font-size: 0.95rem; } }
+
+        /* Main Container */
+        .main-container { max-width: 900px; width: 90%; margin: 0 auto; padding: var(--spacing-lg) var(--spacing-sm); }
+        .main-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border);
+        }
+        .main-title { font-weight: 600; font-size: 1.4rem; color: var(--text); }
+        .nav-buttons { display: flex; gap: var(--spacing-sm); }
+        .btn-primary, .btn-secondary {
+            padding: var(--spacing-sm) var(--spacing-md); border: none; border-radius: var(--spacing-xs);
+            font-family: inherit; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--muted); color: var(--text); border: 1px solid var(--border); }
+        .btn-primary:hover { background: var(--accent-2); }
+        .btn-secondary:hover { background: var(--border); }
+
+        /* Item Selection Grid */
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl); }
+        .item-card {
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--spacing-sm); padding: var(--spacing-md);
+            cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .item-icon { font-size: 3rem; margin-bottom: var(--spacing-sm); display: flex; justify-content: center; align-items: center; height: 50px; }
+        .item-icon svg { width: 50px; height: 50px; }
+        .item-title { font-weight: 600; font-size: 0.9rem; margin-bottom: var(--spacing-xs); }
+        .item-desc { font-size: 0.75rem; color: #6b7280; }
+
+        /* Storyboard & Panels */
+        .storyboard-container { display: none; background: #f1f5f9; border-radius: var(--spacing-sm); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+        .storyboard-container.active { display: block; }
+        .storyboard-title { text-align: center; font-weight: 600; font-size: 1.2rem; margin-bottom: var(--spacing-lg); color: var(--text); }
+        .storyboard-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .panel {
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--spacing-sm); padding: var(--spacing-md); text-align: center;
+            cursor: pointer; transition: all 0.3s; min-height: 100px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; position: relative;
+        }
+        .panel.active { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-color: var(--accent); }
+        .panel-icon { font-size: 2.5rem; margin-bottom: var(--spacing-xs); display: flex; justify-content: center; align-items: center; height: 44px; }
+        .panel-icon svg { width: 44px; height: 44px; }
+        .panel-text { font-size: 0.75rem; font-weight: 500; text-align: center; }
+        .panel-number {
+            position: absolute; top: var(--spacing-xs); left: var(--spacing-xs); background: var(--text); color: white;
+            width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 600;
+        }
+
+        /* Quiz Container */
+        .quiz-container { display: none; background: white; border: 1px solid var(--border); border-radius: var(--spacing-sm); padding: var(--spacing-lg); }
+        .quiz-container.active { display: block; }
+        .quiz-header, .question-container { text-align: center; margin-bottom: var(--spacing-lg); }
+        .quiz-title { font-weight: 600; font-size: 1.1rem; margin-bottom: var(--spacing-sm); color: var(--text); }
+        .quiz-progress { font-size: 0.9rem; color: #6b7280; }
+        .question-text { font-size: 1rem; font-weight: 500; margin-bottom: var(--spacing-lg); color: var(--text); }
+        .answer-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+        .answer-option {
+            background: var(--muted); border: 2px solid var(--border); border-radius: var(--spacing-sm);
+            padding: var(--spacing-lg); cursor: pointer; transition: all 0.2s; text-align: center; font-weight: 500;
+        }
+        .answer-option:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .answer-option.correct { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+        .answer-option.incorrect { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+        .quiz-feedback { text-align: center; padding: var(--spacing-md); border-radius: var(--spacing-sm); font-weight: 500; margin-bottom: var(--spacing-lg); }
+        .quiz-feedback.correct { background: var(--ok-soft); color: var(--ok); }
+        .quiz-feedback.incorrect { background: #fef2f2; color: #dc2626; }
+
+        /* End of Quiz Container */
+        .end-celebration-container { display: none; background: linear-gradient(135deg, var(--ok-soft), var(--muted)); border-radius: var(--spacing-sm); padding: var(--spacing-xl); text-align: center; }
+        .end-celebration-container.active { display: block; }
+        .end-celebration-title { font-size: 1.5rem; font-weight: 700; color: var(--ok); margin-bottom: var(--spacing-md); }
+        .end-celebration-message { font-size: 1rem; margin-bottom: var(--spacing-lg); color: var(--text); }
+        .celebration-stars { font-size: 3rem; margin: var(--spacing-lg) 0; animation: twinkle 1s infinite alternate; }
+        @keyframes twinkle { from { opacity: 0.7; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
+
+        /* Audio & Progress */
+        .audio-controls { display: flex; justify-content: center; gap: var(--spacing-md); margin: var(--spacing-lg) 0; }
+        .audio-btn {
+            background: var(--accent); color: white; border: none; padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--spacing-sm); font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .audio-btn:hover { background: var(--accent-2); }
+        .audio-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .progress-bar { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin: var(--spacing-lg) 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container { width: 95%; }
+            .main-header { flex-direction: column; gap: var(--spacing-sm); text-align: center; }
+            .storyboard-panels { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm); }
+            .answer-options { grid-template-columns: 1fr; }
+        }
+
+        /* Animation & Confetti */
+        @keyframes panelPulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .panel.playing { animation: panelPulse 0.5s ease-in-out; }
+        .confetti-container { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 9999; }
+        .confetti-piece { position: absolute; top: -10vh; width: 8px; height: 14px; opacity: 0.9; border-radius: 2px; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { from { transform: translateY(-10vh) rotate(0deg); } to { transform: translateY(110vh) rotate(720deg); } }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a class="logo" href="#">Beyond Dictionary</a>
+        <div class="header-controls">
+            <div class="lang-selector">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="hi">HI</button>
+            </div>
+            <button class="btn-secondary" id="helpBtn">❓ Help</button>
+            <button class="audio-toggle" id="globalAudioToggle">🔊</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="main-header">
+            <h2 class="main-title" id="main-title">Animals Learning</h2>
+            <div class="nav-buttons">
+                <button class="btn-secondary" id="repeatBtn"></button>
+                <button class="btn-primary" id="nextBtn"></button>
+                <button class="btn-secondary" id="homeBtn"></button>
+            </div>
+        </div>
+
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="items-grid" id="itemGrid"></div>
+        <div class="storyboard-container" id="storyboardContainer">
+            <h3 class="storyboard-title" id="storyboardTitle"></h3>
+            <div class="storyboard-panels" id="storyboardPanels"></div>
+            <div class="audio-controls">
+                <button class="audio-btn" id="playStoryBtn"></button>
+                <button class="audio-btn" id="startQuizBtn"></button>
+            </div>
+        </div>
+
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+                <h3 class="quiz-title" id="quizTitle"></h3>
+                <div class="quiz-progress" id="quizProgress"></div>
+            </div>
+            <div class="question-container">
+                <div class="question-text" id="questionText"></div>
+                <div class="answer-options" id="answerOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback" style="display: none;"></div>
+                <div class="audio-controls">
+                    <button class="audio-btn" id="playStoryBtnQuiz"></button>
+                    <button class="audio-btn" id="repeatQuestionBtn"></button>
+                    <button class="audio-btn" id="nextQuestionBtn" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="end-celebration-container" id="endOfQuizContainer">
+            <h3 class="end-celebration-title" id="end-celebration-title"></h3>
+            <div class="end-celebration-message" id="celebrationMessage"></div>
+            <div class="celebration-stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
+            <div class="audio-controls">
+                <button class="audio-btn" id="celebrationHomeBtn"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confetti" class="confetti-container" aria-hidden="true" style="display:none;"></div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-title" id="helpTitle">Help</div>
+                <button class="modal-close" id="helpCloseBtn" aria-label="Close">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="helpIntroEN"><strong>For Parents (English):</strong> This game helps children learn animal names and habits through a short story (5 cards) followed by a fun quiz (2 questions). You can read on screen or tap the speaker to hear it. Keep sessions short and cheerful.</p>
+                <ul id="helpListEN">
+                    <li>Choose an animal card to start.</li>
+                    <li>Tap ▶️ Play Story to auto-play the 5 panels.</li>
+                    <li>Tap 🎯 Start Quiz to answer questions.</li>
+                    <li>Use 🔊 button to toggle sound on/off.</li>
+                    <li>Switch EN/HI to change language.</li>
+                </ul>
+                <hr style="margin: 12px 0; border: none; border-top: 1px solid var(--border);" />
+                <p id="helpIntroHI"><strong>माता-पिता के लिए (हिंदी):</strong> यह खेल बच्चों को 5 कार्ड की छोटी कहानी और 2 प्रश्नों वाले क्विज़ से जानवरों के बारे में सिखाता है। आप स्क्रीन पर पढ़ सकते हैं या स्पीकर दबाकर सुन सकते हैं। सत्र छोटा और मज़ेदार रखें।</p>
+                <ul id="helpListHI">
+                    <li>शुरू करने के लिए कोई भी जानवर कार्ड चुनें।</li>
+                    <li>▶️ प्ले स्टोरी दबाकर 5 पैनल सुनें/देखें।</li>
+                    <li>🎯 स्टार्ट क्विज़ दबाकर उत्तर दें।</li>
+                    <li>🔊 बटन से आवाज़ चालू/बंद करें।</li>
+                    <li>EN/HI दबाकर भाषा बदलें।</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="helpReadEN">🔊 Read English</button>
+                <button class="modal-btn secondary" id="helpReadHI">🔊 हिंदी सुनें</button>
+                <button class="modal-btn" id="helpOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allLessons = {
+            lion: {
+                title: { en: "Lion", hi: "शेर" },
+                desc: { en: "The king of the jungle", hi: "जंगल का राजा" },
+                panels: [
+                    { icon: "🦁", text: { en: "This is a Lion.", hi: "यह एक शेर है।" } },
+                    { icon: "👑", text: { en: "It is known as the king of the jungle.", hi: "इसे जंगल का राजा कहा जाता है।" } },
+                    { icon: "🔊", text: { en: "A lion makes a loud sound called a roar.", hi: "शेर एक ज़ोर की आवाज़ निकालता है जिसे दहाड़ कहते हैं।" } },
+                    { icon: "💪", text: { en: "Lions are very strong and powerful.", hi: "शेर बहुत मज़बूत और शक्तिशाली होते हैं।" } },
+                    { icon: "🌍", text: { en: "They live in parts of Africa and India.", hi: "वे अफ्रीका और भारत के कुछ हिस्सों में रहते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What sound does a lion make?", hi: "शेर कैसी आवाज़ निकालता है?" }, correct: { en: "A roar", hi: "दहाड़" }, options: [{ en: "A bark", hi: "भौंकना" }, { en: "A meow", hi: "म्याऊं" }, { en: "A roar", hi: "दहाड़" }, { en: "A chirp", hi: "चहचहाना" }] },
+                    { question: { en: "What is the lion known as?", hi: "शेर को किस नाम से जाना जाता है?" }, correct: { en: "King of the jungle", hi: "जंगल का राजा" }, options: [{ en: "King of the water", hi: "पानी का राजा" }, { en: "King of the sky", hi: "आसमान का राजा" }, { en: "King of the jungle", hi: "जंगल का राजा" }, { en: "King of the house", hi: "घर का राजा" }] }
+                ],
+                fullAudio: { en: "This is a Lion. It is known as the king of the jungle. A lion makes a loud sound called a roar. Lions are very strong and powerful. They live in parts of Africa and India.", hi: "यह एक शेर है। इसे जंगल का राजा कहा जाता है। शेर एक ज़ोर की आवाज़ निकालता है जिसे दहाड़ कहते हैं। शेर बहुत मज़बूत और शक्तिशाली होते हैं। वे अफ्रीका और भारत के कुछ हिस्सों में रहते हैं।" }
+            },
+            elephant: {
+                title: { en: "Elephant", hi: "हाथी" },
+                desc: { en: "The largest land animal", hi: "सबसे बड़ा ज़मीनी जानवर" },
+                panels: [
+                    { icon: "🐘", text: { en: "This is an Elephant.", hi: "यह एक हाथी है।" } },
+                    { icon: "📏", text: { en: "It is the largest animal on land.", hi: "यह ज़मीन पर सबसे बड़ा जानवर है।" } },
+                    { icon: "👃", text: { en: "It has a very long nose called a trunk.", hi: "इसकी एक बहुत लंबी नाक होती है जिसे सूंड कहते हैं।" } },
+                    { icon: "👂", text: { en: "Elephants have big, floppy ears.", hi: "हाथियों के बड़े, ढीले कान होते हैं।" } },
+                    { icon: "🤔", text: { en: "They are very intelligent and have good memory.", hi: "वे बहुत बुद्धिमान होते हैं और उनकी याददाश्त अच्छी होती है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is an elephant's long nose called?", hi: "हाथी की लंबी नाक को क्या कहते हैं?" }, correct: { en: "A trunk", hi: "सूंड" }, options: [{ en: "A snout", hi: "थूथन" }, { en: "A trunk", hi: "सूंड" }, { en: "A beak", hi: "चोंच" }, { en: "A horn", hi: "सींग" }] },
+                    { question: { en: "What is special about an elephant's memory?", hi: "हाथी की याददाश्त के बारे में क्या खास है?" }, correct: { en: "It is very good", hi: "यह बहुत अच्छी होती है" }, options: [{ en: "It is very bad", hi: "यह बहुत खराब होती है" }, { en: "They have no memory", hi: "उनकी कोई याददाश्त नहीं होती" }, { en: "It is very good", hi: "यह बहुत अच्छी होती है" }, { en: "It lasts one day", hi: "यह एक दिन तक रहती है" }] }
+                ],
+                fullAudio: { en: "This is an Elephant. It is the largest animal on land. It has a very long nose called a trunk. Elephants have big, floppy ears. They are very intelligent and have good memory.", hi: "यह एक हाथी है। यह ज़मीन पर सबसे बड़ा जानवर है। इसकी एक बहुत लंबी नाक होती है जिसे सूंड कहते हैं। हाथियों के बड़े, ढीले कान होते हैं। वे बहुत बुद्धिमान होते हैं और उनकी याददाश्त अच्छी होती है।" }
+            },
+            monkey: {
+                title: { en: "Monkey", hi: "बंदर" },
+                desc: { en: "A playful, tree-climbing animal", hi: "एक चंचल, पेड़ पर चढ़ने वाला जानवर" },
+                panels: [
+                    { icon: "🐒", text: { en: "This is a Monkey.", hi: "यह एक बंदर है।" } },
+                    { icon: "🌳", text: { en: "Monkeys are great at climbing trees.", hi: "बंदर पेड़ पर चढ़ने में माहिर होते हैं।" } },
+                    { icon: "🍌", text: { en: "Their favorite food is bananas!", hi: "उनका पसंदीदा भोजन केला है!" } },
+                    { icon: "🤸", text: { en: "They love to play and swing from branches.", hi: "उन्हें खेलना और डालियों से झूलना बहुत पसंद है।" } },
+                    { icon: "🔊", text: { en: "They make a chattering sound.", hi: "वे एक किटकिटाने की आवाज़ निकालते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is a monkey's favorite food?", hi: "बंदर का पसंदीदा भोजन क्या है?" }, correct: { en: "Bananas", hi: "केले" }, options: [{ en: "Apples", hi: "सेब" }, { en: "Bananas", hi: "केले" }, { en: "Carrots", hi: "गाजर" }, { en: "Leaves", hi: "पत्तियाँ" }] },
+                    { question: { en: "Where are monkeys very good at climbing?", hi: "बंदर कहाँ चढ़ने में बहुत अच्छे होते हैं?" }, correct: { en: "On trees", hi: "पेड़ों पर" }, options: [{ en: "On mountains", hi: "पहाड़ों पर" }, { en: "On buildings", hi: "इमारतों पर" }, { en: "On trees", hi: "पेड़ों पर" }, { en: "In water", hi: "पानी में" }] }
+                ],
+                fullAudio: { en: "This is a Monkey. Monkeys are great at climbing trees. Their favorite food is bananas! They love to play and swing from branches. They make a chattering sound.", hi: "यह एक बंदर है। बंदर पेड़ पर चढ़ने में माहिर होते हैं। उनका पसंदीदा भोजन केला है! उन्हें खेलना और डालियों से झूलना बहुत पसंद है। वे एक किटकिटाने की आवाज़ निकालते हैं।" }
+            },
+            tiger: {
+                title: { en: "Tiger", hi: "बाघ" },
+                desc: { en: "A big cat with black stripes", hi: "काली धारियों वाली एक बड़ी बिल्ली" },
+                panels: [
+                    { icon: "🐅", text: { en: "This is a Tiger.", hi: "यह एक बाघ है।" } },
+                    { icon: "🇮🇳", text: { en: "It is the national animal of India.", hi: "यह भारत का राष्ट्रीय पशु है।" } },
+                    { icon: "🎨", text: { en: "It has orange fur with black stripes.", hi: "इसकी नारंगी खाल पर काली धारियाँ होती हैं।" } },
+                    { icon: "🐈", text: { en: "A tiger is the biggest cat in the world.", hi: "बाघ दुनिया की सबसे बड़ी बिल्ली है।" } },
+                    { icon: "🤫", text: { en: "They are very good hunters.", hi: "वे बहुत अच्छे शिकारी होते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What pattern is on a tiger's fur?", hi: "बाघ की खाल पर कौन सा पैटर्न होता है?" }, correct: { en: "Stripes", hi: "धारियाँ" }, options: [{ en: "Spots", hi: "धब्बे" }, { en: "Stripes", hi: "धारियाँ" }, { en: "Circles", hi: "गोले" }, { en: "Plain", hi: "सादा" }] },
+                    { question: { en: "A tiger is the national animal of which country?", hi: "बाघ किस देश का राष्ट्रीय पशु है?" }, correct: { en: "India", hi: "भारत" }, options: [{ en: "America", hi: "अमेरिका" }, { en: "China", hi: "चीन" }, { en: "Egypt", hi: "मिस्र" }, { en: "India", hi: "भारत" }] }
+                ],
+                fullAudio: { en: "This is a Tiger. It is the national animal of India. It has orange fur with black stripes. A tiger is the biggest cat in the world. They are very good hunters.", hi: "यह एक बाघ है। यह भारत का राष्ट्रीय पशु है। इसकी नारंगी खाल पर काली धारियाँ होती हैं। बाघ दुनिया की सबसे बड़ी बिल्ली है। वे बहुत अच्छे शिकारी होते हैं।" }
+            },
+            dog: {
+                title: { en: "Dog", hi: "कुत्ता" },
+                desc: { en: "A loyal pet and friend", hi: "एक वफादार पालतू और दोस्त" },
+                panels: [
+                    { icon: "🐕", text: { en: "This is a Dog.", hi: "यह एक कुत्ता है।" } },
+                    { icon: "🏡", text: { en: "Many people keep dogs as pets.", hi: "बहुत से लोग कुत्तों को पालतू जानवर के रूप में रखते हैं।" } },
+                    { icon: "🔊", text: { en: "A dog says 'woof woof' and it is called barking.", hi: "कुत्ता 'वूफ वूफ' कहता है और इसे भौंकना कहते हैं।" } },
+                    { icon: "❤️", text: { en: "Dogs are known for being very loyal and friendly.", hi: "कुत्ते बहुत वफादार और मिलनसार होने के लिए जाने जाते हैं।" } },
+                    { icon: "🦴", text: { en: "They love to play fetch and chew on bones.", hi: "उन्हें फेंककर पकड़ने का खेल खेलना और हड्डियाँ चबाना बहुत पसंद है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What sound does a dog make?", hi: "कुत्ता कैसी आवाज़ निकालता है?" }, correct: { en: "Barking", hi: "भौंकना" }, options: [{ en: "Roaring", hi: "दहाड़ना" }, { en: "Meowing", hi: "म्याऊं करना" }, { en: "Barking", hi: "भौंकना" }, { en: "Hissing", hi: "फुफकारना" }] },
+                    { question: { en: "What quality are dogs known for?", hi: "कुत्ते किस गुण के लिए जाने जाते हैं?" }, correct: { en: "Being loyal", hi: "वफादार होना" }, options: [{ en: "Being lazy", hi: "आलसी होना" }, { en: "Being loyal", hi: "वफादार होना" }, { en: "Climbing trees", hi: "पेड़ों पर चढ़ना" }, { en: "Swimming fast", hi: "तेज तैरना" }] }
+                ],
+                fullAudio: { en: "This is a Dog. Many people keep dogs as pets. A dog says 'woof woof' and it is called barking. Dogs are known for being very loyal and friendly. They love to play fetch and chew on bones.", hi: "यह एक कुत्ता है। बहुत से लोग कुत्तों को पालतू जानवर के रूप में रखते हैं। कुत्ता 'वूफ वूफ' कहता है और इसे भौंकना कहते हैं। कुत्ते बहुत वफादार और मिलनसार होने के लिए जाने जाते हैं। उन्हें फेंककर पकड़ने का खेल खेलना और हड्डियाँ चबाना बहुत पसंद है।" }
+            },
+            cat: {
+                title: { en: "Cat", hi: "बिल्ली" },
+                desc: { en: "An independent, furry pet", hi: "एक स्वतंत्र, रोएँदार पालतू जानवर" },
+                panels: [
+                    { icon: "🐈", text: { en: "This is a Cat.", hi: "यह एक बिल्ली है।" } },
+                    { icon: "🔊", text: { en: "A cat says 'meow' and also purrs when it is happy.", hi: "बिल्ली 'म्याऊं' कहती है और खुश होने पर घुरघुराती भी है।" } },
+                    { icon: "🥛", text: { en: "Cats love to drink milk.", hi: "बिल्लियों को दूध पीना बहुत पसंद है।" } },
+                    { icon: "😴", text: { en: "They are famous for sleeping a lot!", hi: "वे बहुत सोने के लिए प्रसिद्ध हैं!" } },
+                    { icon: "🧶", text: { en: "They also love to play with yarn.", hi: "उन्हें ऊन के गोले से खेलना भी बहुत पसंद है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What sound does a cat make?", hi: "बिल्ली कैसी आवाज़ निकालती है?" }, correct: { en: "Meow", hi: "म्याऊं" }, options: [{ en: "Roar", hi: "दहाड़" }, { en: "Bark", hi: "भौंकना" }, { en: "Moo", hi: "मूं" }, { en: "Meow", hi: "म्याऊं" }] },
+                    { question: { en: "What activity is a cat famous for?", hi: "बिल्ली किस गतिविधि के लिए प्रसिद्ध है?" }, correct: { en: "Sleeping a lot", hi: "बहुत सोना" }, options: [{ en: "Running fast", hi: "तेज दौड़ना" }, { en: "Swimming", hi: "तैरना" }, { en: "Sleeping a lot", hi: "बहुत सोना" }, { en: "Flying", hi: "उड़ना" }] }
+                ],
+                fullAudio: { en: "This is a Cat. A cat says 'meow' and also purrs when it is happy. Cats love to drink milk. They are famous for sleeping a lot! They also love to play with yarn.", hi: "यह एक बिल्ली है। बिल्ली 'म्याऊं' कहती है और खुश होने पर घुरघुराती भी है। बिल्लियों को दूध पीना बहुत पसंद है। वे बहुत सोने के लिए प्रसिद्ध हैं! उन्हें ऊन के गोले से खेलना भी बहुत पसंद है।" }
+            },
+            cow: {
+                title: { en: "Cow", hi: "गाय" },
+                desc: { en: "A farm animal that gives us milk", hi: "एक खेत का जानवर जो हमें दूध देता है" },
+                panels: [
+                    { icon: "🐄", text: { en: "This is a Cow.", hi: "यह एक गाय है।" } },
+                    { icon: "🥛", text: { en: "Cows give us healthy milk to drink.", hi: "गाय हमें पीने के लिए स्वस्थ दूध देती हैं।" } },
+                    { icon: "🔊", text: { en: "A cow makes a sound called 'moo'.", hi: "गाय 'मूं' नामक आवाज़ निकालती है।" } },
+                    { icon: "🌿", text: { en: "They spend their day eating grass in the fields.", hi: "वे अपना दिन खेतों में घास खाकर बिताती हैं।" } },
+                    { icon: "🙏", text: { en: "In India, the cow is considered a sacred animal.", hi: "भारत में गाय को एक पवित्र पशु माना जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What do we get from cows?", hi: "हमें गायों से क्या मिलता है?" }, correct: { en: "Milk", hi: "दूध" }, options: [{ en: "Eggs", hi: "अंडे" }, { en: "Wool", hi: "ऊन" }, { en: "Milk", hi: "दूध" }, { en: "Honey", hi: "शहद" }] },
+                    { question: { en: "What sound does a cow make?", hi: "गाय कैसी आवाज़ निकालती है?" }, correct: { en: "Moo", hi: "मूं" }, options: [{ en: "Moo", hi: "मूं" }, { en: "Oink", hi: "ओइंक" }, { en: "Baa", hi: "बा" }, { en: "Hiss", hi: "फुफकार" }] }
+                ],
+                fullAudio: { en: "This is a Cow. Cows give us healthy milk to drink. A cow makes a sound called 'moo'. They spend their day eating grass in the fields. In India, the cow is considered a sacred animal.", hi: "यह एक गाय है। गाय हमें पीने के लिए स्वस्थ दूध देती हैं। गाय 'मूं' नामक आवाज़ निकालती है। वे अपना दिन खेतों में घास खाकर बिताती हैं। भारत में गाय को एक पवित्र पशु माना जाता है।" }
+            },
+            horse: {
+                title: { en: "Horse", hi: "घोड़ा" },
+                desc: { en: "A strong animal that can run very fast", hi: "एक मज़बूत जानवर जो बहुत तेज़ दौड़ सकता है" },
+                panels: [
+                    { icon: "🐎", text: { en: "This is a Horse.", hi: "यह एक घोड़ा है।" } },
+                    { icon: "🏁", text: { en: "Horses are known for running very fast.", hi: "घोड़े बहुत तेज़ दौड़ने के लिए जाने जाते हैं।" } },
+                    { icon: "🔊", text: { en: "The sound a horse makes is called a 'neigh'.", hi: "घोड़े द्वारा निकाली जाने वाली आवाज़ को 'हिनहिनाना' कहते हैं।" } },
+                    { icon: "🧑‍🌾", text: { en: "They are often found on farms and help people work.", hi: "वे अक्सर खेतों में पाए जाते हैं और लोगों को काम में मदद करते हैं।" } },
+                    { icon: "👶", text: { en: "A baby horse is called a foal.", hi: "घोड़े के बच्चे को 'बछेड़ा' कहा जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What are horses known for?", hi: "घोड़े किस लिए जाने जाते हैं?" }, correct: { en: "Running fast", hi: "तेज़ दौड़ने के लिए" }, options: [{ en: "Running fast", hi: "तेज़ दौड़ने के लिए" }, { en: "Swimming deep", hi: "गहरा तैरने के लिए" }, { en: "Climbing high", hi: "ऊँचा चढ़ने के लिए" }, { en: "Sleeping long", hi: "लंबी नींद के लिए" }] },
+                    { question: { en: "What is a baby horse called?", hi: "घोड़े के बच्चे को क्या कहते हैं?" }, correct: { en: "A foal", hi: "बछेड़ा" }, options: [{ en: "A calf", hi: "बछड़ा" }, { en: "A kitten", hi: "बिल्ली का बच्चा" }, { en: "A puppy", hi: "पिल्ला" }, { en: "A foal", hi: "बछेड़ा" }] }
+                ],
+                fullAudio: { en: "This is a Horse. Horses are known for running very fast. The sound a horse makes is called a 'neigh'. They are often found on farms and help people work. A baby horse is called a foal.", hi: "यह एक घोड़ा है। घोड़े बहुत तेज़ दौड़ने के लिए जाने जाते हैं। घोड़े द्वारा निकाली जाने वाली आवाज़ को 'हिनहिनाना' कहते हैं। वे अक्सर खेतों में पाए जाते हैं और लोगों को काम में मदद करते हैं। घोड़े के बच्चे को 'बछेड़ा' कहा जाता है।" }
+            },
+            fish: {
+                title: { en: "Fish", hi: "मछली" },
+                desc: { en: "An animal that lives and breathes in water", hi: "एक जानवर जो पानी में रहता और सांस लेता है" },
+                panels: [
+                    { icon: "🐠", text: { en: "This is a Fish.", hi: "यह एक मछली है।" } },
+                    { icon: "🌊", text: { en: "Fish live in water, like rivers, lakes and oceans.", hi: "मछलियाँ पानी में रहती हैं, जैसे नदियों, झीलों और महासागरों में।" } },
+                    { icon: "🏊", text: { en: "They use their fins to swim.", hi: "वे तैरने के लिए अपने पंखों का उपयोग करती हैं।" } },
+                    { icon: "😮", text: { en: "They breathe underwater using special things called gills.", hi: "वे गलफड़ों नामक विशेष चीज़ों का उपयोग करके पानी के नीचे सांस लेती हैं।" } },
+                    { icon: "🌈", text: { en: "Fish come in many different colors and sizes.", hi: "मछलियाँ कई अलग-अलग रंगों और आकारों में आती हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "Where do fish live?", hi: "मछलियाँ कहाँ रहती हैं?" }, correct: { en: "In water", hi: "पानी में" }, options: [{ en: "On land", hi: "ज़मीन पर" }, { en: "In the sky", hi: "आसमान में" }, { en: "In water", hi: "पानी में" }, { en: "In trees", hi: "पेड़ों में" }] },
+                    { question: { en: "What do fish use to swim?", hi: "मछलियाँ तैरने के लिए किसका उपयोग करती हैं?" }, correct: { en: "Fins", hi: "पंख" }, options: [{ en: "Legs", hi: "पैर" }, { en: "Fins", hi: "पंख" }, { en: "Wings", hi: "पंख" }, { en: "Hands", hi: "हाथ" }] }
+                ],
+                fullAudio: { en: "This is a Fish. Fish live in water, like rivers, lakes and oceans. They use their fins to swim. They breathe underwater using special things called gills. Fish come in many different colors and sizes.", hi: "यह एक मछली है। मछलियाँ पानी में रहती हैं, जैसे नदियों, झीलों और महासागरों में। वे तैरने के लिए अपने पंखों का उपयोग करती हैं। वे गलफड़ों नामक विशेष चीज़ों का उपयोग करके पानी के नीचे सांस लेती हैं। मछलियाँ कई अलग-अलग रंगों और आकारों में आती हैं।" }
+            },
+            bird: {
+                title: { en: "Bird", hi: "पक्षी" },
+                desc: { en: "An animal with feathers that can fly", hi: "पंखों वाला एक जानवर जो उड़ सकता है" },
+                panels: [
+                    { icon: "🐦", text: { en: "This is a Bird.", hi: "यह एक पक्षी है।" } },
+                    { icon: "🪶", text: { en: "Birds are covered in feathers.", hi: "पक्षी पंखों से ढके होते हैं।" } },
+                    { icon: "✈️", text: { en: "Most birds can fly high in the sky using their wings.", hi: "अधिकांश पक्षी अपने पंखों का उपयोग करके आसमान में ऊँचा उड़ सकते हैं।" } },
+                    { icon: "🥚", text: { en: "They build nests and lay eggs.", hi: "वे घोंसले बनाते हैं और अंडे देते हैं।" } },
+                    { icon: "🎶", text: { en: "Many birds sing beautiful songs.", hi: "बहुत से पक्षी सुंदर गीत गाते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What special ability do most birds have?", hi: "अधिकांश पक्षियों में कौन सी विशेष क्षमता होती है?" }, correct: { en: "They can fly", hi: "वे उड़ सकते हैं" }, options: [{ en: "They can swim underwater", hi: "वे पानी के नीचे तैर सकते हैं" }, { en: "They can fly", hi: "वे उड़ सकते हैं" }, { en: "They can run very fast", hi: "वे बहुत तेज दौड़ सकते हैं" }, { en: "They can talk", hi: "वे बात कर सकते हैं" }] },
+                    { question: { en: "What covers a bird's body?", hi: "पक्षी का शरीर किससे ढका होता है?" }, correct: { en: "Feathers", hi: "पंखों से" }, options: [{ en: "Fur", hi: "फर से" }, { en: "Scales", hi: "शल्कों से" }, { en: "Skin", hi: "त्वचा से" }, { en: "Feathers", hi: "पंखों से" }] }
+                ],
+                fullAudio: { en: "This is a Bird. Birds are covered in feathers. Most birds can fly high in the sky using their wings. They build nests and lay eggs. Many birds sing beautiful songs.", hi: "यह एक पक्षी है। पक्षी पंखों से ढके होते हैं। अधिकांश पक्षी अपने पंखों का उपयोग करके आसमान में ऊँचा उड़ सकते हैं। वे घोंसले बनाते हैं और अंडे देते हैं। बहुत से पक्षी सुंदर गीत गाते हैं।" }
+            },
+            bear: {
+                title: { en: "Bear", hi: "भालू" },
+                desc: { en: "A large, furry forest animal", hi: "एक बड़ा, रोएँदार जंगली जानवर" },
+                panels: [
+                    { icon: "🐻", text: { en: "This is a Bear.", hi: "यह एक भालू है।" } },
+                    { icon: "🌳", text: { en: "Bears live in forests and mountains.", hi: "भालू जंगलों और पहाड़ों में रहते हैं।" } },
+                    { icon: "🍯", text: { en: "They love to eat honey.", hi: "उन्हें शहद खाना बहुत पसंद है।" } },
+                    { icon: "😴", text: { en: "In winter, bears sleep for a long time. This is called hibernation.", hi: "सर्दियों में, भालू लंबे समय तक सोते हैं। इसे हाइबरनेशन कहते हैं।" } },
+                    { icon: "🐾", text: { en: "A baby bear is called a cub.", hi: "भालू के बच्चे को शावक कहा जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What sweet food do bears love to eat?", hi: "भालू को कौन सा मीठा भोजन खाना पसंद है?" }, correct: { en: "Honey", hi: "शहद" }, options: [{ en: "Cake", hi: "केक" }, { en: "Honey", hi: "शहद" }, { en: "Ice Cream", hi: "आइसक्रीम" }, { en: "Chocolate", hi: "चॉकलेट" }] },
+                    { question: { en: "What is a baby bear called?", hi: "भालू के बच्चे को क्या कहते हैं?" }, correct: { en: "A cub", hi: "शावक" }, options: [{ en: "A kitten", hi: "बिल्ली का बच्चा" }, { en: "A puppy", hi: "पिल्ला" }, { en: "A cub", hi: "शावक" }, { en: "A chick", hi: "चूजा" }] }
+                ],
+                fullAudio: { en: "This is a Bear. Bears live in forests and mountains. They love to eat honey. In winter, bears sleep for a long time. This is called hibernation. A baby bear is called a cub.", hi: "यह एक भालू है। भालू जंगलों और पहाड़ों में रहते हैं। उन्हें शहद खाना बहुत पसंद है। सर्दियों में, भालू लंबे समय तक सोते हैं। इसे हाइबरनेशन कहते हैं। भालू के बच्चे को शावक कहा जाता है।" }
+            },
+            frog: {
+                title: { en: "Frog", hi: "मेंढक" },
+                desc: { en: "An amphibian that can jump high", hi: "एक उभयचर जो ऊँचा कूद सकता है" },
+                panels: [
+                    { icon: "🐸", text: { en: "This is a Frog.", hi: "यह एक मेंढक है।" } },
+                    { icon: "💧", text: { en: "Frogs can live both in water and on land.", hi: "मेंढक पानी और ज़मीन दोनों पर रह सकते हैं।" } },
+                    { icon: "🦗", text: { en: "They use their long tongues to catch insects.", hi: "वे कीड़ों को पकड़ने के लिए अपनी लंबी जीभ का उपयोग करते हैं।" } },
+                    { icon: "🔊", text: { en: "A frog makes a 'ribbit' sound.", hi: "मेंढक 'रिबिट' की आवाज़ निकालता है।" } },
+                    { icon: "👶", text: { en: "A baby frog is called a tadpole.", hi: "मेंढक के बच्चे को टैडपोल कहा जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "Where can frogs live?", hi: "मेंढक कहाँ रह सकते हैं?" }, correct: { en: "Both in water and on land", hi: "पानी और ज़मीन दोनों पर" }, options: [{ en: "Only in water", hi: "केवल पानी में" }, { en: "Only on land", hi: "केवल ज़मीन पर" }, { en: "Both in water and on land", hi: "पानी और ज़मीन दोनों पर" }, { en: "Only in trees", hi: "केवल पेड़ों पर" }] },
+                    { question: { en: "What is a baby frog called?", hi: "मेंढक के बच्चे को क्या कहते हैं?" }, correct: { en: "A tadpole", hi: "टैडपोल" }, options: [{ en: "A froglet", hi: "फ्रॉगलेट" }, { en: "A tadpole", hi: "टैडपोल" }, { en: "A calf", hi: "बछड़ा" }, { en: "A cub", hi: "शावक" }] }
+                ],
+                fullAudio: { en: "This is a Frog. Frogs can live both in water and on land. They use their long tongues to catch insects. A frog makes a 'ribbit' sound. A baby frog is called a tadpole.", hi: "यह एक मेंढक है। मेंढक पानी और ज़मीन दोनों पर रह सकते हैं। वे कीड़ों को पकड़ने के लिए अपनी लंबी जीभ का उपयोग करते हैं। मेंढक 'रिबिट' की आवाज़ निकालता है। मेंढक के बच्चे को टैडपोल कहा जाता है।" }
+            },
+            snake: {
+                title: { en: "Snake", hi: "साँप" },
+                desc: { en: "A long reptile with no legs", hi: "बिना पैरों वाला एक लंबा सरीसृप" },
+                panels: [
+                    { icon: "🐍", text: { en: "This is a Snake.", hi: "यह एक साँप है।" } },
+                    { icon: "🦵", text: { en: "Snakes have long bodies but no legs.", hi: "साँपों का शरीर लंबा होता है लेकिन पैर नहीं होते।" } },
+                    { icon: "↔️", text: { en: "They move by slithering on the ground.", hi: "वे ज़मीन पर रेंगकर चलते हैं।" } },
+                    { icon: "🔊", text: { en: "A snake makes a hissing sound.", hi: "साँप फुफकारने की आवाज़ निकालता है।" } },
+                    { icon: "👕", text: { en: "Snakes shed their old skin as they grow.", hi: "साँप बड़े होने पर अपनी पुरानी त्वचा उतार देते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "How do snakes move?", hi: "साँप कैसे चलते हैं?" }, correct: { en: "By slithering", hi: "रेंगकर" }, options: [{ en: "By walking", hi: "चलकर" }, { en: "By jumping", hi: "कूदकर" }, { en: "By slithering", hi: "रेंगकर" }, { en: "By flying", hi: "उड़कर" }] },
+                    { question: { en: "What sound does a snake make?", hi: "साँप कैसी आवाज़ निकालता है?" }, correct: { en: "A hiss", hi: "फुफकार" }, options: [{ en: "A bark", hi: "भौंकना" }, { en: "A roar", hi: "दहाड़" }, { en: "A hiss", hi: "फुफकार" }, { en: "A moo", hi: "मूं" }] }
+                ],
+                fullAudio: { en: "This is a Snake. Snakes have long bodies but no legs. They move by slithering on the ground. A snake makes a hissing sound. Snakes shed their old skin as they grow.", hi: "यह एक साँप है। साँपों का शरीर लंबा होता है लेकिन पैर नहीं होते। वे ज़मीन पर रेंगकर चलते हैं। साँप फुफकारने की आवाज़ निकालता है। साँप बड़े होने पर अपनी पुरानी त्वचा उतार देते हैं।" }
+            },
+            penguin: {
+                title: { en: "Penguin", hi: "पेंगुइन" },
+                desc: { en: "A bird that swims but cannot fly", hi: "एक पक्षी जो तैरता है पर उड़ नहीं सकता" },
+                panels: [
+                    { icon: "🐧", text: { en: "This is a Penguin.", hi: "यह एक पेंगुइन है।" } },
+                    { icon: "🥶", text: { en: "Penguins live in very cold places, like Antarctica.", hi: "पेंगुइन बहुत ठंडी जगहों पर रहते हैं, जैसे अंटार्कटिका।" } },
+                    { icon: "⚫⚪", text: { en: "They are black and white and look like they are wearing a tuxedo.", hi: "वे काले और सफेद होते हैं और ऐसा लगता है जैसे उन्होंने टक्सीडो पहना हो।" } },
+                    { icon: "✈️", text: { en: "They are birds, but they cannot fly.", hi: "वे पक्षी हैं, लेकिन वे उड़ नहीं सकते।" } },
+                    { icon: "🏊", text: { en: "Instead, they are excellent swimmers.", hi: "इसके बजाय, वे उत्कृष्ट तैराक होते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "Can penguins fly?", hi: "क्या पेंगुइन उड़ सकते हैं?" }, correct: { en: "No", hi: "नहीं" }, options: [{ en: "Yes", hi: "हाँ" }, { en: "No", hi: "नहीं" }, { en: "Only for a short time", hi: "केवल थोड़े समय के लिए" }, { en: "Only when they are babies", hi: "केवल जब वे बच्चे होते हैं" }] },
+                    { question: { en: "Where do penguins live?", hi: "पेंगुइन कहाँ रहते हैं?" }, correct: { en: "In very cold places", hi: "बहुत ठंडी जगहों पर" }, options: [{ en: "In the desert", hi: "रेगिस्तान में" }, { en: "In the jungle", hi: "जंगल में" }, { en: "In very cold places", hi: "बहुत ठंडी जगहों पर" }, { en: "In the city", hi: "शहर में" }] }
+                ],
+                fullAudio: { en: "This is a Penguin. Penguins live in very cold places, like Antarctica. They are black and white and look like they are wearing a tuxedo. They are birds, but they cannot fly. Instead, they are excellent swimmers.", hi: "यह एक पेंगुइन है। पेंगुइन बहुत ठंडी जगहों पर रहते हैं, जैसे अंटार्कटिका। वे काले और सफेद होते हैं और ऐसा लगता है जैसे उन्होंने टक्सीडो पहना हो। वे पक्षी हैं, लेकिन वे उड़ नहीं सकते। इसके बजाय, वे उत्कृष्ट तैराक होते हैं।" }
+            },
+            owl: {
+                title: { en: "Owl", hi: "उल्लू" },
+                desc: { en: "A bird that is awake at night", hi: "एक पक्षी जो रात में जागता है" },
+                panels: [
+                    { icon: "🦉", text: { en: "This is an Owl.", hi: "यह एक उल्लू है।" } },
+                    { icon: "🌙", text: { en: "Owls are nocturnal, which means they are active at night.", hi: "उल्लू निशाचर होते हैं, जिसका अर्थ है कि वे रात में सक्रिय रहते हैं।" } },
+                    { icon: "👀", text: { en: "They have very large eyes to see in the dark.", hi: "अंधेरे में देखने के लिए उनकी बहुत बड़ी आँखें होती हैं।" } },
+                    { icon: "🔄", text: { en: "An owl can turn its head almost all the way around.", hi: "एक उल्लू अपना सिर लगभग पूरी तरह घुमा सकता है।" } },
+                    { icon: "🔊", text: { en: "They make a 'hoot' sound.", hi: "वे 'हूट' की आवाज़ निकालते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "When are owls active?", hi: "उल्लू कब सक्रिय रहते हैं?" }, correct: { en: "At night", hi: "रात में" }, options: [{ en: "In the morning", hi: "सुबह में" }, { en: "In the afternoon", hi: "दोपहर में" }, { en: "At night", hi: "रात में" }, { en: "All day", hi: "पूरे दिन" }] },
+                    { question: { en: "What is special about an owl's head?", hi: "उल्लू के सिर के बारे में क्या खास है?" }, correct: { en: "It can turn almost all the way around", hi: "यह लगभग पूरी तरह घूम सकता है" }, options: [{ en: "It is very small", hi: "यह बहुत छोटा होता है" }, { en: "It can turn almost all the way around", hi: "यह लगभग पूरी तरह घूम सकता है" }, { en: "It has no feathers", hi: "इस पर पंख नहीं होते" }, { en: "It can glow in the dark", hi: "यह अंधेरे में चमक सकता है" }] }
+                ],
+                fullAudio: { en: "This is an Owl. Owls are nocturnal, which means they are active at night. They have very large eyes to see in the dark. An owl can turn its head almost all the way around. They make a 'hoot' sound.", hi: "यह एक उल्लू है। उल्लू निशाचर होते हैं, जिसका अर्थ है कि वे रात में सक्रिय रहते हैं। अंधेरे में देखने के लिए उनकी बहुत बड़ी आँखें होती हैं। एक उल्लू अपना सिर लगभग पूरी तरह घुमा सकता है। वे 'हूट' की आवाज़ निकालते हैं।" }
+            },
+            duck: {
+                title: { en: "Duck", hi: "बत्तख" },
+                desc: { en: "A bird that loves to swim in ponds", hi: "एक पक्षी जिसे तालाबों में तैरना पसंद है" },
+                panels: [
+                    { icon: "🦆", text: { en: "This is a Duck.", hi: "यह एक बत्तख है।" } },
+                    { icon: "🌊", text: { en: "Ducks love to swim in ponds and lakes.", hi: "बत्तखों को तालाबों और झीलों में तैरना पसंद है।" } },
+                    { icon: "🔊", text: { en: "They make a 'quack quack' sound.", hi: "वे 'क्वाक क्वाक' की आवाज़ निकालती हैं।" } },
+                    { icon: "🦶", text: { en: "They have special feet called webbed feet to help them swim.", hi: "उनके पास तैरने में मदद करने के लिए वेबबेड फीट नामक विशेष पैर होते हैं।" } },
+                    { icon: "👶", text: { en: "A baby duck is called a duckling.", hi: "बत्तख के बच्चे को डकलिंग कहा जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What sound does a duck make?", hi: "बत्तख कैसी आवाज़ निकालती है?" }, correct: { en: "Quack", hi: "क्वाक" }, options: [{ en: "Hoot", hi: "हूट" }, { en: "Roar", hi: "दहाड़" }, { en: "Quack", hi: "क्वाक" }, { en: "Meow", hi: "म्याऊं" }] },
+                    { question: { en: "What helps a duck to swim?", hi: "बत्तख को तैरने में क्या मदद करता है?" }, correct: { en: "Webbed feet", hi: "वेबबेड फीट" }, options: [{ en: "Big wings", hi: "बड़े पंख" }, { en: "A long beak", hi: "एक लंबी चोंच" }, { en: "Feathers", hi: "पंख" }, { en: "Webbed feet", hi: "वेबबेड फीट" }] }
+                ],
+                fullAudio: { en: "This is a Duck. Ducks love to swim in ponds and lakes. They make a 'quack quack' sound. They have special feet called webbed feet to help them swim. A baby duck is called a duckling.", hi: "यह एक बत्तख है। बत्तखों को तालाबों और झीलों में तैरना पसंद है। वे 'क्वाक क्वाक' की आवाज़ निकालती हैं। उनके पास तैरने में मदद करने के लिए वेबबेड फीट नामक विशेष पैर होते हैं। बत्तख के बच्चे को डकलिंग कहा जाता है।" }
+            },
+            sheep: {
+                title: { en: "Sheep", hi: "भेड़" },
+                desc: { en: "A gentle animal with woolly fur", hi: "ऊनी फर वाला एक कोमल जानवर" },
+                panels: [
+                    { icon: "🐑", text: { en: "This is a Sheep.", hi: "यह एक भेड़ है।" } },
+                    { icon: "☁️", text: { en: "Its fur is soft and woolly, like a cloud.", hi: "इसका फर एक बादल की तरह नरम और ऊनी होता है।" } },
+                    { icon: "👕", text: { en: "We get wool from sheep to make warm clothes.", hi: "हम भेड़ से ऊन प्राप्त करते हैं जिससे गर्म कपड़े बनते हैं।" } },
+                    { icon: "🔊", text: { en: "A sheep says 'baa baa'.", hi: "भेड़ 'बा बा' कहती है।" } },
+                    { icon: "👶", text: { en: "A baby sheep is called a lamb.", hi: "भेड़ के बच्चे को मेमना कहा जाता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What do we get from sheep?", hi: "हमें भेड़ से क्या मिलता है?" }, correct: { en: "Wool", hi: "ऊन" }, options: [{ en: "Milk", hi: "दूध" }, { en: "Eggs", hi: "अंडे" }, { en: "Wool", hi: "ऊन" }, { en: "Cotton", hi: "कपास" }] },
+                    { question: { en: "What is a baby sheep called?", hi: "भेड़ के बच्चे को क्या कहते हैं?" }, correct: { en: "A lamb", hi: "मेमना" }, options: [{ en: "A foal", hi: "बछेड़ा" }, { en: "A lamb", hi: "मेमना" }, { en: "A cub", hi: "शावक" }, { en: "A calf", hi: "बछड़ा" }] }
+                ],
+                fullAudio: { en: "This is a Sheep. Its fur is soft and woolly, like a cloud. We get wool from sheep to make warm clothes. A sheep says 'baa baa'. A baby sheep is called a lamb.", hi: "यह एक भेड़ है। इसका फर एक बादल की तरह नरम और ऊनी होता है। हम भेड़ से ऊन प्राप्त करते हैं जिससे गर्म कपड़े बनते हैं। भेड़ 'बा बा' कहती है। भेड़ के बच्चे को मेमना कहा जाता है।" }
+            },
+            pig: {
+                title: { en: "Pig", hi: "सूअर" },
+                desc: { en: "A pink farm animal with a snout", hi: "थूथन वाला एक गुलाबी खेत का जानवर" },
+                panels: [
+                    { icon: "🐖", text: { en: "This is a Pig.", hi: "यह एक सूअर है।" } },
+                    { icon: "🐽", text: { en: "It has a special nose called a snout.", hi: "इसकी एक विशेष नाक होती है जिसे थूथन कहते हैं।" } },
+                    { icon: "🐷", text: { en: "Pigs are often pink in color.", hi: "सूअर अक्सर गुलाबी रंग के होते हैं।" } },
+                    { icon: "🟤", text: { en: "They love to roll around in the mud to stay cool.", hi: "उन्हें ठंडा रहने के लिए कीचड़ में लोटना पसंद है।" } },
+                    { icon: "🔊", text: { en: "A pig makes an 'oink oink' sound.", hi: "सूअर 'ओइंक ओइंक' की आवाज़ निकालता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is a pig's nose called?", hi: "सूअर की नाक को क्या कहते हैं?" }, correct: { en: "A snout", hi: "थूथन" }, options: [{ en: "A trunk", hi: "सूंड" }, { en: "A snout", hi: "थूथन" }, { en: "A beak", hi: "चोंच" }, { en: "A horn", hi: "सींग" }] },
+                    { question: { en: "Where do pigs love to roll around?", hi: "सूअर कहाँ लोटना पसंद करते हैं?" }, correct: { en: "In the mud", hi: "कीचड़ में" }, options: [{ en: "In the water", hi: "पानी में" }, { en: "In the sand", hi: "रेत में" }, { en: "In the mud", hi: "कीचड़ में" }, { en: "In the grass", hi: "घास में" }] }
+                ],
+                fullAudio: { en: "This is a Pig. It has a special nose called a snout. Pigs are often pink in color. They love to roll around in the mud to stay cool. A pig makes an 'oink oink' sound.", hi: "यह एक सूअर है। इसकी एक विशेष नाक होती है जिसे थूथन कहते हैं। सूअर अक्सर गुलाबी रंग के होते हैं। उन्हें ठंडा रहने के लिए कीचड़ में लोटना पसंद है। सूअर 'ओइंक ओइंक' की आवाज़ निकालता है।" }
+            },
+            giraffe: {
+                title: { en: "Giraffe", hi: "जिराफ़" },
+                desc: { en: "The tallest animal in the world", hi: "दुनिया का सबसे लंबा जानवर" },
+                panels: [
+                    { icon: "🦒", text: { en: "This is a Giraffe.", hi: "यह एक जिराफ़ है।" } },
+                    { icon: "📏", text: { en: "It is the tallest land animal in the world.", hi: "यह दुनिया का सबसे लंबा ज़मीनी जानवर है।" } },
+                    { icon: "🦒", text: { en: "It has a very, very long neck.", hi: "इसकी बहुत, बहुत लंबी गर्दन होती है।" } },
+                    { icon: "🌳", text: { en: "It uses its long neck to eat leaves from tall trees.", hi: "यह अपनी लंबी गर्दन का उपयोग ऊंचे पेड़ों से पत्तियां खाने के लिए करता है।" } },
+                    { icon: "🎨", text: { en: "Giraffes have a beautiful spotted coat.", hi: "जिराफ़ों का एक सुंदर धब्बेदार कोट होता है।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is a giraffe famous for?", hi: "जिराफ़ किस लिए प्रसिद्ध है?" }, correct: { en: "Its long neck", hi: "अपनी लंबी गर्दन के लिए" }, options: [{ en: "Its long tail", hi: "अपनी लंबी पूंछ के लिए" }, { en: "Its long neck", hi: "अपनी लंबी गर्दन के लिए" }, { en: "Its big ears", hi: "अपने बड़े कानों के लिए" }, { en: "Its sharp teeth", hi: "अपने तेज दांतों के लिए" }] },
+                    { question: { en: "What does a giraffe eat?", hi: "जिराफ़ क्या खाता है?" }, correct: { en: "Leaves from tall trees", hi: "ऊंचे पेड़ों से पत्तियां" }, options: [{ en: "Fish", hi: "मछली" }, { en: "Insects", hi: "कीड़े" }, { en: "Leaves from tall trees", hi: "ऊंचे पेड़ों से पत्तियां" }, { en: "Grass", hi: "घास" }] }
+                ],
+                fullAudio: { en: "This is a Giraffe. It is the tallest land animal in the world. It has a very, very long neck. It uses its long neck to eat leaves from tall trees. Giraffes have a beautiful spotted coat.", hi: "यह एक जिराफ़ है। यह दुनिया का सबसे लंबा ज़मीनी जानवर है। इसकी बहुत, बहुत लंबी गर्दन होती है। यह अपनी लंबी गर्दन का उपयोग ऊंचे पेड़ों से पत्तियां खाने के लिए करता है। जिराफ़ों का एक सुंदर धब्बेदार कोट होता है।" }
+            },
+            zebra: {
+                title: { en: "Zebra", hi: "ज़ेबरा" },
+                desc: { en: "A wild horse with black and white stripes", hi: "काली और सफेद धारियों वाला एक जंगली घोड़ा" },
+                panels: [
+                    { icon: "🦓", text: { en: "This is a Zebra.", hi: "यह एक ज़ेबरा है।" } },
+                    { icon: "🎨", text: { en: "It looks like a horse with black and white stripes.", hi: "यह काली और सफेद धारियों वाले घोड़े की तरह दिखता है।" } },
+                    { icon: "🤔", text: { en: "Every zebra has a unique pattern of stripes, like a fingerprint.", hi: "हर ज़ेबरा की धारियों का एक अनूठा पैटर्न होता है, जैसे फिंगरप्रिंट।" } },
+                    { icon: "🌍", text: { en: "Zebras live in Africa.", hi: "ज़ेबरा अफ्रीका में रहते हैं।" } },
+                    { icon: "🏃", text: { en: "They can run very fast to escape from danger.", hi: "वे खतरे से बचने के लिए बहुत तेज दौड़ सकते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What colors are a zebra's stripes?", hi: "ज़ेबरा की धारियाँ किस रंग की होती हैं?" }, correct: { en: "Black and white", hi: "काली और सफेद" }, options: [{ en: "Black and yellow", hi: "काली और पीली" }, { en: "Black and white", hi: "काली और सफेद" }, { en: "Brown and white", hi: "भूरी और सफेद" }, { en: "Grey and black", hi: "ग्रे और काली" }] },
+                    { question: { en: "What is special about a zebra's stripes?", hi: "ज़ेबरा की धारियों के बारे में क्या खास है?" }, correct: { en: "Every zebra's pattern is unique", hi: "हर ज़ेबरा का पैटर्न अनूठा होता है" }, options: [{ en: "They can change color", hi: "वे रंग बदल सकते हैं" }, { en: "They glow in the dark", hi: "वे अंधेरे में चमकते हैं" }, { en: "Every zebra's pattern is unique", hi: "हर ज़ेबरा का पैटर्न अनूठा होता है" }, { en: "They are all the same", hi: "वे सभी एक जैसे होते हैं" }] }
+                ],
+                fullAudio: { en: "This is a Zebra. It looks like a horse with black and white stripes. Every zebra has a unique pattern of stripes, like a fingerprint. Zebras live in Africa. They can run very fast to escape from danger.", hi: "यह एक ज़ेबरा है। यह काली और सफेद धारियों वाले घोड़े की तरह दिखता है। हर ज़ेबरा की धारियों का एक अनूठा पैटर्न होता है, जैसे फिंगरप्रिंट। ज़ेबरा अफ्रीका में रहते हैं। वे खतरे से बचने के लिए बहुत तेज दौड़ सकते हैं।" }
+            },
+            fox: {
+                title: { en: "Fox", hi: "लोमड़ी" },
+                desc: { en: "A clever animal with a bushy tail", hi: "एक झाड़ीदार पूंछ वाला एक चालाक जानवर" },
+                panels: [
+                    { icon: "🦊", text: { en: "This is a Fox.", hi: "यह एक लोमड़ी है।" } },
+                    { icon: "🧠", text: { en: "Foxes are known for being very clever and cunning.", hi: "लोमड़ी बहुत चालाक और धूर्त होने के लिए जानी जाती है।" } },
+                    { icon: "🎨", text: { en: "They usually have reddish-brown fur.", hi: "आमतौर पर उनका फर लाल-भूरे रंग का होता है।" } },
+                    { icon: "🦊", text: { en: "A fox has a long, bushy tail.", hi: "लोमड़ी की एक लंबी, झाड़ीदार पूंछ होती है।" } },
+                    { icon: "🌃", text: { en: "They often hunt for food at night.", hi: "वे अक्सर रात में भोजन का शिकार करती हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What are foxes known for?", hi: "लोमड़ी किस लिए जानी जाती हैं?" }, correct: { en: "Being clever", hi: "चालाक होने के लिए" }, options: [{ en: "Being slow", hi: "धीमे होने के लिए" }, { en: "Being clever", hi: "चालाक होने के लिए" }, { en: "Being noisy", hi: "शोर करने के लिए" }, { en: "Being big", hi: "बड़े होने के लिए" }] },
+                    { question: { en: "What kind of tail does a fox have?", hi: "लोमड़ी की पूंछ कैसी होती है?" }, correct: { en: "Long and bushy", hi: "लंबी और झाड़ीदार" }, options: [{ en: "Short and thin", hi: "छोटी और पतली" }, { en: "No tail", hi: "कोई पूंछ नहीं" }, { en: "Long and bushy", hi: "लंबी और झाड़ीदार" }, { en: "Curly", hi: "घुंघराली" }] }
+                ],
+                fullAudio: { en: "This is a Fox. Foxes are known for being very clever and cunning. They usually have reddish-brown fur. A fox has a long, bushy tail. They often hunt for food at night.", hi: "यह एक लोमड़ी है। लोमड़ी बहुत चालाक और धूर्त होने के लिए जानी जाती है। आमतौर पर उनका फर लाल-भूरे रंग का होता है। लोमड़ी की एक लंबी, झाड़ीदार पूंछ होती है। वे अक्सर रात में भोजन का शिकार करती हैं।" }
+            },
+            deer: {
+                title: { en: "Deer", hi: "हिरण" },
+                desc: { en: "A graceful animal with antlers", hi: "सींगों वाला एक सुंदर जानवर" },
+                panels: [
+                    { icon: "🦌", text: { en: "This is a Deer.", hi: "यह एक हिरण है।" } },
+                    { icon: "🌳", text: { en: "Deer live in forests and grassy areas.", hi: "हिरण जंगलों और घास वाले क्षेत्रों में रहते हैं।" } },
+                    { icon: "🦌", text: { en: "Male deer grow large horns called antlers.", hi: "नर हिरणों के बड़े सींग उगते हैं जिन्हें एंटलर्स कहा जाता है।" } },
+                    { icon: "🌿", text: { en: "They are herbivores, which means they only eat plants.", hi: "वे शाकाहारी होते हैं, जिसका अर्थ है कि वे केवल पौधे खाते हैं।" } },
+                    { icon: "🏃", text: { en: "Deer are very fast runners.", hi: "हिरण बहुत तेज धावक होते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What are a male deer's horns called?", hi: "नर हिरण के सींगों को क्या कहते हैं?" }, correct: { en: "Antlers", hi: "एंटलर्स" }, options: [{ en: "Tusks", hi: "दांत" }, { en: "Antlers", hi: "एंटलर्स" }, { en: "Claws", hi: "पंजे" }, { en: "Beaks", hi: "चोंच" }] },
+                    { question: { en: "What do deer eat?", hi: "हिरण क्या खाते हैं?" }, correct: { en: "Plants", hi: "पौधे" }, options: [{ en: "Insects", hi: "कीड़े" }, { en: "Fish", hi: "मछली" }, { en: "Plants", hi: "पौधे" }, { en: "Other animals", hi: "अन्य जानवर" }] }
+                ],
+                fullAudio: { en: "This is a Deer. Deer live in forests and grassy areas. Male deer grow large horns called antlers. They are herbivores, which means they only eat plants. Deer are very fast runners.", hi: "यह एक हिरण है। हिरण जंगलों और घास वाले क्षेत्रों में रहते हैं। नर हिरणों के बड़े सींग उगते हैं जिन्हें एंटलर्स कहा जाता है। वे शाकाहारी होते हैं, जिसका अर्थ है कि वे केवल पौधे खाते हैं। हिरण बहुत तेज धावक होते हैं।" }
+            },
+            rabbit: {
+                title: { en: "Rabbit", hi: "खरगोश" },
+                desc: { en: "A small animal with long ears", hi: "लंबे कानों वाला एक छोटा जानवर" },
+                panels: [
+                    { icon: "🐇", text: { en: "This is a Rabbit.", hi: "यह एक खरगोश है।" } },
+                    { icon: "👂", text: { en: "Rabbits have very long ears.", hi: "खरगोश के बहुत लंबे कान होते हैं।" } },
+                    { icon: "🥕", text: { en: "They love to eat carrots and other vegetables.", hi: "उन्हें गाजर और अन्य सब्जियां खाना बहुत पसंद है।" } },
+                    { icon: "🐇", text: { en: "They can hop very fast.", hi: "वे बहुत तेजी से फुदक सकते हैं।" } },
+                    { icon: "🕳️", text: { en: "Rabbits live in underground homes called burrows.", hi: "खरगोश बिल नामक भूमिगत घरों में रहते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What kind of ears do rabbits have?", hi: "खरगोश के कान कैसे होते हैं?" }, correct: { en: "Long ears", hi: "लंबे कान" }, options: [{ en: "Short ears", hi: "छोटे कान" }, { en: "Round ears", hi: "गोल कान" }, { en: "Long ears", hi: "लंबे कान" }, { en: "No ears", hi: "कोई कान नहीं" }] },
+                    { question: { en: "What is a rabbit's favorite food?", hi: "खरगोश का पसंदीदा भोजन क्या है?" }, correct: { en: "Carrots", hi: "गाजर" }, options: [{ en: "Fish", hi: "मछली" }, { en: "Carrots", hi: "गाजर" }, { en: "Bread", hi: "ब्रेड" }, { en: "Cheese", hi: "पनीर" }] }
+                ],
+                fullAudio: { en: "This is a Rabbit. Rabbits have very long ears. They love to eat carrots and other vegetables. They can hop very fast. Rabbits live in underground homes called burrows.", hi: "यह एक खरगोश है। खरगोश के बहुत लंबे कान होते हैं। उन्हें गाजर और अन्य सब्जियां खाना बहुत पसंद है। वे बहुत तेजी से फुदक सकते हैं। खरगोश बिल नामक भूमिगत घरों में रहते हैं।" }
+            },
+            crocodile: {
+                title: { en: "Crocodile", hi: "मगरमच्छ" },
+                desc: { en: "A large reptile with a powerful jaw", hi: "एक शक्तिशाली जबड़े वाला एक बड़ा सरीसृप" },
+                panels: [
+                    { icon: "🐊", text: { en: "This is a Crocodile.", hi: "यह एक मगरमच्छ है।" } },
+                    { icon: "💧", text: { en: "Crocodiles live in and near water.", hi: "मगरमच्छ पानी में और उसके पास रहते हैं।" } },
+                    { icon: "🦷", text: { en: "They have lots of sharp teeth and a very powerful jaw.", hi: "उनके बहुत सारे तेज दांत और एक बहुत शक्तिशाली जबड़ा होता है।" } },
+                    { icon: "🛡️", text: { en: "Their skin is very tough, like armor.", hi: "उनकी त्वचा कवच की तरह बहुत सख्त होती है।" } },
+                    { icon: "🤫", text: { en: "They can stay very still in the water while waiting for their prey.", hi: "वे अपने शिकार की प्रतीक्षा करते हुए पानी में बहुत स्थिर रह सकते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is powerful about a crocodile?", hi: "मगरमच्छ के बारे में क्या शक्तिशाली है?" }, correct: { en: "Its jaw", hi: "इसका जबड़ा" }, options: [{ en: "Its eyesight", hi: "इसकी दृष्टि" }, { en: "Its jaw", hi: "इसका जबड़ा" }, { en: "Its legs", hi: "इसके पैर" }, { en: "Its tail", hi: "इसकी पूंछ" }] },
+                    { question: { en: "Where do crocodiles live?", hi: "मगरमच्छ कहाँ रहते हैं?" }, correct: { en: "In and near water", hi: "पानी में और उसके पास" }, options: [{ en: "In the desert", hi: "रेगिस्तान में" }, { en: "In the mountains", hi: "पहाड़ों में" }, { en: "In and near water", hi: "पानी में और उसके पास" }, { en: "In the city", hi: "शहर में" }] }
+                ],
+                fullAudio: { en: "This is a Crocodile. Crocodiles live in and near water. They have lots of sharp teeth and a very powerful jaw. Their skin is very tough, like armor. They can stay very still in the water while waiting for their prey.", hi: "यह एक मगरमच्छ है। मगरमच्छ पानी में और उसके पास रहते हैं। उनके बहुत सारे तेज दांत और एक बहुत शक्तिशाली जबड़ा होता है। उनकी त्वचा कवच की तरह बहुत सख्त होती है। वे अपने शिकार की प्रतीक्षा करते हुए पानी में बहुत स्थिर रह सकते हैं।" }
+            },
+            camel: {
+                title: { en: "Camel", hi: "ऊंट" },
+                desc: { en: "The ship of the desert", hi: "रेगिस्तान का जहाज" },
+                panels: [
+                    { icon: "🐫", text: { en: "This is a Camel.", hi: "यह एक ऊंट है।" } },
+                    { icon: "🏜️", text: { en: "Camels live in hot deserts.", hi: "ऊंट गर्म रेगिस्तान में रहते हैं।" } },
+                    { icon: "⛰️", text: { en: "They have a big lump on their back called a hump.", hi: "उनकी पीठ पर एक बड़ा उभार होता है जिसे कूबड़ कहते हैं।" } },
+                    { icon: "💧", text: { en: "The hump stores fat, which helps them survive without food and water for a long time.", hi: "कूबड़ में वसा जमा होती है, जो उन्हें लंबे समय तक भोजन और पानी के बिना जीवित रहने में मदद करती है।" } },
+                    { icon: "🚢", text: { en: "They are called the 'ship of the desert' because they carry people and things across the sand.", hi: "उन्हें 'रेगिस्तान का जहाज' कहा जाता है क्योंकि वे लोगों और चीजों को रेत के पार ले जाते हैं।" } }
+                ],
+                quizQuestions: [
+                    { question: { en: "What is the lump on a camel's back called?", hi: "ऊंट की पीठ पर उभार को क्या कहते हैं?" }, correct: { en: "A hump", hi: "कूबड़" }, options: [{ en: "A bump", hi: "उभार" }, { en: "A hump", hi: "कूबड़" }, { en: "A hill", hi: "पहाड़ी" }, { en: "A bag", hi: "थैला" }] },
+                    { question: { en: "Why is a camel called the 'ship of the desert'?", hi: "ऊंट को 'रेगिस्तान का जहाज' क्यों कहा जाता है?" }, correct: { en: "It carries people and things", hi: "यह लोगों और चीजों को ले जाता है" }, options: [{ en: "It likes to swim", hi: "उसे तैरना पसंद है" }, { en: "It carries people and things", hi: "यह लोगों और चीजों को ले जाता है" }, { en: "It is very big", hi: "यह बहुत बड़ा है" }, { en: "It looks like a ship", hi: "यह एक जहाज की तरह दिखता है" }] }
+                ],
+                fullAudio: { en: "This is a Camel. Camels live in hot deserts. They have a big lump on their back called a hump. The hump stores fat, which helps them survive without food and water for a long time. They are called the 'ship of the desert' because they carry people and things across the sand.", hi: "यह एक ऊंट है। ऊंट गर्म रेगिस्तान में रहते हैं। उनकी पीठ पर एक बड़ा उभार होता है जिसे कूबड़ कहते हैं। कूबड़ में वसा जमा होती है, जो उन्हें लंबे समय तक भोजन और पानी के बिना जीवित रहने में मदद करती है। उन्हें 'रेगिस्तान का जहाज' कहा जाता है क्योंकि वे लोगों और चीजों को रेत के पार ले जाते हैं।" }
+            }
+        };
+
+        const uiStrings = {
+            mainTitle: { en: "Animals Learning", hi: "जानवरों को सीखें" },
+            repeatBtn: { en: "🔄 Repeat", hi: "🔄 दोहराएं" },
+            nextBtn: { en: "➡️ Next", hi: "➡️ अगला" },
+            homeBtn: { en: "🏠 Home", hi: "🏠 होम" },
+            helpBtn: { en: "❓ Help", hi: "❓ मदद" },
+            helpTitle: { en: "How this game works", hi: "यह खेल कैसे काम करता है" },
+            helpIntroEN: { en: "This game helps children learn animal names and habits through a short 5-card story and a quick 2-question quiz. Read on screen or tap the speaker to hear.", hi: "" },
+            helpIntroHI: { en: "", hi: "यह खेल 5 कार्ड की छोटी कहानी और 2 प्रश्नों के क्विज़ के ज़रिए बच्चों को जानवरों के नाम और आदतें सिखाता है। स्क्रीन पर पढ़ें या स्पीकर दबाकर सुनें।" },
+            helpListEN_1: { en: "Choose any animal card to start.", hi: "" },
+            helpListEN_2: { en: "Tap ▶️ Play Story to auto-play the 5 panels.", hi: "" },
+            helpListEN_3: { en: "Tap 🎯 Start Quiz to answer questions.", hi: "" },
+            helpListEN_4: { en: "Use 🔊 button to toggle sound.", hi: "" },
+            helpListEN_5: { en: "Switch EN/HI to change language.", hi: "" },
+            helpListHI_1: { en: "", hi: "शुरू करने के लिए कोई भी जानवर कार्ड चुनें।" },
+            helpListHI_2: { en: "", hi: "▶️ प्ले स्टोरी दबाकर 5 पैनल चलाएँ।" },
+            helpListHI_3: { en: "", hi: "🎯 स्टार्ट क्विज़ दबाकर उत्तर दें।" },
+            helpListHI_4: { en: "", hi: "🔊 बटन से आवाज़ चालू/बंद करें।" },
+            helpListHI_5: { en: "", hi: "EN/HI से भाषा बदलें।" },
+            helpReadEN: { en: "🔊 Read English", hi: "🔊 अंग्रेज़ी सुनें" },
+            helpReadHI: { en: "🔊 Listen in Hindi", hi: "🔊 हिंदी सुनें" },
+            helpOkBtn: { en: "OK", hi: "ठीक है" },
+            playStoryBtn: { en: "▶️ Play Story", hi: "▶️ कहानी चलाएं" },
+            startQuizBtn: { en: "🎯 Start Quiz", hi: "🎯 क्विज़ शुरू करें" },
+            repeatQuestionBtn: { en: "🔊 Repeat Question", hi: "🔊 प्रश्न दोहराएं" },
+            nextQuestionBtn: { en: "➡️ Next Question", hi: "➡️ अगला प्रश्न" },
+            celebrationHomeBtn: { en: "🏠 Back to Home", hi: "🏠 होम पर वापस" },
+            endCelebrationTitle: { en: "🎉 Fantastic! 🎉", hi: "🎉 शानदार! 🎉" },
+            quizProgress: { en: "Question {x} of {y}", hi: "प्रश्न {x} / {y}" },
+            correctFeedback: { en: "🎉 Correct! Great job!", hi: "🎉 सही! बहुत बढ़िया!" },
+            incorrectFeedback: { en: "❌ Not quite. The answer is '{answer}'.", hi: "❌ सही नहीं। जवाब '{answer}' है।" },
+            endMessage: { en: "You learned about {title}! You got {score} out of {total} questions correct!", hi: "आपने {title} के बारे में सीखा! आपको {total} में से {score} प्रश्नों के सही उत्तर मिले!" }
+        };
+
+        let currentLesson = null, currentPanelIndex = 0, currentMode = 'home', audioEnabled = true;
+        let completedLessons = new Set(), currentQuestionIndex = 0, quizScore = 0;
+        let currentLang = 'en', hindiVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            hindiVoice = voices.find(v => v.lang === 'hi-IN' && v.name.includes('Male')) || voices.find(v => v.lang === 'hi-IN');
+        }
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateGrid();
+            setupEventListeners();
+            updateUIText();
+            updateProgress();
+        });
+
+        function setupEventListeners() {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', (e) => setLanguage(e.target.dataset.lang)));
+            document.getElementById('itemGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.item-card');
+                if (card) loadLesson(card.dataset.item);
+            });
+            document.getElementById('storyboardPanels').addEventListener('click', (e) => {
+                const panel = e.target.closest('.panel');
+                if (panel) selectPanel(Array.from(panel.parentNode.children).indexOf(panel));
+            });
+            document.getElementById('answerOptions').addEventListener('click', (e) => {
+                const option = e.target.closest('.answer-option');
+                if (option) selectAnswer(option);
+            });
+            document.getElementById('repeatBtn').addEventListener('click', repeatCurrentAction);
+            document.getElementById('nextBtn').addEventListener('click', nextAction);
+            document.getElementById('homeBtn').addEventListener('click', goHome);
+            document.getElementById('globalAudioToggle').addEventListener('click', toggleAudio);
+            document.getElementById('playStoryBtn').addEventListener('click', playFullStorySequence);
+            document.getElementById('startQuizBtn').addEventListener('click', startQuiz);
+            document.getElementById('playStoryBtnQuiz').addEventListener('click', returnToStoryFromQuiz);
+            document.getElementById('repeatQuestionBtn').addEventListener('click', repeatCurrentQuestion);
+            document.getElementById('nextQuestionBtn').addEventListener('click', nextQuestion);
+            document.getElementById('celebrationHomeBtn').addEventListener('click', goHome);
+
+            // Help modal events
+            const helpBtn = document.getElementById('helpBtn');
+            const helpModal = document.getElementById('helpModal');
+            const helpCloseBtn = document.getElementById('helpCloseBtn');
+            const helpOkBtn = document.getElementById('helpOkBtn');
+            const helpReadEN = document.getElementById('helpReadEN');
+            const helpReadHI = document.getElementById('helpReadHI');
+            function openHelp(){ helpModal.style.display = 'block'; }
+            function closeHelp(){ helpModal.style.display = 'none'; speechSynthesis.cancel(); }
+            helpBtn.addEventListener('click', openHelp);
+            helpCloseBtn.addEventListener('click', closeHelp);
+            helpOkBtn.addEventListener('click', closeHelp);
+            helpModal.addEventListener('click', (e)=>{ if(e.target === helpModal) closeHelp(); });
+            helpReadEN.addEventListener('click', ()=>{
+                const text = [
+                    uiStrings.helpIntroEN.en,
+                    uiStrings.helpListEN_1.en,
+                    uiStrings.helpListEN_2.en,
+                    uiStrings.helpListEN_3.en,
+                    uiStrings.helpListEN_4.en,
+                    uiStrings.helpListEN_5.en
+                ].join(' ');
+                speakText({ en: text, hi: text }, 0.95, 1.1);
+            });
+            helpReadHI.addEventListener('click', ()=>{
+                const text = [
+                    uiStrings.helpIntroHI.hi,
+                    uiStrings.helpListHI_1.hi,
+                    uiStrings.helpListHI_2.hi,
+                    uiStrings.helpListHI_3.hi,
+                    uiStrings.helpListHI_4.hi,
+                    uiStrings.helpListHI_5.hi
+                ].join(' ');
+                speakText({ en: text, hi: text }, 0.9, 1.0);
+            });
+        }
+        
+        function generateGrid() {
+            const grid = document.getElementById('itemGrid');
+            grid.innerHTML = '';
+            for (const key in allLessons) {
+                const lesson = allLessons[key];
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.dataset.item = key;
+                card.innerHTML = `
+                    <div class="item-icon">${lesson.panels[0].icon}</div>
+                    <div class="item-title">${lesson.title[currentLang]}</div>
+                    <div class="item-desc">${lesson.desc[currentLang]}</div>`;
+                grid.appendChild(card);
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+            updateUIText();
+            generateGrid();
+            updateProgress();
+            if (currentLesson) {
+                if (currentMode === 'story') {
+                    document.getElementById('storyboardTitle').textContent = currentLesson.title[currentLang];
+                    renderPanels();
+                    selectPanel(currentPanelIndex, false);
+                } else if (currentMode === 'quiz') {
+                    document.getElementById('quizTitle').textContent = `${currentLesson.title[currentLang]} Quiz`;
+                    showQuestion(false);
+                }
+            }
+        }
+
+        function updateUIText() {
+            Object.keys(uiStrings).forEach(key => {
+                const element = document.getElementById(key);
+                if (element && uiStrings[key][currentLang]) {
+                    element.textContent = uiStrings[key][currentLang];
+                }
+            });
+            document.getElementById('main-title').textContent = uiStrings.mainTitle[currentLang];
+            document.getElementById('repeatBtn').textContent = uiStrings.repeatBtn[currentLang];
+            document.getElementById('nextBtn').textContent = uiStrings.nextBtn[currentLang];
+            document.getElementById('homeBtn').textContent = uiStrings.homeBtn[currentLang];
+            document.getElementById('helpBtn').textContent = uiStrings.helpBtn[currentLang];
+            document.getElementById('helpTitle').textContent = uiStrings.helpTitle[currentLang];
+            document.getElementById('helpIntroEN').firstChild.textContent = (currentLang==='en'? 'For Parents (English): ' : 'For Parents (English): ');
+            document.getElementById('helpIntroEN').lastChild && (document.getElementById('helpIntroEN').lastChild.textContent = '');
+            document.getElementById('helpIntroEN').innerHTML = `<strong>For Parents (English):</strong> ${uiStrings.helpIntroEN.en}`;
+            document.getElementById('helpIntroHI').innerHTML = `<strong>माता-पिता के लिए (हिंदी):</strong> ${uiStrings.helpIntroHI.hi}`;
+            const enList = ['helpListEN_1','helpListEN_2','helpListEN_3','helpListEN_4','helpListEN_5'];
+            const hiList = ['helpListHI_1','helpListHI_2','helpListHI_3','helpListHI_4','helpListHI_5'];
+            enList.forEach((id,idx)=>{ const el = document.getElementById(id); if (el) el.children[idx] ? el.children[idx].textContent = uiStrings[id].en : (el.innerHTML = `<li>${uiStrings[id].en}</li>` + el.innerHTML); });
+            hiList.forEach((id,idx)=>{ const el = document.getElementById(id); if (el) el.children[idx] ? el.children[idx].textContent = uiStrings[id].hi : (el.innerHTML = `<li>${uiStrings[id].hi}</li>` + el.innerHTML); });
+            document.getElementById('helpReadEN').textContent = uiStrings.helpReadEN[currentLang];
+            document.getElementById('helpReadHI').textContent = uiStrings.helpReadHI[currentLang];
+            document.getElementById('helpOkBtn').textContent = uiStrings.helpOkBtn[currentLang];
+            const playStoryQuiz = document.getElementById('playStoryBtnQuiz');
+            if (playStoryQuiz) playStoryQuiz.textContent = uiStrings.playStoryBtn[currentLang];
+        }
+
+        function loadLesson(lessonKey) {
+            currentLesson = allLessons[lessonKey];
+            currentPanelIndex = 0;
+            currentMode = 'story';
+            document.getElementById('itemGrid').style.display = 'none';
+            document.getElementById('storyboardContainer').classList.add('active');
+            ['quizContainer', 'endOfQuizContainer'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById('storyboardTitle').textContent = currentLesson.title[currentLang];
+            renderPanels();
+            selectPanel(0);
+        }
+
+        function renderPanels() {
+            const container = document.getElementById('storyboardPanels');
+            container.innerHTML = '';
+            currentLesson.panels.forEach((panel, index) => {
+                const panelEl = document.createElement('div');
+                panelEl.className = `panel ${panel.class || ''}`;
+                panelEl.innerHTML = `<div class="panel-number">${index + 1}</div><div class="panel-icon">${panel.icon}</div><div class="panel-text">${panel.text[currentLang]}</div>`;
+                container.appendChild(panelEl);
+            });
+        }
+
+        function selectPanel(index, shouldSpeak = true) {
+            if (!currentLesson || index >= currentLesson.panels.length) return;
+            currentPanelIndex = index;
+            document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === index));
+            if (shouldSpeak && audioEnabled) playPanelAudio(index);
+        }
+
+        function startQuiz() {
+            currentMode = 'quiz';
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            document.getElementById('storyboardContainer').classList.remove('active');
+            document.getElementById('quizContainer').classList.add('active');
+            document.getElementById('quizTitle').textContent = `${currentLesson.title[currentLang]} Quiz`;
+            showQuestion();
+        }
+
+        function showQuestion(shouldSpeak = true) {
+            const questionData = currentLesson.quizQuestions[currentQuestionIndex];
+            const totalQuestions = currentLesson.quizQuestions.length;
+            document.getElementById('questionText').textContent = questionData.question[currentLang];
+            document.getElementById('quizProgress').textContent = uiStrings.quizProgress[currentLang].replace('{x}', currentQuestionIndex + 1).replace('{y}', totalQuestions);
+            const optionsContainer = document.getElementById('answerOptions');
+            optionsContainer.innerHTML = '';
+            questionData.options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'answer-option';
+                optionEl.textContent = option[currentLang];
+                optionEl.dataset.answer = option.en;
+                optionsContainer.appendChild(optionEl);
+            });
+            document.getElementById('quizFeedback').style.display = 'none';
+            document.getElementById('nextQuestionBtn').style.display = 'none';
+            if (audioEnabled && shouldSpeak) speakText(questionData.question);
+        }
+
+        function selectAnswer(selectedOption) {
+            const questionData = currentLesson.quizQuestions[currentQuestionIndex];
+            const isCorrect = selectedOption.dataset.answer === questionData.correct.en;
+            const feedbackEl = document.getElementById('quizFeedback');
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option.dataset.answer === questionData.correct.en) option.classList.add('correct');
+                else if (option === selectedOption) option.classList.add('incorrect');
+            });
+            feedbackEl.style.display = 'block';
+            if (isCorrect) {
+                feedbackEl.className = 'quiz-feedback correct';
+                feedbackEl.textContent = uiStrings.correctFeedback[currentLang];
+                quizScore++;
+                if (audioEnabled) speakHappy({en: 'Correct!', hi: 'सही!'});
+            } else {
+                const feedbackText = uiStrings.incorrectFeedback[currentLang].replace('{answer}', questionData.correct[currentLang]);
+                feedbackEl.className = 'quiz-feedback incorrect';
+                feedbackEl.textContent = feedbackText;
+                if (audioEnabled) speakSad({ en: `Not quite. The answer is ${questionData.correct.en}`, hi: `सही नहीं। जवाब है ${questionData.correct.hi}` });
+            }
+            document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentLesson.quizQuestions.length) showQuestion();
+            else showEndOfQuizCelebration();
+        }
+
+        function showEndOfQuizCelebration() {
+            currentMode = 'celebration';
+            document.getElementById('quizContainer').classList.remove('active');
+            document.getElementById('endOfQuizContainer').classList.add('active');
+            const message = uiStrings.endMessage[currentLang]
+                .replace('{title}', currentLesson.title[currentLang])
+                .replace('{score}', quizScore)
+                .replace('{total}', currentLesson.quizQuestions.length);
+            document.getElementById('celebrationMessage').textContent = message;
+            const lessonKey = Object.keys(allLessons).find(key => allLessons[key] === currentLesson);
+            completedLessons.add(lessonKey);
+            updateProgress();
+            if (audioEnabled) speakHappy({en: `Fantastic! ${message}`, hi: `शानदार! ${message}`});
+            launchConfetti();
+        }
+
+        function goHome() {
+            document.getElementById('itemGrid').style.display = 'grid';
+            ['storyboardContainer', 'quizContainer', 'endOfQuizContainer'].forEach(id => document.getElementById(id).classList.remove('active'));
+            currentLesson = null;
+            currentMode = 'home';
+            speechSynthesis.cancel();
+        }
+
+        function speakText(textObj, rate = 0.8, pitch = 1.1) {
+            if (!audioEnabled || !textObj) return;
+            speechSynthesis.cancel();
+            const textToSpeak = textObj[currentLang] || textObj.en;
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            if (currentLang === 'hi' && hindiVoice) {
+                utterance.voice = hindiVoice;
+                utterance.rate = 0.8;
+                utterance.pitch = 1.0;
+            } else {
+                utterance.rate = rate;
+                utterance.pitch = pitch;
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        function speakHappy(textObj) { speakText(textObj, 0.95, 1.3); }
+        function speakSad(textObj) { speakText(textObj, 0.8, 0.8); }
+        function playPanelAudio(index) {
+            speakText(currentLesson.panels[index].text);
+            const panelEl = document.querySelectorAll('.panel')[index];
+            panelEl.classList.add('playing');
+            setTimeout(() => panelEl.classList.remove('playing'), 500);
+        }
+        
+        function playFullStorySequence() {
+            if (!currentLesson) return;
+            speechSynthesis.cancel();
+            currentMode = 'story';
+            document.getElementById('quizContainer').classList.remove('active');
+            document.getElementById('storyboardContainer').classList.add('active');
+            let panelIndex = 0;
+            const playNextPanel = () => {
+                if (panelIndex >= currentLesson.panels.length || currentMode !== 'story' || !currentLesson) {
+                    if (currentLesson) currentPanelIndex = currentLesson.panels.length - 1;
+                    return;
+                }
+                currentPanelIndex = panelIndex;
+                document.querySelectorAll('.panel').forEach((p, i) => p.classList.toggle('active', i === panelIndex));
+                const panelEl = document.querySelectorAll('.panel')[panelIndex];
+                panelEl.classList.add('playing');
+                setTimeout(() => panelEl.classList.remove('playing'), 500);
+                const textObj = currentLesson.panels[panelIndex].text;
+                const textToSpeak = textObj[currentLang] || textObj.en;
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                if (currentLang === 'hi' && hindiVoice) {
+                    utterance.voice = hindiVoice;
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
+                } else {
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.1;
+                }
+                utterance.onend = () => {
+                    panelIndex++;
+                    playNextPanel();
+                };
+                if (!audioEnabled) {
+                    setTimeout(() => utterance.onend(), 1000);
+                    return;
+                }
+                speechSynthesis.speak(utterance);
+            };
+            playNextPanel();
+        }
+        
+        function returnToStoryFromQuiz() {
+            currentMode = 'story';
+            document.getElementById('quizContainer').classList.remove('active');
+            document.getElementById('storyboardContainer').classList.add('active');
+            playFullStorySequence();
+        }
+        function repeatCurrentQuestion() { speakText(currentLesson.quizQuestions[currentQuestionIndex].question); }
+
+        function repeatCurrentAction() {
+            if (currentMode === 'story' && currentLesson) {
+                playFullStorySequence();
+            } else if (currentMode === 'quiz') {
+                repeatCurrentQuestion();
+            }
+        }
+
+        function nextAction() {
+            if (currentMode === 'story') {
+                if (currentPanelIndex < currentLesson.panels.length - 1) selectPanel(currentPanelIndex + 1);
+                else startQuiz();
+            } else if (currentMode === 'quiz' && document.getElementById('nextQuestionBtn').style.display !== 'none') {
+                 nextQuestion();
+            }
+        }
+        
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('globalAudioToggle').textContent = audioEnabled ? '🔊' : '🔇';
+            if (!audioEnabled) speechSynthesis.cancel();
+        }
+
+        function updateProgress() {
+            const totalLessons = Object.keys(allLessons).length;
+            const progress = (completedLessons.size / totalLessons) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.querySelectorAll('.item-card').forEach(card => {
+                const existingBadge = card.querySelector('.completion-badge');
+                if (existingBadge) existingBadge.remove();
+                if (completedLessons.has(card.dataset.item)) {
+                    const badge = document.createElement('div');
+                    badge.className = 'completion-badge';
+                    badge.textContent = ' ✅';
+                    badge.style.cssText = 'position: absolute; top: 5px; right: 5px; font-size: 1.2rem;';
+                    card.style.position = 'relative';
+                    card.appendChild(badge);
+                }
+            });
+        }
+
+        function launchConfetti() {
+            const container = document.getElementById('confetti');
+            container.innerHTML = ''; container.style.display = 'block';
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#e362ff', '#ff9f1c'];
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = `${Math.random() * 100}vw`;
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = `${2 + Math.random() * 2.5}s`;
+                piece.style.transform = `rotate(${Math.random()*360}deg)`;
+                container.appendChild(piece);
+            }
+            setTimeout(() => { container.style.display = 'none'; container.innerHTML = ''; }, 4000);
+        }
+    </script>
+</body>
+</html>
+
