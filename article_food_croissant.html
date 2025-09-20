@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Guide to the Croissant: History, Craft & Experience</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A comprehensive, historical, and interactive guide to the croissant. Explore its origins, sensory profile, baking process, and cultural significance with engaging quizzes and detailed information.">
+    <meta name="keywords" content="croissant, food history, baking, french pastry, viennoiserie, culinary arts, interactive food guide, lamination, recipe, good food good life">
+    <meta name="author" content="Beyond Dictionary">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <link rel="canonical" href="https://www.yourwebsite.com/croissant-article">
+
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="The Ultimate Guide to the Croissant: History, Craft & Experience">
+    <meta property="og:description" content="A comprehensive, historical, and interactive guide to the croissant. Explore its origins, sensory profile, baking process, and cultural significance.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200&auto=format&fit=crop">
+    <meta property="og:url" content="https://www.yourwebsite.com/croissant-article">
+    <meta property="og:type" content="article">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FDFCF8;
+            --text-color: #3D352E;
+            --accent-color: #C19A6B;
+            --accent-dark: #8E6A47;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            text-wrap: balance;
+        }
+        .hero {
+            height: 75vh; /* Reduced height for desktop */
+            min-height: 500px;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center 70%; /* Focus on the croissant */
+        }
+        .section-title {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .interactive-container {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .quiz-option, .poll-option {
+            display: block; width: 100%; text-align: left; background-color: white;
+            border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+        }
+        .quiz-option:hover:not(.answered):not(.selected) { background-color: #f9fafb; border-color: var(--accent-dark); }
+        .correct { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #f87171 !important; color: #991b1b; }
+        .quiz-feedback { margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; font-weight: 600; display: none; }
+        .quiz-feedback.visible { display: block; }
+        .draggable { cursor: grab; user-select: none; }
+        .draggable:active { cursor: grabbing; }
+        .dragging { opacity: 0.5; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .matching-container { display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; }
+        .matching-column { flex: 1; min-width: 220px; }
+        .matching-column h5 { text-align: center; color: #6b7280; font-weight: 500; margin-bottom: 0.5rem; }
+        .match-option.selected { background-color: #fef3c7; border-color: var(--accent-color); }
+        .match-results-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 1rem; }
+        .match-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.375rem; }
+        .info-card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%; }
+        .info-card h4 { color: var(--accent-dark); }
+        .ftb-input {
+            border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.25rem 0.5rem;
+            text-align: center; margin: 0 0.25rem; width: 120px;
+            transition: all 0.2s; background-color: #f9fafb;
+        }
+        .ftb-input:focus { border-color: var(--accent-dark); outline: none; box-shadow: 0 0 0 2px rgba(193, 154, 107, 0.2); }
+        .quiz-btn {
+            background-color: var(--accent-dark); color: white; font-weight: bold;
+            padding: 0.5rem 1rem; border-radius: 0.375rem; transition: background-color 0.2s;
+            border: none; cursor: pointer;
+        }
+        .quiz-btn:hover:not(:disabled) { background-color: #3D352E; }
+        .quiz-btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
+        .hint-btn {
+            font-size: 0.8rem; color: #6b7280; background: #f3f4f6;
+            padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; border: 1px solid #d1d5db;
+        }
+        .poll-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background-color: var(--accent-color); opacity: 0.3; transition: width 0.8s ease-in-out; z-index: 1; }
+        .poll-option { position: relative; overflow: hidden; }
+        .poll-option span { position: relative; z-index: 2; }
+        .seo-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
+        .seo-tag { background-color: #f3f4f6; color: #4b5563; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="hero flex flex-col items-center justify-center text-white text-center p-4">
+        <!-- Hidden img tag for SEO and accessibility -->
+        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200&auto=format&fit=crop" alt="A close-up of a perfectly golden, flaky croissant." class="hidden">
+        <h1 class="text-6xl md:text-8xl font-bold">Croissant</h1>
+        <p class="text-xl md:text-2xl mt-4 italic" style="font-family: 'Playfair Display';">An ode to golden layers of joy 🥐</p>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-8 py-16 md:py-24 space-y-24">
+        <section id="identity">
+            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12">Identity & Origins</h2>
+            <div class="card p-6 md:p-8">
+                <h3 class="text-2xl font-semibold mb-4">Recipe Summary</h3>
+                <blockquote class="border-l-4 border-accent-color pl-4 italic text-gray-700">A buttery, flaky viennoiserie pastry of Austrian origin, named for its crescent shape. It is made from a layered yeast-leavened dough (pâte feuilletée) that is laminated with butter and baked to golden perfection.</blockquote>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div><h4 class="text-xl font-semibold text-accent-dark mb-2">Cultural Significance</h4><p>The croissant's story is a tale of cultural adoption and culinary perfection. Its journey begins not in France, but in 19th century Vienna, Austria, with the <strong class="font-semibold">kipferl</strong>. Legend says it was created to celebrate a victory over the Ottoman Empire, its shape mimicking the crescent on their flag. The pastry journeyed to Paris around 1838 with Austrian baker August Zang. Parisian bakers, in their quest for excellence, embraced the kipferl but transformed it by using puff pastry and copious amounts of high-quality butter. This act of refinement elevated it from a simple bread to a sophisticated symbol of French breakfast culture, a cornerstone of the local *boulangerie*, and an icon of indulgent, leisurely mornings worldwide.</p></div>
+                    <div><h4 class="text-xl font-semibold text-accent-dark mb-2">Etymology & Details</h4><ul class="list-disc list-inside space-y-2 text-gray-700"><li><strong>Name:</strong> Croissant (kwa-son).</li><li><strong>Etymology:</strong> From the French word for "crescent."</li><li><strong>Country of Origin:</strong> Austria (as the Kipferl).</li><li><strong>Region of Perfection:</strong> Europe (specifically Paris, France).</li><li><strong>Category:</strong> Viennoiserie Pastry.</li><li><strong>Popularity:</strong> Consistently ranked as one of the world's most beloved pastries.</li><li><strong>Emotional Feel:</strong> Indulgent, comforting, sophisticated, a small luxury.</li></ul></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sensory">
+             <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">A Feast for the Senses</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="info-card"><h4 class="text-xl mb-2">Texture & Mouthfeel</h4><p>✨ The experience is a journey of contrasts. It begins with a delicate, shatteringly crisp exterior that crackles audibly. This gives way to an impossibly soft, airy, and tenderly chewy honeycomb interior that seems to melt on the tongue.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Taste Profile</h4><p>😋 The flavor is a profound and complex symphony. It is profoundly buttery and rich, with a subtle sweetness from the caramelized crust that perfectly balances a mild, yeasty complexity developed during the slow fermentation process.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Aroma</h4><p>👃 Before the first bite, the aroma sets the stage. It's an intoxicating and comforting perfume of caramelized butter, toasted nuts, and freshly baked bread that fills a room and evokes powerful feelings of comfort, nostalgia, and anticipation.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Visuals & Sound</h4><p>👀 A perfect croissant is a work of art: a beautiful deep golden-brown hue with clearly defined, delicate layers. When torn, it reveals the coveted honeycomb structure (*alvéolage*). 🔊 The experience begins with that distinct, satisfying crackle—the sound of pure indulgence.</p></div>
+             </div>
+        </section>
+
+        <section id="creation" class="bg-white rounded-2xl p-6 md:p-12 shadow-lg">
+            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12">The Art of Creation</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div><h3 class="text-2xl font-semibold mb-4">The Lamination Method</h3><p class="text-gray-600 mb-6">The heart of the croissant is <strong class="font-semibold text-accent-dark">lamination</strong>. This meticulous technique involves enclosing a slab of cold, high-fat butter within a lean dough, then executing a series of precise folds, or 'turns'. Each turn multiplies the layers. When baked, the water in the butter turns to steam, explosively pushing the dough layers apart. This creates the hundreds of whisper-thin, flaky sheets that define the pastry.</p><h4 class="text-xl mb-2 font-semibold">Common Mistakes</h4><p class="text-gray-600">Using low-fat butter (too much water), not chilling the dough sufficiently between folds (butter melts), or under-proofing (dense texture).</p></div>
+                <div><h3 class="text-2xl font-semibold mb-4">The Baker's Toolkit</h3><div class="space-y-4"><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Main Ingredients</h4><p class="text-sm text-gray-600">Flour, high-fat (min. 82%) European-style butter, yeast, sugar, salt, milk.</p></div><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Pro Tip</h4><p class="text-sm text-gray-600">To revive a day-old croissant, bake at 180°C (350°F) for 3-5 mins. Never microwave!</p></div><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Best Substitute</h4><p class="text-sm text-gray-600">Puff pastry offers flakiness but lacks the croissant's yeasty depth and chew.</p></div></div></div>
+            </div>
+        </section>
+
+        <section id="interactive-zone">
+            <h2 class="section-title text-4xl md:text-5xl font-bold mb-6 text-center">Test Your Croissant Knowledge</h2>
+            
+            <div class="interactive-container">
+                <h3 class="text-2xl font-semibold mb-4">Multiple Choice</h3>
+                <div class="space-y-6">
+                    <div id="mcq1"><p class="font-semibold mb-2">1. What is the primary ingredient for flaky texture?</p><div class="space-y-2"><button class="quiz-option">Baking powder</button><button class="quiz-option" data-correct="true">Butter</button><button class="quiz-option">Cornstarch</button></div><div class="quiz-feedback">🧠 Butter is folded multiple times into the dough (lamination), which creates flaky layers.</div></div>
+                    <div id="mcq2"><p class="font-semibold mb-2">2. Which city is most associated with the croissant?</p><div class="space-y-2"><button class="quiz-option">Vienna</button><button class="quiz-option" data-correct="true">Paris</button><button class="quiz-option">Rome</button></div><div class="quiz-feedback">🧠 Though it has Austrian roots (kipferl), it became iconic in Parisian cafés.</div></div>
+                    <div id="mcq3"><p class="font-semibold mb-2">3. What does "croissant" mean in French?</p><div class="space-y-2"><button class="quiz-option">Spiral</button><button class="quiz-option">Oval</button><button class="quiz-option" data-correct="true">Crescent</button></div><div class="quiz-feedback">🧠 The name is a direct reference to its crescent shape.</div></div>
+                </div>
+            </div>
+
+            <div class="interactive-container">
+                <h3 class="text-2xl font-semibold mb-4">Fill in the Blank</h3>
+                <div id="ftb-quiz" class="space-y-6">
+                    <div id="ftb1" class="space-y-2"><p class="text-lg">A croissant is made using <input type="text" data-answer="lamination" class="ftb-input">, where dough is folded over butter.</p><div class="ftb-feedback hidden"></div></div>
+                    <div id="ftb2" class="space-y-2"><p class="text-lg">The signature aroma comes from the high fat content of <input type="text" data-answer="butter" class="ftb-input">.</p><div class="ftb-feedback hidden"></div></div>
+                </div>
+                <div class="text-center mt-6"><button id="check-ftb-btn" class="quiz-btn">Submit Answers</button></div>
+            </div>
+
+            <div class="interactive-container">
+                <h3 class="text-2xl font-semibold mb-4">Sequence the Steps</h3>
+                <p class="text-center text-gray-600 mb-4">Drag and drop into the correct order.</p>
+                <div id="sequence-list" class="space-y-2 max-w-md mx-auto">
+                    <div class="quiz-option draggable" draggable="true" data-order="3">Bake at high heat</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="1">Laminate with butter</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="5">Let proof until doubled</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="2">Roll out dough</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="4">Cut & shape into crescents</div>
+                </div>
+                <div class="text-center mt-6 space-x-4">
+                    <button id="check-sequence-btn" class="quiz-btn">Check Sequence</button>
+                    <button id="show-sequence-answer-btn" class="quiz-btn hidden">Show Correct Order</button>
+                </div>
+            </div>
+
+            <div class="interactive-container">
+                <h3 class="text-2xl font-semibold mb-4">Match the Pairs</h3>
+                <p class="text-center text-gray-600 mb-4">Tap a property, then tap its matching descriptor.</p>
+                <div class="matching-container">
+                    <div id="match-col-a" class="matching-column"><h5>Property</h5>
+                        <button class="quiz-option match-option" data-match-id="texture">Texture</button>
+                        <button class="quiz-option match-option" data-match-id="role">Cultural Role</button>
+                        <button class="quiz-option match-option" data-match-id="shape">Shape</button>
+                    </div>
+                    <div id="match-col-b" class="matching-column"><h5>Descriptor</h5>
+                        <button class="quiz-option match-option" data-match-id="role">Parisian Icon</button>
+                        <button class="quiz-option match-option" data-match-id="shape">Crescent</button>
+                        <button class="quiz-option match-option" data-match-id="texture">Flaky</button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h5 class="font-semibold text-center">Your Matches</h5>
+                    <div id="match-results-area" class="match-results-grid"></div>
+                </div>
+                <div class="text-center mt-6"><button id="check-match-btn" class="quiz-btn">Check Matches</button></div>
+            </div>
+        </section>
+        
+        <section id="experience">
+            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">The Croissant Experience</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="info-card"><h4 class="text-xl mb-2">Serving Suggestions</h4><p>Perfect on its own, with jam and butter, or as a base for ham & cheese or almond croissants.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Best Time & Temp</h4><p>Ideally eaten warm in the morning for breakfast or brunch. Room temperature is also excellent.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Storage & Shelf Life</h4><p>Best eaten fresh. Store in a paper bag for up to 2 days. Can be frozen and reheated in an oven.</p></div>
+                <div class="info-card"><h4 class="text-xl mb-2">Global Variations</h4><p>Includes the Italian Cornetto (softer, with egg), and the lard-based Medialuna of Argentina.</p></div>
+            </div>
+        </section>
+
+        <section id="nutrition-diet" class="card p-6 md:p-8">
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-6">Nutrition & Diet</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div><h4 class="font-semibold text-accent-dark">Calorie Count</h4><p>~230-270 kcal per medium unit.</p></div>
+                <div><h4 class="font-semibold text-accent-dark">Nutritional Highlights</h4><p>Primarily a source of energy from carbohydrates and fats. A mindful indulgence rather than a health food.</p></div>
+                <div><h4 class="font-semibold text-accent-dark">Dietary Tags & Allergens</h4><p>Vegetarian. Contains Wheat (Gluten) and Dairy. Not suitable for vegan or gluten-free diets.</p></div>
+            </div>
+        </section>
+
+        <section id="polls">
+            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">How Do You Croissant?</h2>
+            <div class="max-w-2xl mx-auto space-y-10">
+                <div class="poll-container"><p class="font-semibold text-lg text-gray-800 mb-4">What's your go-to style?</p><div class="space-y-3"><button data-feedback="Ah, a purist! You appreciate the classic buttery perfection. 👍" class="poll-option"><span>🧈 Plain & Perfect</span><div class="poll-bar-fill"></div></button><button data-feedback="A touch of sweetness! A match made in heaven. 😋" class="poll-option"><span>🍫 Chocolate Filled</span><div class="poll-bar-fill"></div></button><button data-feedback="A bold and delicious choice! A fantastic savory meal. 🧀" class="poll-option"><span>🧀 Savory & Stuffed</span><div class="poll-bar-fill"></div></button></div><p class="poll-feedback text-center mt-4 font-semibold text-accent-dark hidden"></p></div>
+                <div class="poll-container"><p class="font-semibold text-lg text-gray-800 mb-4">What drink do you love with a croissant?</p><div class="space-y-3"><button data-feedback="The classic pairing! The bitterness of coffee cuts through the richness perfectly." class="poll-option"><span>☕ Coffee</span><div class="poll-bar-fill"></div></button><button data-feedback="An indulgent choice for an indulgent pastry. We approve!" class="poll-option"><span>🍫 Hot Chocolate</span><div class="poll-bar-fill"></div></button><button data-feedback="A simple, refreshing combination that lets the croissant shine." class="poll-option"><span>🥛 Cold Milk</span><div class="poll-bar-fill"></div></button></div><p class="poll-feedback text-center mt-4 font-semibold text-accent-dark hidden"></p></div>
+                <div class="poll-container"><p class="font-semibold text-lg text-gray-800 mb-4">Which phrase best captures the croissant mood?</p><div class="space-y-3"><button data-feedback="Evokes imagery of a perfect, leisurely morning." class="poll-option"><span>“Mornings in Paris.”</span><div class="poll-bar-fill"></div></button><button data-feedback="A beautiful description of its structure and taste." class="poll-option"><span>“Layers of delight.”</span><div class="poll-bar-fill"></div></button><button data-feedback="Simple, happy, and to the point!" class="poll-option"><span>“Golden bite of joy.”</span><div class="poll-bar-fill"></div></button></div><p class="poll-feedback text-center mt-4 font-semibold text-accent-dark hidden"></p></div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-white pt-12 pb-8">
+        <div class="container mx-auto px-4 text-center">
+             <h4 class="text-xl mb-4">Mood & Metadata</h4>
+             <div class="text-gray-600 max-w-4xl mx-auto text-sm space-y-2">
+                <p><strong class="text-accent-dark">Slogan:</strong> Golden layers of joy.</p>
+                <p><strong class="text-accent-dark">Quote:</strong> "Anyone can cook, but only the fearless can be great." - Chef Gusteau, 'Ratatouille'</p>
+                <p><strong class="text-accent-dark">Mood Board:</strong> Parisian café, weekend brunch, flour-dusted hands, artisan bakery.</p>
+                 <p><strong class="text-accent-dark">AI Prompt/Alt Text:</strong> A beautifully golden-brown, crescent-shaped croissant on a white plate in a Parisian café, with delicate, flaky layers visible and a dusting of flour nearby.</p>
+                <p><strong class="text-accent-dark">Semantic Tags:</strong> breakfast, pastry, French cuisine, comfort food, elegant, viennoiserie.</p>
+                <p class="pt-2 font-semibold text-base">#ButteryDelight #CroissantLove #ParisianVibes #FlakyGoodness</p>
+             </div>
+             <div class="mt-8">
+                <h4 class="text-lg mb-4 text-gray-500">A Celebration of Good Food, Good Life</h4>
+                <div class="seo-tags">
+                    <span class="seo-tag">ArtisanBaking</span><span class="seo-tag">CelebrationOfFood</span><span class="seo-tag">GoodFoodGoodLife</span><span class="seo-tag">CulinaryHeritage</span><span class="seo-tag">FrenchPastryArt</span><span class="seo-tag">FoodEtymology</span><span class="seo-tag">SensoryExperience</span><span class="seo-tag">ComfortFoodJoy</span><span class="seo-tag">MindfulIndulgence</span><span class="seo-tag">FoodStorytelling</span><span class="seo-tag">BakingTradition</span><span class="seo-tag">IconicEats</span>
+                </div>
+             </div>
+             <p class="mt-8 text-gray-500">Crafted with 🥐 in mind. Truly <u>Beyond Dictionary</u>.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- MCQ Logic ---
+        document.querySelectorAll('#mcq1, #mcq2, #mcq3').forEach(mcq => {
+            mcq.addEventListener('click', e => {
+                const option = e.target.closest('.quiz-option');
+                if (!option || mcq.classList.contains('answered')) return;
+                mcq.classList.add('answered');
+                const correctButton = mcq.querySelector('[data-correct="true"]');
+                const feedback = mcq.querySelector('.quiz-feedback');
+                if (option.dataset.correct) {
+                    option.classList.add('correct');
+                } else {
+                    option.classList.add('incorrect');
+                    correctButton.classList.add('correct');
+                }
+                feedback.classList.add('visible', 'correct');
+            });
+        });
+
+        // --- Fill in the Blank Logic ---
+        document.getElementById('check-ftb-btn')?.addEventListener('click', e => {
+            document.querySelectorAll('#ftb-quiz > div').forEach(ftb => {
+                const input = ftb.querySelector('input');
+                const feedbackDiv = ftb.querySelector('.ftb-feedback');
+                const isCorrect = input.value.trim().toLowerCase() === input.dataset.answer;
+                input.classList.remove('correct', 'incorrect');
+                input.classList.add(isCorrect ? 'correct' : 'incorrect');
+                input.disabled = true;
+                
+                feedbackDiv.classList.remove('hidden');
+                if(!isCorrect) {
+                     feedbackDiv.innerHTML = `<span class="font-semibold text-sm mr-4">Not quite...</span>
+                        <button class="hint-btn" data-hint-for="${input.dataset.answer}">Hint</button>
+                        <button class="hint-btn ml-2" data-show-answer-for="${input.dataset.answer}">Show Answer</button>`;
+                } else {
+                    feedbackDiv.innerHTML = `<span class="text-sm font-semibold text-green-600">Correct! ✅</span>`;
+                }
+            });
+            e.target.disabled = true;
+        });
+
+        document.getElementById('ftb-quiz')?.addEventListener('click', function(e) {
+            if (e.target.matches('[data-hint-for]')) {
+                const answer = e.target.dataset.hintFor;
+                const hints = { lamination: "It's a process of folding butter into dough.", butter: "It's a yellow dairy product." };
+                alert(`Hint: ${hints[answer]}`);
+            }
+            if (e.target.matches('[data-show-answer-for]')) {
+                const answerKey = e.target.dataset.showAnswerFor;
+                const inputField = document.querySelector(`input[data-answer="${answerKey}"]`);
+                if(inputField) {
+                   inputField.value = answerKey;
+                   inputField.classList.add('correct');
+                   inputField.classList.remove('incorrect');
+                }
+            }
+        });
+
+        // --- Drag and Drop Base Logic ---
+        let draggedItem = null;
+        document.querySelectorAll('.draggable').forEach(item => {
+            item.addEventListener('dragstart', e => { draggedItem = e.target; setTimeout(() => e.target.classList.add('dragging'), 0); });
+            item.addEventListener('dragend', () => { draggedItem?.classList.remove('dragging'); draggedItem = null; });
+        });
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) { return { offset: offset, element: child }; } 
+                else { return closest; }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // --- Sequence Quiz Logic ---
+        const sequenceList = document.getElementById('sequence-list');
+        if(sequenceList) {
+            sequenceList.addEventListener('dragover', e => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(sequenceList, e.clientY);
+                if (draggedItem && draggedItem.parentElement === sequenceList) {
+                    if (afterElement == null) { sequenceList.appendChild(draggedItem); } 
+                    else { sequenceList.insertBefore(draggedItem, afterElement); }
+                }
+            });
+
+            document.getElementById('check-sequence-btn').addEventListener('click', e => {
+                let allCorrect = true;
+                sequenceList.querySelectorAll('.draggable').forEach((item, index) => {
+                    item.classList.remove('correct', 'incorrect');
+                    const isCorrect = parseInt(item.dataset.order) === index + 1;
+                    item.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    item.innerHTML = `<span class="mr-2 text-lg">${isCorrect ? '✅' : '❌'}</span> ${item.textContent}`;
+                    item.draggable = false;
+                    if (!isCorrect) allCorrect = false;
+                });
+                if (!allCorrect) document.getElementById('show-sequence-answer-btn').classList.remove('hidden');
+                e.target.disabled = true;
+            });
+            
+            document.getElementById('show-sequence-answer-btn').addEventListener('click', e => {
+                 const correctOrder = Array.from(sequenceList.querySelectorAll('.draggable')).sort((a,b) => a.dataset.order - b.dataset.order);
+                 correctOrder.forEach(item => {
+                    item.classList.remove('incorrect');
+                    item.classList.add('correct');
+                    item.innerHTML = `<span class="mr-2 text-lg">✅</span> ${item.textContent.replace(/❌|✅/g, '').trim()}`;
+                    sequenceList.appendChild(item)
+                 });
+                 e.target.disabled = true;
+            });
+        }
+
+        // --- Matching Quiz Logic (Tap-to-match) ---
+        const matchContainer = document.querySelector('.interactive-container:has(#match-col-a)');
+        if (matchContainer) {
+            let selectedA = null;
+            let matches = {};
+            const colA = document.getElementById('match-col-a');
+            const colB = document.getElementById('match-col-b');
+            const resultsArea = document.getElementById('match-results-area');
+            const checkBtn = document.getElementById('check-match-btn');
+
+            const updateResults = () => {
+                resultsArea.innerHTML = '';
+                for (const idA in matches) {
+                    const textA = colA.querySelector(`[data-match-id="${idA}"]`).textContent;
+                    const textB = colB.querySelector(`[data-match-id="${matches[idA]}"]`).textContent;
+                    resultsArea.innerHTML += `<div class="match-result-row bg-gray-100"><span>${textA}</span> <span>↔️</span> <span>${textB}</span></div>`;
+                }
+            };
+
+            colA.addEventListener('click', e => {
+                const button = e.target.closest('.match-option');
+                if (!button || checkBtn.disabled) return;
+                if (selectedA) selectedA.classList.remove('selected');
+                selectedA = button;
+                selectedA.classList.add('selected');
+            });
+
+            colB.addEventListener('click', e => {
+                const button = e.target.closest('.match-option');
+                if (!button || !selectedA || checkBtn.disabled) return;
+                
+                matches[selectedA.dataset.matchId] = button.dataset.matchId;
+                
+                selectedA.classList.remove('selected');
+                selectedA = null;
+                updateResults();
+            });
+
+            checkBtn.addEventListener('click', e => {
+                resultsArea.innerHTML = '';
+                let correctCount = 0;
+                const allIds = Array.from(colA.querySelectorAll('.match-option')).map(b => b.dataset.matchId);
+
+                allIds.forEach(id => {
+                    const textA = colA.querySelector(`[data-match-id="${id}"]`).textContent;
+                    const userMatchId = matches[id];
+                    const userMatchText = userMatchId ? colB.querySelector(`[data-match-id="${userMatchId}"]`).textContent : '<i>No match</i>';
+                    const isCorrect = userMatchId === id;
+
+                    const resultRow = document.createElement('div');
+                    resultRow.classList.add('match-result-row', isCorrect ? 'correct' : 'incorrect');
+                    
+                    let innerHTML = `<span>${textA}</span> <span>↔️</span> <span>${userMatchText}</span>`;
+                    if (!isCorrect) {
+                        const correctTextB = colB.querySelector(`[data-match-id="${id}"]`).textContent;
+                        innerHTML += `<span class="text-xs ml-auto pl-2">(Correct: ${correctTextB})</span>`;
+                    } else {
+                        correctCount++;
+                    }
+                    resultRow.innerHTML = innerHTML;
+                    resultsArea.appendChild(resultRow);
+                });
+                
+                const feedbackEl = matchContainer.querySelector('.quiz-feedback');
+                feedbackEl.innerHTML = `You got ${correctCount} out of ${allIds.length} correct!`;
+                feedbackEl.classList.add('visible', correctCount === allIds.length ? 'correct' : 'incorrect');
+                e.target.disabled = true;
+            });
+        }
+        
+        // --- Poll Logic ---
+        document.querySelectorAll('.poll-container').forEach(container => {
+            container.addEventListener('click', e => {
+                const option = e.target.closest('.poll-option');
+                if (!option || container.classList.contains('answered')) return;
+                container.classList.add('answered');
+                const feedbackEl = container.querySelector('.poll-feedback');
+                const customFeedback = option.dataset.feedback;
+                const results = [62, 28, 10].sort(() => Math.random() - 0.5);
+                container.querySelectorAll('.poll-option').forEach((opt, index) => {
+                    const fill = opt.querySelector('.poll-bar-fill');
+                    const textSpan = opt.querySelector('span');
+                    const percentage = results[index];
+                    if(fill) fill.style.width = `${percentage}%`;
+                    if(textSpan) textSpan.textContent += ` (${percentage}%)`;
+                });
+                if (customFeedback && feedbackEl) {
+                    feedbackEl.textContent = customFeedback;
+                    feedbackEl.classList.remove('hidden');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
