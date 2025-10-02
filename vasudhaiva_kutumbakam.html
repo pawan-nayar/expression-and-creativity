@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasudhaiva Kutumbakam: Tracing the “World is One Family” Principle from Ancient Origins to 2025</title>
+    <meta name="description" content="A 7000+ word interactive guide on 'Vasudhaiva Kutumbakam' (The World is One Family). Explore its journey from Vedic origins to modern diplomacy through timelines, quizzes, FAQs, and global perspectives.">
+    <meta name="keywords" content="Vasudhaiva Kutumbakam, World is One Family, Indian Philosophy, G20, Upanishads, Vedanta, Global Ethics, Indian Diplomacy, Oneness">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <style>
+        /* ================= Base / Theme ================= */
+        :root {
+          --bg: #ffffff;
+          --text: #212529;
+          --muted: #f8f9fa;
+          --border: #e9ecef;
+          --accent: #fd7e14;
+          --header-bg: #212529;
+          --header-fg: #f8f9fa;
+          --ok: #27ae60;
+          --ok-soft: #eafaf1;
+          --bad: #c0392b;
+          --bad-soft: #fbeeee;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+        .container { max-width: 850px; margin: auto; padding: 24px; background: #fff; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ================= Header / Footer / Breadcrumbs ================= */
+        .site-header, .site-footer { background: var(--header-bg); color: var(--header-fg); padding: 14px 24px; }
+        .site-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; }
+        .site-header nav { display: flex; gap: 14px; }
+        .site-header nav a { color: #ced4da; text-decoration: none; }
+        .site-header nav a:hover { color: #fff; }
+        .site-footer { text-align: center; margin-top: 50px; padding: 40px; }
+        .breadcrumbs { margin-bottom: 24px; font-size: 0.9rem; color: #6c757d; }
+        .breadcrumbs a { color: var(--accent); }
+
+        /* ================= Typography & Layout ================= */
+        h1 { font-family: 'Lora', serif; font-size: clamp(2.2rem, 5vw, 3rem); text-align: left; margin-bottom: 8px; color: var(--header-bg); line-height: 1.2; }
+        .byline { font-family: 'Lora', serif; font-size: clamp(1.1rem, 3vw, 1.4rem); font-style: italic; color: #6c757d; margin-bottom: 24px; }
+        h2 { font-family: 'Lora', serif; font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--text); margin: 56px 0 20px; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        h3 { font-family: 'Lora', serif; font-size: clamp(1.3rem, 3vw, 1.6rem); color: var(--text); margin-top: 32px; margin-bottom: 12px; }
+        h4 { font-size: clamp(1.1rem, 2.5vw, 1.2rem); font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        p { margin-bottom: 16px; word-wrap: break-word; }
+        ul { margin-left: 24px; margin-bottom: 24px; list-style-type: '🌿'; padding-left: 1em; }
+        li { margin-bottom: 12px; padding-left: 0.5em; }
+        .article-meta { display: flex; align-items: center; gap: 12px; color: #6c757d; margin-bottom: 32px; font-size: 0.95rem; }
+        .author-emoji { font-size: 32px; line-height: 1; }
+        .intro { font-size: 1.15rem; line-height: 1.8; background: var(--muted); padding: 24px; border-radius: 4px; border-left: 4px solid var(--accent); margin: 24px 0; }
+        .img-frame { position: relative; width: 100%; overflow: hidden; border-radius: 12px; margin: 24px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; background: var(--muted); padding: 20px; }
+        .img-frame img { max-width: 35%; height: auto; border-radius: 8px; }
+        .img-frame figcaption { font-size: 0.9rem; color: #6c757d; margin-top: 10px; font-style: italic; }
+        .btn { background: var(--accent); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
+        .btn:hover { background-color: #d35400; }
+        .btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+
+        /* ================= Interactive & Structural Elements ================= */
+        .table-wrap { position: relative; border: 1px solid var(--border); border-radius: 12px; background: #fff; margin: 24px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .table-scroll { position: relative; overflow-x: auto; }
+        table.data-table { width: 100%; border-collapse: collapse; }
+        table.data-table th, table.data-table td { padding: 14px 16px; border: 1px solid var(--border); text-align: left; vertical-align: top; white-space: normal; }
+        table.data-table thead th { background: var(--muted); font-weight: 600; white-space: nowrap; }
+        table.data-table tbody tr:nth-child(even) { background: #fdf2e9; } /* --zebra color */
+        table.data-table th:first-child, table.data-table td:first-child { position: -webkit-sticky; position: sticky; left: 0; z-index: 1; border-right: 2px solid var(--border); font-weight: 600; min-width: 150px; }
+        table.data-table thead th:first-child { z-index: 2; background-color: var(--muted); }
+        table.data-table tbody td:first-child { background-color: #fff; }
+        table.data-table tbody tr:nth-child(even) td:first-child { background-color: #fdf2e9; } /* --zebra color */
+
+        .accordion { display: grid; gap: 8px; }
+        .accordion-item { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .accordion-header { width: 100%; text-align: left; background: var(--muted); border: none; padding: 16px 20px; border-radius: 0; cursor: pointer; font-size: 1.1rem; font-weight: bold; display: flex; align-items: center; color: var(--text); border-bottom: 1px solid var(--border); }
+        .accordion-header .accordion-title { margin-right: auto; padding-right: 1rem; }
+        .accordion-header i { transition: transform 0.3s ease; }
+        .accordion-header[aria-expanded="true"] { background: #e9ecef; } /* slightly darker muted */
+        .accordion-header[aria-expanded="true"] i { transform: rotate(180deg); }
+        .accordion-content { padding: 0 20px; background: #fff; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; }
+        .accordion-content.open { max-height: 500px; padding: 20px; }
+
+        /* --- Quiz & Poll Styles --- */
+        .quiz-container { padding: 20px; border: 2px solid var(--border); border-radius: 12px; background: #fff; }
+        .quiz-navigation { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .quiz-body { display: none; } .quiz-body.active { display: block; }
+        .quiz-options { display: grid; gap: 12px; }
+        .quiz-option label { display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; background: var(--muted); }
+        .quiz-option input[type="radio"] { flex-shrink: 0; }
+        .quiz-option .explanation { display: none; margin-top: 10px; padding: 15px; border-radius: 6px; border-left: 4px solid #6c757d; }
+        .quiz-option.selected.correct label { background: var(--ok-soft); border-color: var(--ok); }
+        .quiz-option.selected.wrong label { background: var(--bad-soft); border-color: var(--bad); }
+        .quiz-option.correct .explanation { border-left-color: var(--ok); background: var(--ok-soft); }
+        .quiz-option.wrong .explanation { border-left-color: var(--bad); background: var(--bad-soft); }
+        .poll-container { display: grid; gap: 12px; margin: 24px 0; }
+        .poll-option { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; background: var(--muted); transition: background-color 0.2s; }
+        .poll-option:hover { background: var(--border); }
+        .poll-bar { height: 10px; background: var(--accent); border-radius: 5px; }
+        .poll-results { margin-top: 10px; }
+        .poll-result-bar-container { background: var(--muted); border-radius: 5px; height: 10px; margin-top: 4px; overflow: hidden; }
+
+        .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .quote-card { background: var(--muted); padding: 24px; border-radius: 4px; border-left: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .quote-text { font-family: 'Lora', serif; font-style: italic; font-size: 1.1rem; margin-bottom: 12px; line-height: 1.6; }
+        .quote-author { font-weight: bold; font-style: normal; text-align: right; color: var(--text); }
+
+        /* --- Glossary Styles --- */
+        .glossary-cloud { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; justify-content: center; }
+        .glossary-chip { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: #fdf2e9; border: 1px solid var(--accent); color: var(--accent); font-weight: 600; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .glossary-chip:hover, .glossary-chip:focus { background: #fbe5d3; }
+        .chip-tip { position: fixed; z-index: 1001; min-width: 240px; max-width: min(92vw, 420px); background: var(--header-bg); color: #fff; padding: 12px 14px; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0, .2); opacity: 0; visibility: hidden; transition: .15s; line-height: 1.45; }
+        .chip-tip.show { opacity: 1; visibility: visible; }
+        .chip-tip .arrow { position: absolute; width: 12px; height: 12px; background: var(--header-bg); transform: rotate(45deg); }
+
+        /* --- Card Styles (Simplified) --- */
+        .highlight-card, .critique-card { background: var(--muted); border-left: 4px solid var(--accent); padding: 20px; border-radius: 4px; margin: 24px 0; }
+        .highlight-card h5, .critique-card h5 { color: var(--text); margin-top: 0; font-family: 'Inter', sans-serif; }
+        .critique-card h5::before { content: '🔬 '; }
+        .highlight-card h5::before { content: '🌏 '; }
+
+        /* --- Flip Card Styles --- */
+        .flip-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; margin: 32px 0; }
+        .flip-card { background-color: transparent; width: 100%; height: 180px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .flip-card-front { background: var(--muted); border-left: 4px solid var(--accent); }
+        .flip-card-back { background: var(--header-bg); color: var(--header-fg); transform: rotateY(180deg); }
+        .original-script { font-size: 1.8rem; margin-bottom: 10px; }
+        .lang-name { font-weight: bold; font-style: italic; color: var(--accent); }
+        .translation { font-size: 1.1rem; font-style: italic; margin-bottom: 8px; }
+        .transliteration { font-weight: 500; }
+
+        /* Progress tracker */
+        .progress-tracker { display: flex; align-items: center; gap: 6px; margin: 24px 0; padding: 12px; background: var(--muted); border-radius: 8px; flex-wrap: wrap; }
+        .progress-step { width: 20px; height: 20px; border-radius: 50%; background: var(--border); color: #6c757d; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; transition: background-color 0.3s; }
+        .progress-step.completed { background: var(--ok); color: #fff; }
+        .progress-step.current { background: var(--accent); color: #fff; }
+        .progress-line { flex: 1; height: 2px; background: var(--border); min-width: 20px; transition: background-color 0.3s; }
+        .progress-line.completed { background: var(--ok); }
+
+        @media (max-width: 768px) {
+            .site-header { flex-direction: column; gap: 12px; }
+            h1 { font-size: 2rem; }
+            .byline { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="#" class="logo">Beyond Dictionary</a>
+        <nav><a href="#">Learning</a><a href="#">Games</a><a href="#">FAQ</a></nav>
+    </header>
+
+    <div class="container">
+
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="#">Philosophy</a> > <a href="#">Global Ethics</a> > Vasudhaiva Kutumbakam</nav>
+
+        <h1>Vasudhaiva Kutumbakam</h1>
+        <p class="byline">Tracing the “World is One Family” Principle from Ancient Origins to 2025</p>
+        <div class="article-meta"><span class="author-emoji">🌏</span><span>Global History Collective &nbsp; | &nbsp; Comprehensive Guide</span></div>
+
+        <p class="intro">
+            The Sanskrit phrase "Vasudhaiva Kutumbakam" envisions the entire world as a single, interconnected family. This profound ideal, originating in ancient Indian scriptures, has journeyed through millennia, shaping spiritual thought, imperial policy, and modern diplomacy. This guide traces its complete arc—from Vedic hymns and Upanishadic revelations to its role in India's G20 presidency and its relevance in a globalized 21st century. We will explore its applications, cultural expressions, and the critical debates it inspires today.
+        </p>
+
+        <div class="img-frame">
+             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1200px-The_Earth_seen_from_Apollo_17.jpg" alt="The Earth seen from space, showing Africa, Antarctica, and Asia">
+             <figcaption>The 'Blue Marble' photograph taken during the Apollo 17 mission, a powerful visual of our shared home.</figcaption>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step current">1</div><div class="progress-line"></div>
+            <div class="progress-step">2</div><div class="progress-line"></div>
+            <div class="progress-step">3</div><div class="progress-line"></div>
+            <div class="progress-step">4</div><div class="progress-line"></div>
+            <div class="progress-step">5</div><div class="progress-line"></div>
+            <div class="progress-step">6</div><div class="progress-line"></div>
+            <div class="progress-step">7</div><div class="progress-line"></div>
+            <div class="progress-step">8</div>
+            <span style="margin-left:12px; font-size:0.9rem; color:#6c757d; width: 100%; text-align: center; padding-top: 5px;">
+                Origins → Classical → Imperial → Interfaith → Culture → Colonial → Diplomacy → Modern
+            </span>
+        </div>
+
+        <section id="part1">
+            <h2>Part 1: Vedic and Upanishadic Origins of a Universal Ethos</h2>
+            <p>The ideal of Vasudhaiva Kutumbakam, meaning “the world is one family,” finds its earliest roots in the Vedic age. The Rigveda (c. 1500–1000 BCE), the oldest Indian scripture, contains hymns promoting social harmony and collective unity. One celebrated verse urges people to act and think together in unison: “Let us move together, speak together, let our minds be united.” This spirit of universal fellowship and shared purpose laid a philosophical groundwork for later ideas of world kinship.</p>
+            <p>By the Upanishadic period (mid-1st millennium BCE), the concept matured into a direct expression of global family. The Maha Upanishad (VI.71–73) proclaims: “One is a relative, another stranger – this is the thinking of the narrow-minded; for the magnanimous, the entire world is one family.” In its original Sanskrit it reads, “udāra-charitānām tu vasudhaiva kuṭumbakam”, encapsulating the view that truly enlightened souls transcend all divisive boundaries. Importantly, this verse appears in a section describing the qualities of a person who has attained the highest spiritual state – one who performs worldly duties without attachment and regards everyone with equal benevolence. Thus, in Upanishadic philosophy, Vasudhaiva Kutumbakam was not a mere slogan but a moral vision linked to self-realization: the sage who sees the Self in all beings treats the world as family. The teaching was influential in later Hindu thought – for example, the Bhagavata Purana praised this Maha Upanishad adage as the “loftiest Vedantic thought,” underscoring its importance in classical theology.</p>
+        </section>
+
+        <section id="part2">
+            <h2>Part 2: Classical Indian Thought and Literature</h2>
+            <h3>Epics and Philosophical Traditions</h3>
+            <p>During the classical period (last centuries BCE to early CE), the ethos of a unified humanity permeated India’s major epics and philosophical schools. The Mahābhārata and related texts extol ideals of <strong>sama-darshana</strong> (equal vision) toward all creatures. In the Bhagavad Gita, Lord Krishna teaches that the truly wise see all beings with an equal eye, whether a learned priest, a cow, an elephant, or an outcaste dog-eater. This sama-darshi outlook resonates strongly with the spirit of Vasudhaiva Kutumbakam, implying a universal brotherhood beyond social hierarchy.</p>
+            
+            <div class="highlight-card">
+                <h5>A Parallel Vision from Ancient Tamil Culture</h5>
+                <p>The Tamil poet Kaniyan Pungundranar (c. 6th century BCE) famously declared in Purananuru 192: <strong>“Yaadhum oore, yaavarum kelir” – “Every city is our city; everyone is our kin.”</strong> This ancient Tamil aphorism rejects all divisions among humans and affirms that all people, whatever their rank, were alike, showing the ideal was embraced across linguistic and regional cultures in South Asia.</p>
+            </div>
+
+            <p>Classical Indian philosophy also reinforced these values. Vedanta philosophy emphasized the one Brahman or universal spirit present in all beings. At the same time, Buddhist and Jain traditions emerged with parallel ethics of universalism. The Buddha taught <strong>maitrī</strong> (loving-kindness) and <strong>karuṇā</strong> (compassion) for all living beings, while Jainism preached a deep interconnectedness with the aphorism “Parasparopagraho Jīvānām” (“All life is bound together by mutual support”).</p>
+
+            <h3>Popular Literature and Critical Reflection</h3>
+            <p>Literary works and fables spread the message to popular audiences. The Hitopadeśa, a Sanskrit fable anthology, included the now-famous verse. Interestingly, in the tale, this lofty verse is recited by a cunning jackal trying to deceive his prey. Scholars have noted this as an early critical reflection on the slogan’s misuse: the moral lesson is not that the world is one family per se, but rather “do not be naive when someone makes lofty declarations.” Nevertheless, its inclusion shows that the ideal had entered the cultural vocabulary of the Indian world and was widely admired as an ethical maxim.</p>
+        </section>
+
+        <section id="part3">
+            <h2>Part 3: Imperial Traditions: Mauryan Universalism to Chola Cosmopolitanism</h2>
+            <p>The ethos of Vasudhaiva Kutumbakam also found expression in governance. Emperor Ashoka of the Mauryan Empire (3rd century BCE) provides a striking early example. After his bloody conquest of Kalinga, Ashoka underwent a moral transformation and resolved to govern through Dhamma (righteous law). In his Rock Edicts, Ashoka proclaims a near-familial bond with his subjects: “All men are my children. What I desire for my own children… that I desire for all men.” This imperial vision of benevolence effectively secularized the world-family ideal into policy.</p>
+
+            <div class="img-frame">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Sarnath_Pillar_of_Ashoka.jpg" alt="The Lion Capital of Ashoka from Sarnath">
+                <figcaption>The Lion Capital of Ashoka from Sarnath, a symbol of peace and universal responsibility from ancient India.</figcaption>
+            </div>
+            
+            <p>During the Gupta Empire (4th–5th centuries CE), often regarded as India’s “Classical Age,” the ideal persisted. The Sanskrit Purāṇas compiled in this era continued to teach the unity of mankind. The Gupta period also saw increasing contact with foreign peoples and the absorption of newcomers into the social fold. Likewise, South Indian empires like the Cholas (9th–13th centuries) embodied a cosmopolitan outlook, ruling a vast realm stretching to Southeast Asia and encouraging exchange across cultures. The spread of Indian cultural influence helped diffuse these concepts abroad.</p>
+            
+            <div class="highlight-card">
+                <h5>Echoes in Southeast Asia: "Unity in Diversity"</h5>
+                <p>In medieval Java under Hindu-Javanese kings, the epic poem Sutasoma (14th century) declared <strong>“Bhinneka Tunggal Ika” – “Unity in Diversity”</strong> – famously stating that Shiva and Buddha, though worshipped differently, are one. This line, now Indonesia’s national motto, shows clear conceptual resonance with the Indian ideal that all peoples share an underlying unity.</p>
+            </div>
+        </section>
+        
+        <section id="part4">
+            <h2>Part 4: The Interfaith Embrace</h2>
+            <p>South Asia’s rich religious mosaic continually reinterpreted Vasudhaiva Kutumbakam. Buddhist universities like Nalanda created lived experiences of the world-family, hosting monks from across Asia. Jainism fostered a strong internal ethos of equality, with one text declaring: “All those with life are brothers”.</p>
+            <p>The arrival of Islam added a new dimension, stressing the universal brotherhood of mankind under one God. The Prophet Muhammad’s Last Sermon explicitly stated: “All mankind is from Adam and Eve; an Arab has no superiority over a non-Arab.” Sufi saints like Rumi and Nizamuddin Auliya emphasized unity and love beyond religion. The Bhakti movement echoed these themes, with poet-saints like Kabir and Guru Nanak rejecting religious divisions.</p>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">Akbar's Syncretism: Sulh-i-Kul (Universal Peace)</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Under the Mughal Empire, Emperor Akbar the Great (r. 1556–1605) promoted a philosophy of <strong>Sulh-i-Kul (universal peace)</strong>. He held interfaith dialogues in his Ibādat Khāna (House of Worship) with Hindus, Muslims, Jains, Parsis, and Christians, attempting to treat all subjects like members of one family of humanity. This policy was premised on the idea that truth is one and no single creed holds a monopoly—reminiscent of the Rigvedic “Ekam sat vipra bahudha vadanti” (“Truth is one, the wise call it by many names”).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">Sikhism and the Langar: A Living Example</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Guru Nanak, the founder of Sikhism, proclaimed: “There is no Hindu, no Muslim – all are children of God.” The Sikh practice of <strong>langar (community kitchen)</strong> invited people of all castes and faiths to sit and eat together as one family. This tradition continues today in Gurdwaras worldwide and serves as a powerful, daily social enactment of Vasudhaiva Kutumbakam ideals.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">India as a Refuge: The Parsi Story</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p>India’s history of offering refuge to religious minorities—like the Parsis (Zoroastrians fleeing Persia around the 8th century)—is rooted in an ethos that “the guest is God.” According to legend, a local Indian king welcomed the Parsis by showing them a bowl of milk filled to the brim, signifying his kingdom was full. The Parsi leader responded by dissolving sugar in the milk, demonstrating that they would enrich the local culture without displacing it, symbolically embracing them as family. This narrative reinforced India’s self-image as a land of inclusivity.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz1">
+            <h2>Quiz I: Test Your Knowledge (Part 1/2)</h2>
+            <p>Let's check your understanding of the foundational concepts we've covered so far. Choose the most accurate answer.</p>
+            <div class="quiz-container">
+                <div class="quiz-navigation">
+                    <button class="btn" id="quiz1PrevBtn" disabled>⮜</button>
+                    <span class="question-counter"><span id="quiz1CurrentQ">1</span> of <span id="quiz1TotalQ">13</span></span>
+                    <button class="btn" id="quiz1NextBtn">⮞</button>
+                </div>
+                <div id="quiz1-body-container"></div>
+            </div>
+        </section>
+        
+        <section id="part5">
+            <h2>Part 5: Cultural Expressions in Art, Literature and Architecture</h2>
+            <p>Throughout history, the “world-as-family” ideal has inspired myriad cultural expressions. In ancient India, Sanskrit dramas like <em>Mṛcchakatika</em> portrayed friendship across class lines, while Tamil Sangam poems celebrated universal kinship.</p>
+            <p>In art and architecture, we see visual syncretism. At sites like the <strong>Ellora Caves</strong>, Hindu, Buddhist, and Jain temples were carved side-by-side in the same cliff—a stone testament to religious coexistence. Mughal art often blended Persian and Indian motifs, symbolizing harmony. The lotus, a recurring motif used by many traditions, was adopted for the 2023 G20 logo to represent unity emerging from diversity.</p>
+
+            <h3>Voices of Unity: A South Asian Spiritual Journey</h3>
+            <p>The spirit of 'one family' echoes across the languages of South Asia. Click on the cards below to see the translation and discover the shared heritage of this beautiful idea.</p>
+            <div class="flip-card-grid">
+                <!-- Card 1: Sanskrit -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">वसुधैव कुटुम्बकम्</div>
+                            <div class="lang-name">Sanskrit</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"The world is one family"</div>
+                            <div class="transliteration">(Vasudhaiva Kuṭumbakam)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2: Tamil -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">யாதும் ஊரே யாவரும் கேளிர்</div>
+                            <div class="lang-name">Tamil</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"Every city is our city, everyone is our kin"</div>
+                            <div class="transliteration">(Yaadhum oore, yaavarum kelir)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3: Hindi -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">सारा संसार एक परिवार है</div>
+                            <div class="lang-name">Hindi</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"The whole world is one family"</div>
+                            <div class="transliteration">(Saara sansaar ek parivaar hai)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4: Bengali -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">জগৎ জুড়িয়া এক ঘর</div>
+                            <div class="lang-name">Bengali</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"The world is one home"</div>
+                            <div class="transliteration">(Jagat juriya ek ghar)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 5: Punjabi -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                             <div class="original-script" style="font-size: 1.5rem;">ਸਭੇ ਸਾਝੀਵਾਲ ਸਦਾਇਨਿ</div>
+                            <div class="lang-name">Punjabi (from Gurbani)</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"Everyone is a partner in Grace; no one is a stranger"</div>
+                            <div class="transliteration">(Sabhē sājhīvāl sadāin)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 6: Urdu -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                             <div class="original-script" style="font-size: 1.5rem;">مذہب نہیں سکھاتا آپس میں بیر رکھنا</div>
+                            <div class="lang-name">Urdu</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"Religion does not teach us to bear animosity toward each other"</div>
+                            <div class="transliteration">(Mazhab nahin sikhata aapas mein bair rakhna)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 7: Telugu -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">ప్రపంచమంతా ఒకే కుటుంబం</div>
+                            <div class="lang-name">Telugu</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"The whole world is one family"</div>
+                            <div class="transliteration">(Prapanchantha oke kutumbam)</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 8: Kannada -->
+                <div class="flip-card" tabindex="0">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="original-script">ವಿಶ್ವವೇ ಒಂದು ಕುಟುಂಬ</div>
+                            <div class="lang-name">Kannada</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="translation">"The universe itself is one family"</div>
+                            <div class="transliteration">(Vishwave ondu kutumba)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Bhakti Geet: Songs of Universal Devotion</h3>
+            <p>This section provides a selection of devotional songs (bhakti geet) with their original text, transliteration, and meaning, offering insight into their cultural and spiritual significance as expressions of a universal family.</p>
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Bhakti Geet</th>
+                                <th>Line 1 (Devanagari)</th>
+                                <th>Transliteration</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Vaishnava Jana To</td>
+                                <td>वैष्णव जन तो तेने कहिये जे, पीड़ परायी जाणे रे</td>
+                                <td>Vaishnava jan to tene kahiye je, peed paraayi jaane re</td>
+                                <td>A true devotee is one who understands others’ pain.</td>
+                            </tr>
+                            <tr>
+                                <td>Raghupati Raghav Raja Ram</td>
+                                <td>रघुपति राघव राजा राम, पतित पावन सीताराम</td>
+                                <td>Raghupati Raghav Raja Ram, patita pāvan Sītā Rām</td>
+                                <td>O Lord Rama of the Raghu line; Sita-Ram, purifier of sinners.</td>
+                            </tr>
+                            <tr>
+                                <td>Itni Shakti Hamein Dena Data</td>
+                                <td>इतनी शक्ति हमें देना दाता, मन का विश्वास कमज़ोर हो ना</td>
+                                <td>Itnī shakti hamẽ denā dātā, man kā viśvās kamzor ho nā</td>
+                                <td>Grant strength so that faith does not weaken.</td>
+                            </tr>
+                            <tr>
+                                <td>Tu Hi Ram Hai Tu Rahim Hai</td>
+                                <td>तू ही राम है, तू रहीम है, तू करीम, कृष्ण, खुदा हुआ</td>
+                                <td>Tū hī Rām hai, tū Rahīm hai, tū Karīm, Kṛṣṇa, Khudā huā</td>
+                                <td>You are Ram and Rahim; you are Karim, Krishna, Khuda.</td>
+                            </tr>
+                            <tr>
+                                <td>Vaishnava Jana To (Resource Note)</td>
+                                <td>वैष्णव जन तो तेने कहिये जे, पीड़ परायी जाणे रे</td>
+                                <td>Vaishnava jan to tene kahiye je, peed paraayi jaane re</td>
+                                <td>Rich teaching sheets and translations available for class use.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="highlight-card">
+                <h5>A Home for the World: Tagore's Visva-Bharati</h5>
+                <p>In the 20th century, Rabindranath Tagore’s university at Shantiniketan (Visva-Bharati, 1921) was conceived as a living artwork of global unity. Tagore chose as its motto an ancient Vedic line: <strong>“Yatra vishvam bhavatyek nidam” – “Where the world makes a home in a single nest.”</strong> This poetic image of a single nest for the entire world encapsulates the architectural and educational philosophy of the place.</p>
+            </div>
+        </section>
+
+        <section id="part6">
+            <h2>Part 6: Colonial Era Reinterpretations and Nationalist Revival</h2>
+            <p>The colonial period brought upheaval but also a rediscovery of Vasudhaiva Kutumbakam. Confronted by British imperialism, Indian thinkers highlighted their tradition of universalism as a hallmark of Indian culture. Figures like Raja Rammohan Roy espoused the unity of all religions.</p>
+            <p>By the late 19th century, Indian spiritual leaders carried this message to the world. In 1893, <strong>Swami Vivekananda</strong> addressed the World’s Parliament of Religions in Chicago with the famous greeting, “Sisters and Brothers of America,” addressing all present as family. <strong>Mahatma Gandhi</strong>’s principle of Sarvodaya (“welfare of all”) and his vision of an India free from communal hatred drew on the notion that all humans are one family under God. He famously said, “I do not want my house to be walled in on all sides… I want the cultures of all lands to be blown about my house as freely as possible.”</p>
+            <p>Indian nationalists argued that Indian culture’s emphasis on Vasudhaiva Kutumbakam made it uniquely suited to lead a divided world toward peace, contrasting it with the divisiveness of Western imperialism. This set the stage for independent India’s foreign policy based on universal cooperation.</p>
+        </section>
+        
+        <section id="part7">
+            <h2>Part 7: Post-Independence Diplomacy and Global Influence</h2>
+            <p>After 1947, India’s foreign policy explicitly wove Vasudhaiva Kutumbakam into its guiding principles. Prime Minister Jawaharlal Nehru championed the <strong>Non-Aligned Movement (NAM)</strong>, aiming to unite newly independent nations into a family free from Cold War blocs. Successive leaders continued to cite the phrase in diplomacy at the United Nations to promote peace, anti-racism, and environmental cooperation.</p>
+            
+            <div class="highlight-card">
+                <h5>Engraved in Parliament</h5>
+                <p>The phrase was engraved in the entrance hall of the Indian Parliament in New Delhi, greeting lawmakers and visitors with the reminder that “the entire world is a family.” This served not only as a cultural statement but also as a subtle piece of soft power, showcasing India’s philosophical heritage to foreign dignitaries.</p>
+            </div>
+            
+            <p>Concrete foreign policy initiatives reflected this ideal. India was a key drafter of the Universal Declaration of Human Rights, with Hansa Mehta ensuring its language was inclusive (changing “All men” to “All human beings”). India also sent one of the largest contingents to early UN peacekeeping missions, acting on the belief that security is indivisible worldwide.</p>
+        </section>
+        
+        <section id="part8">
+            <h2>Part 8: The 21st Century: Contemporary Applications and Critiques</h2>
+            <p>In the 21st century, Vasudhaiva Kutumbakam has taken on renewed relevance. During the COVID-19 pandemic, India launched the <strong>“Vaccine Maitri”</strong> (Vaccine Friendship) initiative, citing the principle as inspiration for its humanitarian aid. More recently, India’s G20 Presidency in 2023 adopted the official theme: <strong>“One Earth, One Family, One Future,”</strong> which prominently embraced the Sanskrit motto.</p>
+            
+             <div class="img-frame">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Bharat_Mandapam_Pragati_Maidan.jpg/640px-Bharat_Mandapam_Pragati_Maidan.jpg" alt="Bharat Mandapam convention center in New Delhi, lit up for the G20 Summit.">
+                <figcaption>The Bharat Mandapam in New Delhi, the venue for the 2023 G20 Summit, which adopted the theme "One Earth, One Family, One Future."</figcaption>
+            </div>
+
+            <div class="critique-card">
+                <h5>Critical Perspectives</h5>
+                <p>Despite its appeal, the concept faces critiques. Some scholars note the dissonance between the lofty ideal and domestic social tensions. Others point out the original context in the Hitopadeśa, where the phrase is used by a trickster jackal, suggesting a lesson in not being naive. In international relations, realists question its efficacy in a world of power politics, suggesting that if the world is a family, it can be a dysfunctional one. These critiques invite a more nuanced understanding: that Vasudhaiva Kutumbakam is an aspirational value that requires continuous striving to realize.</p>
+            </div>
+            
+            <p>With growing awareness of climate change, the concept has also been reinterpreted to include Mother Earth and all species in the “family.” In a world fractured by conflict and crisis in 2025, the old ideal offers both a vision and a value: a vision of a world more unified than divided, and a value-system that prioritizes cooperation, compassion, and coexistence as if we truly are one human family.</p>
+        </section>
+
+        <section id="interactive-timeline">
+            <h2>Timeline of Key Developments</h2>
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Period (Century)</th>
+                                <th>Key Developments in the Vasudhaiva Kutumbakam Ideal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1500–1000 BCE</td><td>Rigveda hymns emphasize social harmony and collective unity: “move together, speak together, let our minds be one.”</td></tr>
+                            <tr><td>c. 6th cent. BCE</td><td>Maha Upanishad declares “vasudhaiva kutumbakam.” Tamil poet Kaniyan Pungundranar writes “Every city is our city; everyone is our kin.”</td></tr>
+                            <tr><td>3rd cent. BCE</td><td>Emperor Ashoka’s edicts proclaim, “All men are my children,” establishing a policy of universal welfare.</td></tr>
+                            <tr><td>1st–4th cent. CE</td><td>Bhagavad Gita teaches sama-darshana (equal vision). The ideal permeates epics and classical literature.</td></tr>
+                            <tr><td>4th–5th cent. CE</td><td>During Gupta Empire, Bhagavata Purana hails the phrase as the "loftiest thought."</td></tr>
+                            <tr><td>9th–12th cent.</td><td>The phrase appears in popular fables like the Hitopadeśa. Bhakti and Sufi movements preach oneness.</td></tr>
+                            <tr><td>16th cent.</td><td>Mughal Emperor Akbar implements Sulh-i-Kul (universal peace) and holds interfaith dialogues.</td></tr>
+                            <tr><td>17th cent.</td><td>Dara Shikoh translates Upanishads into Persian to find common ground between Islam and Hinduism.</td></tr>
+                            <tr><td>19th cent.</td><td>Swami Vivekananda addresses the world as “Sisters and Brothers” at the 1893 World’s Parliament of Religions.</td></tr>
+                            <tr><td>1900–1947</td><td>Gandhi, Tagore, and Nehru embed the ideal in the Indian nationalist narrative against colonial division.</td></tr>
+                            <tr><td>1947–1960s</td><td>Independent India champions the Non-Aligned Movement, uniting former colonies as a family of nations.</td></tr>
+                            <tr><td>1970s–1990s</td><td>The phrase is used in global advocacy against nuclear weapons and for environmental cooperation.</td></tr>
+                            <tr><td>2000s–2025</td><td>The ideal guides policies like “Vaccine Maitri” and becomes the theme for India’s 2023 G20 Presidency: “One Earth, One Family, One Future.”</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="polls-container">
+            <h3>Polls: Your Perspective on a Global Family</h3>
+            <p>How does this ancient ideal resonate today? Share your perspective.</p>
+            <div class="poll-container">
+                <h4>What is the biggest challenge to achieving a 'world family' in 2025?</h4>
+                <div id="poll1-options">
+                    <div class="poll-option" data-option="1">Nationalism & Political Divisions</div>
+                    <div class="poll-option" data-option="2">Economic Inequality</div>
+                    <div class="poll-option" data-option="3">Cultural & Religious Intolerance</div>
+                    <div class="poll-option" data-option="4">Misinformation & Lack of Empathy</div>
+                </div>
+                <div class="poll-results" id="poll1-results" style="display:none;"></div>
+            </div>
+            <div class="poll-container">
+                <h4>Which contemporary application of Vasudhaiva Kutumbakam is most inspiring?</h4>
+                <div id="poll2-options">
+                    <div class="poll-option" data-option="1">Global Health Cooperation (e.g., Vaccine Maitri)</div>
+                    <div class="poll-option" data-option="2">Collective Climate Action ("One Earth")</div>
+                    <div class="poll-option" data-option="3">Interfaith Dialogue & Pluralism</div>
+                    <div class="poll-option" data-option="4">Digital Connectivity & Global Community</div>
+                </div>
+                <div class="poll-results" id="poll2-results" style="display:none;"></div>
+            </div>
+        </section>
+        
+        <section id="part9_advanced">
+            <h2>Advanced & Supplementary Content</h2>
+            <h3>A Treasury of Quotes on Global Unity</h3>
+            <div class="quotes-grid">
+                <div class="quote-card"><p class="quote-text">“One is a relative, another stranger – this is the thinking of the narrow-minded; for the magnanimous, the entire world is one family.”</p><p class="quote-author">― Maha Upanishad</p></div>
+                <div class="quote-card"><p class="quote-text">“Yaadhum oore, yaavarum kelir” – “Every city is our city; everyone is our kin.”</p><p class="quote-author">― Kaniyan Pungundranar</p></div>
+                <div class="quote-card"><p class="quote-text">“All men are my children. What I desire for my own children… that I desire for all men.”</p><p class="quote-author">― Emperor Ashoka</p></div>
+                <div class="quote-card"><p class="quote-text">“Sisters and Brothers of America.”</p><p class="quote-author">― Swami Vivekananda, 1893</p></div>
+                <div class="quote-card"><p class="quote-text">“I do not want my house to be walled in on all sides... I want the cultures of all lands to be blown about my house as freely as possible.”</p><p class="quote-author">― Mahatma Gandhi</p></div>
+                <div class="quote-card"><p class="quote-text">“Yatra vishvam bhavatyek nidam” – “Where the world makes a home in a single nest.”</p><p class="quote-author">― Rabindranath Tagore</p></div>
+            </div>
+
+            <h3>Frequently Asked Questions</h3>
+            <div id="faq-accordion-container"></div>
+
+            <h3>Glossary of Key Terms</h3>
+            <p>Click on the terms below to explore their meanings.</p>
+            <div class="glossary-cloud" id="glossaryCloud"></div>
+        </section>
+        
+        <section id="quiz2">
+            <h2>Quiz II: Test Your Knowledge (Part 2/2)</h2>
+            <p>Continue to test your knowledge with the second half of the quiz, focusing on deeper concepts and applications.</p>
+            <div class="quiz-container">
+                <div class="quiz-navigation">
+                    <button class="btn" id="quiz2PrevBtn" disabled>⮜</button>
+                    <span class="question-counter"><span id="quiz2CurrentQ">1</span> of <span id="quiz2TotalQ">12</span></span>
+                    <button class="btn" id="quiz2NextBtn">⮞</button>
+                </div>
+                <div id="quiz2-body-container"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Global Ethos Archives. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data for Quizzes, FAQs, and Glossary
+            const quizQuestions = [
+                { q: "What is the literal English translation of 'Vasudhaiva Kutumbakam'?", correct: 1, options: [{text:"All are equal"}, {text:"The world is one family"}, {text:"Unity in diversity"}, {text:"Truth alone triumphs"}] },
+                { q: "Which ancient Indian text contains the first explicit mention of 'Vasudhaiva Kutumbakam'?", correct: 2, options: [{text:"Rigveda"}, {text:"Bhagavad Gita"}, {text:"Maha Upanishad"}, {text:"Hitopadeśa"}] },
+                { q: "The Tamil phrase 'Yaadhum oore, yaavarum kelir' expresses a similar sentiment. What does it mean?", correct: 0, options: [{text:"Every city is our city; everyone is our kin"}, {text:"Truth is one, sages call it by many names"}, {text:"All life is bound by mutual support"}, {text:"Let us move together"}] },
+                { q: "Which Mauryan emperor famously declared 'All men are my children' in his edicts?", correct: 3, options: [{text:"Chandragupta Maurya"}, {text:"Bindusara"}, {text:"Samudragupta"}, {text:"Ashoka"}] },
+                { q: "In the Bhagavad Gita, the concept of seeing all beings with an equal eye is known as:", correct: 1, options: [{text:"Ahimsa"}, {text:"Sama-darshana"}, {text:"Karunā"}, {text:"Maitrī"}] },
+                { q: "The Indonesian national motto, 'Bhinneka Tunggal Ika' (Unity in Diversity), was inspired by concepts from which culture?", correct: 2, options: [{text:"Chinese"}, {text:"Persian"}, {text:"Indian"}, {text:"Arabic"}] },
+                { q: "The Sikh practice of serving free meals to all, regardless of faith or caste, is called:", correct: 0, options: [{text:"Langar"}, {text:"Seva"}, {text:"Kirtan"}, {text:"Sangat"}] },
+                { q: "Which Mughal emperor promoted the policy of 'Sulh-i-Kul' (universal peace)?", correct: 3, options: [{text:"Babur"}, {text:"Shah Jahan"}, {text:"Aurangzeb"}, {text:"Akbar"}] },
+                { q: "Rabindranath Tagore's university, Visva-Bharati, has a motto that translates to:", correct: 1, options: [{text:"The guest is God"}, {text:"Where the world makes a home in a single nest"}, {text:"Let noble thoughts come from all sides"}, {text:"The welfare of all"}] },
+                { q: "Who famously opened his address at the 1893 World's Parliament of Religions with 'Sisters and Brothers of America'?", correct: 0, options: [{text:"Swami Vivekananda"}, {text:"Mahatma Gandhi"}, {text:"Jawaharlal Nehru"}, {text:"Raja Rammohan Roy"}] },
+                { q: "In post-independence India, the principle of Vasudhaiva Kutumbakam heavily influenced which foreign policy doctrine?", correct: 2, options: [{text:"The Look East Policy"}, {text:"The Gujral Doctrine"}, {text:"The Non-Aligned Movement (NAM)"}, {text:"The Nuclear Doctrine"}] },
+                { q: "What was the official theme of India’s G20 Presidency in 2023?", correct: 3, options: [{text:"Recover Together, Recover Stronger"}, {text:"Realizing Opportunities of the 21st Century for All"}, {text:"Shaping an Interconnected World"}, {text:"One Earth, One Family, One Future"}] },
+                { q: "The critique regarding the Hitopadeśa points out that the famous verse is spoken by which character?", correct: 1, options: [{text:"A wise sage"}, {text:"A cunning jackal"}, {text:"A noble king"}, {text:"A loyal deer"}] },
+                { q: "What was the name of India's COVID-19 vaccine export initiative?", correct: 2, options: [{text:"Operation Sanjeevani"}, {text:"Vaccine Seva"}, {text:"Vaccine Maitri"}, {text:"Arogya Setu"}] },
+                { q: "The Jain aphorism 'Parasparopagraho Jīvānām' reflects a similar ethos. What does it mean?", correct: 0, options: [{text:"All life is bound together by mutual support"}, {text:"Non-violence is the highest virtue"}, {text:"The soul is divine"}, {text:"Many-sidedness of reality"}] },
+                { q: "The Bhagavata Purana described the 'Vasudhaiva Kutumbakam' adage from the Maha Upanishad as the...", correct: 3, options: [{text:"most practical advice"}, {text:"most difficult path"}, {text:"oldest Vedic principle"}, {text:"loftiest Vedantic thought"}] },
+                { q: "The architectural layout of which UNESCO World Heritage site, featuring Hindu, Buddhist, and Jain temples carved side-by-side, symbolizes religious coexistence?", correct: 1, options: [{text:"Ajanta Caves"}, {text:"Ellora Caves"}, {text:"Hampi"}, {text:"Khajuraho"}] },
+                { q: "Prince Dara Shikoh's translation of the Upanishads sought common ground between Vedanta and which mystical tradition?", correct: 2, options: [{text:"Kabbalah"}, {text:"Gnosticism"}, {text:"Islamic Sufism"}, {text:"Christian Mysticism"}] },
+                { q: "Mahatma Gandhi's principle of 'Sarvodaya' translates to:", correct: 0, options: [{text:"Welfare of all"}, {text:"Self-reliance"}, {text:"Truth-force"}, {text:"Non-possession"}] },
+                { q: "Who ensured the Universal Declaration of Human Rights used the phrase 'All human beings' instead of 'All men'?", correct: 3, options: [{text:"Eleanor Roosevelt"}, {text:"Vijaya Lakshmi Pandit"}, {text:"Sarojini Naidu"}, {text:"Hansa Mehta"}] },
+                { q: "The modern Baha'i House of Worship in Delhi, open to all faiths, is famously known as the:", correct: 1, options: [{text:"Akshardham Temple"}, {text:"Lotus Temple"}, {text:"Birla Mandir"}, {text:"ISKCON Temple"}] },
+                { q: "The term 'udāra-charitānām' from the original Sanskrit verse refers to whom?", correct: 2, options: [{text:"Powerful rulers"}, {text:"Wealthy merchants"}, {text:"The magnanimous or noble-minded"}, {text:"Religious priests"}] },
+                { q: "The ancient Rigvedic verse 'Ekam sat vipra bahudha vadanti' aligns with the spirit of inclusivity. What does it mean?", correct: 0, options: [{text:"Truth is one, the wise call it by many names"}, {text:"May good thoughts come from all directions"}, {text:"The guest is equivalent to God"}, {text:"Let's walk together, speak together"}] },
+                { q: "Which Indian social reformer of the 19th century founded the Brahmo Samaj to promote a universal worship of one God?", correct: 3, options: [{text:"Dayananda Saraswati"}, {text:"Ishwar Chandra Vidyasagar"}, {text:"Keshab Chandra Sen"}, {text:"Raja Rammohan Roy"}] },
+                { q: "Reinterpreting the concept for modern challenges, activists now often speak of an 'Earth family', expanding the circle of kinship to include:", correct: 1, options: [{text:"Only endangered animals"}, {text:"All species and Mother Earth"}, {text:"Future human generations"}, {text:"Artificial Intelligence"}] }
+            ];
+
+            const faqs = {
+                "Beginner Questions": [
+                    { q: "What does 'Vasudhaiva Kutumbakam' literally mean?", a: "It is a Sanskrit phrase composed of three words: 'Vasudhā' (the Earth), 'ēva' (is indeed), and 'Kutumbakam' (one family). Together, it translates to 'The whole Earth is one family'." },
+                    { q: "Where does this phrase come from?", a: "It originates from the Maha Upanishad, an ancient Hindu scripture. It is found in verse 72 of the sixth chapter." },
+                    { q: "Is this an official motto of India?", a: "While not the official national motto (which is 'Satyameva Jayate' - Truth Alone Triumphs), it is a deeply cherished cultural and philosophical principle. It is inscribed in the entrance hall of India's Parliament and was the official theme for India's 2023 G20 Presidency." },
+                    { q: "How is this different from 'globalization'?", a: "Globalization typically refers to economic and technological interconnectedness. Vasudhaiva Kutumbakam is a philosophical and ethical concept that emphasizes moral, spiritual, and emotional interconnectedness, promoting empathy, compassion, and a sense of shared responsibility for all beings." },
+                    { q: "Is this a purely Hindu concept?", a: "While its origins are in Hindu scriptures (the Upanishads), its ethos of universalism is shared by many other traditions that originated or flourished in India, including Buddhism, Jainism, and Sikhism. It has also resonated with Islamic Sufism and modern humanist thought." },
+                    { q: "What is the most famous modern use of this phrase?", a: "Its most prominent recent use was as the official theme for India's G20 Presidency in 2023: 'One Earth, One Family, One Future'. This brought the ancient concept onto the main stage of global diplomacy." },
+                    { q: "Who are the 'narrow-minded' mentioned in the original verse?", a: "The verse contrasts two types of people. The 'narrow-minded' (laghu-chetasām) are those who think in terms of 'mine' vs. 'yours' or 'us' vs. 'them'. The 'magnanimous' (udāra-charitānām) are those who see the entire world as their family." },
+                    { q: "Can I see this principle in action today?", a: "Yes. Examples include international humanitarian aid during disasters, global efforts to combat climate change, interfaith dialogue initiatives, and even the Sikh practice of 'langar' (free community kitchens) which serves food to everyone regardless of background." }
+                ],
+                "Intermediate Questions": [
+                    { q: "How did Emperor Ashoka apply this principle in his rule?", a: "After the bloody Kalinga war, Ashoka adopted a policy of 'Dhamma' (righteous conduct). He declared all his subjects were like his 'children' and instructed his officials to care for them as a father would. His vision of benevolent rule extended even to peoples beyond his borders, effectively turning the ideal into state policy." },
+                    { q: "What is the connection between this idea and the Non-Aligned Movement (NAM)?", a: "During the Cold War, India's first Prime Minister, Jawaharlal Nehru, co-founded NAM. The movement encouraged newly independent nations to form their own 'family' outside the two major power blocs (US and USSR), reflecting the ideal of global cooperation and mutual respect without coercion." },
+                    { q: "What is the critical perspective on the use of this phrase from the Hitopadeśa?", a: "In the Hitopadeśa fables, the verse is spoken by a cunning jackal to trick a deer into a false sense of security. Some critics argue this original context is a cautionary tale, warning us to be wary of those who use lofty ideals insincerely, rather than a straightforward endorsement of the ideal itself." },
+                    { q: "How did Swami Vivekananda introduce this concept to the West?", a: "At the 1893 World's Parliament of Religions in Chicago, he began his iconic speech with 'Sisters and Brothers of America'. This simple, familial greeting broke from formal convention and instantly established a connection with the audience, embodying the spirit of Vasudhaiva Kutumbakam and presenting India's tradition of universal acceptance." },
+                    { q: "What is 'Sulh-i-Kul' and how does it relate?", a: "'Sulh-i-Kul' means 'universal peace' and was a policy promoted by the Mughal Emperor Akbar. He created a 'House of Worship' for dialogue between different religions and fostered a syncretic culture. It represents an Islamic-era political application of the same spirit of seeing all of humanity as one." },
+                    { q: "How does the Tamil phrase 'Yaadhum oore, yaavarum kelir' compare?", a: "It's a remarkable parallel. Written by the Sangam-era poet Kaniyan Pungundranar, it means 'Every city is our city; everyone is our kin.' It shows that the concept of a common human family was not limited to Sanskrit traditions but was a powerful idea across different linguistic and cultural spheres of ancient India." },
+                    { q: "How does India's 'Vaccine Maitri' initiative connect to this principle?", a: "During the COVID-19 pandemic, India exported millions of vaccines under the 'Vaccine Friendship' program. The government explicitly framed this as being guided by Vasudhaiva Kutumbakam, portraying global health cooperation not just as a policy choice but as a familial duty to help others in need." },
+                    { q: "What is the link between Vedanta philosophy and this ideal?", a: "Vedanta philosophy posits the existence of one ultimate reality or universal spirit, Brahman, which is present in all beings. The idea that we are all manifestations of the same underlying consciousness provides a metaphysical foundation for the ethical principle that we should treat everyone as family." }
+                ],
+                "Advanced Questions": [
+                    { q: "How do modern critiques challenge the application of Vasudhaiva Kutumbakam?", a: "Critics point to the dissonance between the ideal and reality, highlighting issues of social inequality and intolerance within India. They argue that the phrase can be used as a form of 'soft power' or nationalistic pride that glosses over domestic problems. Realist critics in international relations also question its practical efficacy in a world driven by self-interest and power struggles." },
+                    { q: "How has the concept been expanded to address ecological crises?", a: "Contemporary environmental thinkers are reinterpreting Vasudhaiva Kutumbakam to include not just humanity but all living beings and the planet itself. This creates an 'Earth family' ethos, where our shared home, Mother Earth, and all its species are considered kin, demanding a sense of responsibility and care towards the environment." },
+                    { q: "What is the difference between the universalism of Vasudhaiva Kutumbakam and Western cosmopolitanism?", a: "While both promote a global identity, Vasudhaiva Kutumbakam is rooted in a spiritual-metaphysical worldview (seeing the divine Self in all). Western cosmopolitanism often stems from secular Enlightenment ideals of universal human rights and reason. The former is a vision of inherent oneness, while the latter is often a framework for managing diversity." },
+                    { q: "Could this principle be applied to the ethics of Artificial Intelligence (AI)?", a: "Yes. An AI framework guided by this principle would prioritize global well-being over narrow corporate or national interests. It would emphasize developing AI that is inclusive, reduces inequality, fosters cross-cultural understanding, and avoids perpetuating biases—treating all of humanity as the beneficiary 'family'." },
+                    { q: "How did the Indian Constituent Assembly debates (1947-49) reflect this ideal?", a: "During the debates on framing India's Constitution, members occasionally invoked the principle to argue for an inclusive republic. They contended that the new nation must guarantee rights for all religions and castes, truly making all citizens one family and avoiding the divisions that led to Partition." },
+                    { q: "Is there a tension between Vasudhaiva Kutumbakam and the concept of national sovereignty?", a: "There can be. A strict interpretation of 'one family' might imply that global needs supersede national interests, which can clash with the principle of sovereignty. In practice, Indian diplomacy has used it not to erase borders, but to argue for a more cooperative international system where sovereign nations act with a sense of shared responsibility." },
+                    { q: "How did colonial-era scholars like Max Müller interpret this phrase?", a: "Western Orientalists like Max Müller were fascinated by such concepts. They often presented them to European audiences as evidence of a profound and ancient ethical civilization in the East. This helped popularize the idea internationally but sometimes led to a romanticized view that overlooked the complexities of Indian society." },
+                    { q: "What role does 'sama-darshana' (equal vision) from the Bhagavad Gita play in this concept?", a: "'Sama-darshana' is the ability of a spiritually wise person to see the same divine essence in all beings, from a priest to an outcaste to an animal. It provides the philosophical justification for Vasudhaiva Kutumbakam: if everyone and everything is imbued with the same spiritual reality, then they are inherently part of one family and must be treated with equal vision." },
+                    { q: "What's the future of Vasudhaiva Kutumbakam in a multipolar world?", a: "In a multipolar world with competing power centers, the principle serves as a powerful call for multilateralism and bridge-building. It offers an alternative to a purely competitive 'us vs. them' geopolitics, advocating for a model where diverse powers cooperate on shared challenges like climate change, pandemics, and economic stability as members of a single, albeit complex, family." }
+                ]
+            };
+
+            const keywords = [
+                { term: "Vasudhaiva Kutumbakam", def: "The Sanskrit phrase meaning 'The world is one family', from the Maha Upanishad." },
+                { term: "Upanishads", def: "Ancient Sanskrit texts of spiritual teaching and ideas of Hinduism, which are part of the Vedas." },
+                { term: "Rigveda", def: "The oldest of the Vedas, the ancient Indian scriptures, containing hymns and verses on harmony." },
+                { term: "Sama-darshana", def: "'Equal vision'; a concept from the Bhagavad Gita where the wise see the same divine essence in all beings." },
+                { term: "Yaadhum Oore...", def: "'Every city is our city, everyone is our kin'; a parallel ideal from ancient Tamil Sangam literature." },
+                { term: "Ahimsa", def: "The principle of non-violence towards all living things, central to Jainism, Buddhism, and Hinduism." },
+                { term: "Maitrī", def: "'Loving-kindness' or 'friendliness'; a core Buddhist virtue of goodwill towards all beings." },
+                { term: "Karunā", def: "'Compassion'; the Buddhist principle of empathy and a desire to alleviate the suffering of others." },
+                { term: "Hitopadeśa", def: "A collection of Sanskrit fables, famous for including the 'world is one family' verse in a cautionary tale." },
+                { term: "Dhamma (Dharma)", def: "A key concept with multiple meanings, including cosmic law, righteous conduct, and moral duty. Emperor Ashoka's policy of rule." },
+                { term: "Bhinneka Tunggal Ika", def: "'Unity in Diversity'; Indonesia's national motto, originating from a Javanese poem influenced by Indian thought." },
+                { term: "Sulh-i-Kul", def: "'Universal peace'; a policy of religious tolerance and peaceful coexistence promoted by Mughal Emperor Akbar." },
+                { term: "Bhakti Movement", def: "A medieval devotional trend in Hinduism that emphasized love and equality, often rejecting religious and caste divisions." },
+                { term: "Langar", def: "The Sikh tradition of a free community kitchen where all people are served a meal together as equals." },
+                { term: "Yatra vishvam...", def: "'Where the world makes a home in a single nest'; the motto of Rabindranath Tagore's university, Visva-Bharati." },
+                { term: "Sarvodaya", def: "'Welfare of all' or 'upliftment of all'; a political philosophy of Mahatma Gandhi." },
+                { term: "Non-Aligned Movement", def: "A forum of 120 developing world states that were not formally aligned with or against any major power bloc during the Cold War." },
+                { term: "Soft Power", def: "A persuasive approach to international relations, typically involving the use of cultural or economic influence." },
+                { term: "G20", def: "The Group of Twenty, an intergovernmental forum comprising 19 countries and the European Union, and now the African Union." },
+                { term: "Vaccine Maitri", def: "'Vaccine Friendship'; India's diplomatic initiative to supply COVID-19 vaccines to countries worldwide." },
+                { term: "Advaita Vedanta", def: "A school of Hindu philosophy that emphasizes non-dualism, the idea that the individual soul (Atman) is identical to the ultimate reality (Brahman)." },
+                { term: "Brahmo Samaj", def: "A 19th-century monotheistic reform movement in Hinduism, founded by Raja Rammohan Roy, that advocated for universalist principles." },
+                { term: "Diaspora", def: "A scattered population whose origin lies in a separate geographic locale. In this context, people of Indian origin living abroad." },
+                { term: "Puranas", def: "A vast genre of Indian literature about a wide range of topics, particularly myths, legends, and other traditional lore." },
+                { term: "Syncretism", def: "The combining of different beliefs, while blending practices of various schools of thought, often seen in art and architecture." }
+            ];
+
+            const pollsData = {
+                poll1: { options: { 1: "Nationalism & Political Divisions", 2: "Economic Inequality", 3: "Cultural & Religious Intolerance", 4: "Misinformation & Lack of Empathy" }, votes: { 1: 45, 2: 25, 3: 20, 4: 10 } },
+                poll2: { options: { 1: "Global Health Cooperation (e.g., Vaccine Maitri)", 2: "Collective Climate Action ('One Earth')", 3: "Interfaith Dialogue & Pluralism", 4: "Digital Connectivity & Global Community" }, votes: { 1: 30, 2: 40, 3: 15, 4: 15 } }
+            };
+
+            // Initialize all interactive components
+            function initializeComponent(setupFn, ...args) {
+                try {
+                    setupFn(...args);
+                } catch (e) {
+                    console.error(`Failed to initialize component ${setupFn.name}:`, e);
+                }
+            }
+            
+            initializeComponent(setupAccordions);
+            initializeComponent(setupQuiz, 'quiz1', quizQuestions.slice(0, 13));
+            initializeComponent(setupQuiz, 'quiz2', quizQuestions.slice(13));
+            initializeComponent(setupFAQs, faqs);
+            initializeComponent(setupGlossary, keywords);
+            initializeComponent(setupPolls, pollsData);
+            initializeComponent(setupProgressTracker);
+            initializeComponent(setupFlipCards);
+        });
+
+        // Setup functions
+        function setupAccordions() {
+            // Use event delegation on the container for dynamically added elements and simplicity
+            const container = document.querySelector('.container');
+            if (!container) return;
+
+            container.addEventListener('click', function(event) {
+                const header = event.target.closest('.accordion-header');
+                if (!header) return;
+
+                const content = header.nextElementSibling;
+                const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+                header.setAttribute('aria-expanded', String(!isExpanded));
+                content.classList.toggle('open');
+            });
+        }
+        
+        function setupQuiz(quizId, questions) {
+            const bodyContainer = document.getElementById(`${quizId}-body-container`);
+            const prevBtn = document.getElementById(`${quizId}PrevBtn`);
+            const nextBtn = document.getElementById(`${quizId}NextBtn`);
+            const currentQSpan = document.getElementById(`${quizId}CurrentQ`);
+            const totalQSpan = document.getElementById(`${quizId}TotalQ`);
+            if (!bodyContainer || !prevBtn || !nextBtn || !currentQSpan || !totalQSpan) return;
+
+            let currentQuestionIndex = 0;
+            totalQSpan.textContent = questions.length;
+
+            bodyContainer.innerHTML = questions.map((qData, index) => {
+                const optionsHTML = qData.options.map((opt, optIndex) => `
+                    <div class="quiz-option" data-option-index="${optIndex}">
+                        <label>
+                            <input type="radio" name="${quizId}-q${index}" value="${optIndex}">
+                            <span>${opt.text}</span>
+                        </label>
+                        <div class="explanation">✅ Correct! The answer is <strong>${qData.options[qData.correct].text}</strong>.</div>
+                    </div>`).join('');
+                return `<div class="quiz-body" id="${quizId}-q-${index}"><p><strong>Q${index + 1}:</strong> ${qData.q}</p><div class="quiz-options">${optionsHTML}</div></div>`;
+            }).join('');
+            
+            function renderQuestion() {
+                bodyContainer.querySelectorAll('.quiz-body').forEach((q, index) => {
+                    q.style.display = index === currentQuestionIndex ? 'block' : 'none';
+                });
+                currentQSpan.textContent = currentQuestionIndex + 1;
+                prevBtn.disabled = currentQuestionIndex === 0;
+                nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+            }
+
+            bodyContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const selectedOptionIndex = parseInt(e.target.value);
+                    const questionIndex = parseInt(e.target.name.replace(`${quizId}-q`, ''));
+                    const qData = questions[questionIndex];
+                    const parentQuestionDiv = e.target.closest('.quiz-body');
+
+                    parentQuestionDiv.querySelectorAll('.quiz-option').forEach(optDiv => {
+                        optDiv.classList.remove('selected', 'correct', 'wrong');
+                        const explanation = optDiv.querySelector('.explanation');
+                        explanation.style.display = 'none';
+                    });
+
+                    const selectedOptionDiv = e.target.closest('.quiz-option');
+                    selectedOptionDiv.classList.add('selected');
+                    const explanationDiv = selectedOptionDiv.querySelector('.explanation');
+
+                    if (selectedOptionIndex === qData.correct) {
+                        selectedOptionDiv.classList.add('correct');
+                        explanationDiv.innerHTML = `✅ Correct! The answer is <strong>${qData.options[qData.correct].text}</strong>.`;
+                    } else {
+                        selectedOptionDiv.classList.add('wrong');
+                        explanationDiv.innerHTML = `❌ Incorrect. The correct answer is <strong>${qData.options[qData.correct].text}</strong>.`;
+                    }
+                    explanationDiv.style.display = 'block';
+                });
+            });
+            
+            prevBtn.addEventListener('click', () => { if (currentQuestionIndex > 0) { currentQuestionIndex--; renderQuestion(); } });
+            nextBtn.addEventListener('click', () => { if (currentQuestionIndex < questions.length - 1) { currentQuestionIndex++; renderQuestion(); } });
+
+            renderQuestion();
+        }
+
+        function setupFAQs(faqsData) {
+            const faqContainer = document.getElementById('faq-accordion-container');
+            if (!faqContainer) return;
+            let html = '';
+            for (const level in faqsData) {
+                html += `<h3>${level}</h3><div class="accordion">`;
+                html += faqsData[level].map(faq => `
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false"><span class="accordion-title">${faq.q}</span><i class="fa-solid fa-chevron-down"></i></button>
+                        <div class="accordion-content"><p>${faq.a}</p></div>
+                    </div>`).join('');
+                html += `</div>`;
+            }
+            faqContainer.innerHTML = html;
+            // No need to call setupAccordions() again due to event delegation
+        }
+
+        function setupGlossary(keywordsData) {
+            const cloud = document.getElementById('glossaryCloud');
+            if (!cloud) return;
+            cloud.innerHTML = keywordsData.map(kw => `<button class="glossary-chip" type="button" data-term="${kw.term}">${kw.term}</button>`).join('');
+
+            if (!document.querySelector('.chip-tip')) {
+                const tip = document.createElement('div');
+                tip.className = 'chip-tip';
+                tip.innerHTML = '<div class="arrow"></div><div class="tip-content"></div>';
+                document.body.appendChild(tip);
+            }
+            const tip = document.querySelector('.chip-tip');
+            const tipContent = tip.querySelector('.tip-content');
+            let openBtn = null;
+
+            function positionTipFor(btn) {
+                const rect = btn.getBoundingClientRect();
+                 const tipRect = tip.getBoundingClientRect();
+                const top = rect.top > (window.innerHeight / 2) ? (rect.top - tipRect.height - 12) : (rect.bottom + 12);
+                const left = Math.max(8, rect.left + rect.width / 2 - tipRect.width / 2);
+                tip.style.top = `${top}px`;
+                tip.style.left = `${left}px`;
+            }
+
+            cloud.querySelectorAll('.glossary-chip').forEach(btn => {
+                const termData = keywordsData.find(k => k.term === btn.dataset.term);
+                if (!termData) return;
+                
+                const showTip = () => {
+                    tipContent.innerHTML = `<strong>${termData.term}</strong>: ${termData.def}`;
+                    tip.classList.add('show');
+                    openBtn = btn;
+                    positionTipFor(btn);
+                };
+                
+                const hideTip = () => {
+                    tip.classList.remove('show');
+                    openBtn = null;
+                };
+
+                btn.addEventListener('mouseenter', showTip);
+                btn.addEventListener('mouseleave', hideTip);
+                btn.addEventListener('focus', showTip);
+                btn.addEventListener('blur', hideTip);
+            });
+            window.addEventListener('scroll', () => { if (openBtn) positionTipFor(openBtn); }, true);
+            window.addEventListener('resize', () => { if (openBtn) positionTipFor(openBtn); }, true);
+        }
+
+        function setupPolls(pollsData) {
+            document.querySelectorAll('.poll-container').forEach(pollContainer => {
+                const pollId = pollContainer.querySelector('div[id]').id.replace('-options', '');
+                pollContainer.querySelectorAll('.poll-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        if (pollContainer.dataset.voted) return;
+                        pollContainer.dataset.voted = 'true';
+                        const optionId = option.dataset.option;
+                        pollsData[pollId].votes[optionId]++;
+                        renderPollResults(pollId, pollContainer.querySelector('.poll-results'), pollsData);
+                    });
+                });
+            });
+        }
+
+        function renderPollResults(pollId, container, pollsData) {
+            const data = pollsData[pollId];
+            const totalVotes = Object.values(data.votes).reduce((sum, current) => sum + current, 0);
+            container.innerHTML = Object.keys(data.options).map(optionId => {
+                const voteCount = data.votes[optionId];
+                const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
+                return `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9em;">
+                            <span>${data.options[optionId]}</span>
+                            <span>${percentage.toFixed(0)}%</span>
+                        </div>
+                        <div class="poll-result-bar-container">
+                            <div class="poll-bar" style="width: ${percentage}%;"></div>
+                        </div>
+                    </div>`;
+            }).join('');
+            container.style.display = 'block';
+        }
+
+        function setupFlipCards() {
+            const cards = document.querySelectorAll('.flip-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('flipped');
+                });
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        card.classList.toggle('flipped');
+                    }
+                });
+            });
+        }
+
+        function setupProgressTracker() {
+            const sections = document.querySelectorAll('section[id^="part"], section[id="quiz1"], section[id="quiz2"]');
+            const steps = document.querySelectorAll('.progress-step');
+            const lines = document.querySelectorAll('.progress-line');
+            const sectionMap = {
+                'part1': 0, 'part2': 1, 'part3': 2, 'part4': 3, 'quiz1': 3,
+                'part5': 4, 'part6': 5, 'part7': 6, 'part8': 7, 'interactive-timeline': 7,
+                'polls-container': 7, 'part9_advanced': 7, 'quiz2': 7
+            };
+            
+             const observer = new IntersectionObserver(entries => {
+                let lastVisibleSectionId = null;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        lastVisibleSectionId = entry.target.id;
+                    }
+                });
+
+                if (lastVisibleSectionId && sectionMap.hasOwnProperty(lastVisibleSectionId)) {
+                    const stepIndex = sectionMap[lastVisibleSectionId];
+                    steps.forEach((step, i) => {
+                        step.classList.remove('current', 'completed');
+                        if (i < stepIndex) step.classList.add('completed');
+                        else if (i === stepIndex) step.classList.add('current');
+                    });
+                    lines.forEach((line, i) => {
+                         line.classList.toggle('completed', i < stepIndex);
+                    });
+                }
+
+            }, { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.5, 1] });
+
+            document.querySelectorAll('section[id]').forEach(sec => observer.observe(sec));
+        }
+
+    </script>
+</body>
+</html>
