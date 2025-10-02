@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EQ Test: Tone Detection</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .game-container {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 10px 0;
+      color: #1f2937;
+    }
+    .instruction {
+      font-size: 0.9em;
+      color: #4b5563;
+      margin: 5px 0 10px;
+    }
+    .score {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #1f2937;
+      margin: 10px 0;
+    }
+    .quote {
+      font-size: 1em;
+      font-style: italic;
+      margin: 10px 0;
+      padding: 10px;
+      background: #f8fafc;
+      border-left: 3px solid #6b7280;
+      border-radius: 5px;
+      min-height: 50px;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .option {
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    .option:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      background: #e0e7ff;
+    }
+    .option-emoji {
+      font-size: 1.5em;
+    }
+    .option-text h3 {
+      margin: 0;
+      font-size: 1em;
+      color: #1f2937;
+    }
+    .option-text p {
+      margin: 3px 0 0;
+      font-size: 0.8em;
+      color: #4b5563;
+    }
+    .feedback {
+      margin: 10px 0;
+      font-size: 0.9em;
+      color: #374151;
+      font-style: italic;
+      min-height: 30px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    button {
+      padding: 8px 15px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9em;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #4338ca;
+    }
+    button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+    }
+    .footer {
+      margin-top: 15px;
+      font-size: 0.7em;
+      color: #6b7280;
+    }
+    .correct { background: #d1fae5; border-color: #10b981; }
+    .incorrect { background: #fee2e2; border-color: #ef4444; }
+    @media (min-width: 600px) {
+      .options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>EQ Test: Tone Detection</h1>
+    <div class="instruction">Identify the emotional tone to enhance your emotional intelligence.</div>
+    <div class="score">Score: <span id="score">0</span> | Round: <span id="round">1</span>/20</div>
+    <div class="quote" id="quote"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="buttons">
+      <button id="prev" disabled>Back</button>
+      <button id="next" disabled>Next</button>
+    </div>
+    <div class="footer">© Beyond Dictionary 2025. All rights reserved.</div>
+  </div>
+
+  <script>
+    const dataBank = [
+      { text: "The only way to do great work is to love what you do.", source: "Steve Jobs", tone: "Inspirational", feedback: "Uplifts with passion for meaningful work." },
+      { text: "I have a dream that one day this nation will rise up.", source: "Martin Luther King Jr.", tone: "Hopeful", feedback: "Envisions unity and equality." },
+      { text: "Life is what happens when you're busy making other plans.", source: "John Lennon", tone: "Reflective", feedback: "Ponders life’s unpredictability." },
+      { text: "Many lack originality, lack originality, originality.", source: "Kanye West", tone: "Sarcastic", feedback: "Mocks unoriginality with sharp wit." },
+      { text: "Get busy living or get busy dying.", source: "Stephen King", tone: "Urgent", feedback: "Demands immediate action for life." },
+      { text: "You can't handle the truth!", source: "A Few Good Men", tone: "Confrontational", feedback: "Challenges with aggressive reality." },
+      { text: "I'm gonna make him an offer he can't refuse.", source: "The Godfather", tone: "Threatening", feedback: "Hides menace in calm words." },
+      { text: "May the Force be with you.", source: "Star Wars", tone: "Encouraging", feedback: "Warms with support and strength." },
+      { text: "Here's looking at you, kid.", source: "Casablanca", tone: "Romantic", feedback: "Expresses tender, nostalgic love." },
+      { text: "Houston, we have a problem.", source: "Apollo 13", tone: "Urgent", feedback: "Signals crisis with restrained panic." },
+      { text: "I will survive, oh, as long as I know how to love.", source: "Gloria Gaynor", tone: "Empowering", feedback: "Declares resilience through love." },
+      { text: "Yesterday, all my troubles seemed so far away.", source: "The Beatles", tone: "Nostalgic", feedback: "Longs for a happier past." },
+      { text: "I got a feeling that tonight’s gonna be a good night.", source: "Black Eyed Peas", tone: "Excited", feedback: "Radiates high-energy optimism." },
+      { text: "I'm just a soul whose intentions are good.", source: "The Animals", tone: "Pleading", feedback: "Seeks empathy with sincerity." },
+      { text: "Welcome to the jungle, we got fun and games.", source: "Guns N' Roses", tone: "Sarcastic", feedback: "Masks chaos with mocking invitation." },
+      { text: "A journey of a thousand miles begins with a single step.", source: "Lao Tzu", tone: "Encouraging", feedback: "Motivates small steps to goals." },
+      { text: "The early bird catches the worm.", source: "Proverb", tone: "Motivational", feedback: "Urges prompt action for success." },
+      { text: "Don't judge a book by its cover.", source: "Proverb", tone: "Cautionary", feedback: "Warns against superficial judgment." },
+      { text: "Every cloud has a silver lining.", source: "Proverb", tone: "Optimistic", feedback: "Finds hope in adversity." },
+      { text: "Actions speak louder than words.", source: "Proverb", tone: "Assertive", feedback: "Values deeds over promises." },
+      { text: "Ask not what your country can do for you.", source: "John F. Kennedy", tone: "Challenging", feedback: "Demands selfless duty." },
+      { text: "We shall fight on the beaches.", source: "Winston Churchill", tone: "Defiant", feedback: "Rallies unyielding resolve." },
+      { text: "The only thing we have to fear is fear itself.", source: "Franklin D. Roosevelt", tone: "Reassuring", feedback: "Calms with courageous wisdom." },
+      { text: "Let us never negotiate out of fear.", source: "John F. Kennedy", tone: "Resolute", feedback: "Stands firm with strength." },
+      { text: "This was their finest hour.", source: "Winston Churchill", tone: "Praising", feedback: "Honors bravery with pride." },
+      { text: "To be or not to be, that is the question.", source: "Shakespeare", tone: "Contemplative", feedback: "Muses on existence deeply." },
+      { text: "I'll be back.", source: "The Terminator", tone: "Threatening", feedback: "Promises return with menace." },
+      { text: "All you need is love.", source: "The Beatles", tone: "Optimistic", feedback: "Champions love as solution." },
+      { text: "Carpe diem, seize the day.", source: "Dead Poets Society", tone: "Inspirational", feedback: "Urges living in the moment." },
+      { text: "I see dead people.", source: "The Sixth Sense", tone: "Eerie", feedback: "Chills with haunting truth." },
+      { text: "Just keep swimming.", source: "Finding Nemo", tone: "Encouraging", feedback: "Cheers with persistent optimism." },
+      { text: "Born to be wild.", source: "Steppenwolf", tone: "Rebellious", feedback: "Celebrates untamed freedom." },
+      { text: "A friend in need is a friend indeed.", source: "Proverb", tone: "Affirming", feedback: "Values loyalty in hardship." },
+      { text: "We are the change we seek.", source: "Barack Obama", tone: "Empowering", feedback: "Inspires action for change." },
+      { text: "Let it be.", source: "The Beatles", tone: "Calming", feedback: "Promotes peace and acceptance." },
+      { text: "I'm king of the world!", source: "Titanic", tone: "Triumphant", feedback: "Exudes victorious joy." },
+      { text: "Better late than never.", source: "Proverb", tone: "Encouraging", feedback: "Supports effort despite delay." },
+      { text: "I am inevitable.", source: "Avengers: Endgame", tone: "Ominous", feedback: "Declares fate with dread." },
+      { text: "Sweet dreams are made of this.", source: "Eurythmics", tone: "Dreamy", feedback: "Evokes surreal hope." },
+      { text: "Freedom is not free.", source: "Proverb", tone: "Solemn", feedback: "Reminds of liberty’s cost." },
+      { text: "We choose to go to the moon.", source: "John F. Kennedy", tone: "Ambitious", feedback: "Sets bold collective goals." },
+      { text: "Hakuna matata, it means no worries.", source: "The Lion King", tone: "Carefree", feedback: "Embraces stress-free living." },
+      { text: "Stay hungry, stay foolish.", source: "Steve Jobs", tone: "Motivational", feedback: "Encourages risk and curiosity." },
+      { text: "Smells like teen spirit.", source: "Nirvana", tone: "Rebellious", feedback: "Captures youthful defiance." },
+      { text: "When in Rome, do as the Romans do.", source: "Proverb", tone: "Advisory", feedback: "Advises cultural adaptation." },
+      { text: "The future belongs to those who believe.", source: "Eleanor Roosevelt", tone: "Inspirational", feedback: "Uplifts with faith in potential." },
+      { text: "There's no place like home.", source: "The Wizard of Oz", tone: "Nostalgic", feedback: "Longs for home’s comfort." },
+      { text: "Imagine all the people living life in peace.", source: "John Lennon", tone: "Hopeful", feedback: "Dreams of global harmony." },
+      { text: "A penny saved is a penny earned.", source: "Proverb", tone: "Practical", feedback: "Advocates prudent saving." },
+      { text: "Together we stand, divided we fall.", source: "Aesop", tone: "Unifying", feedback: "Stresses strength in unity." },
+    ];
+
+    const toneDetails = {
+      Inspirational: { emoji: "🌟", description: "Uplifts and motivates, fostering personal growth." },
+      Hopeful: { emoji: "🌈", description: "Envisions better future, building resilience." },
+      Reflective: { emoji: "🤔", description: "Prompts deep thought, enhancing self-awareness." },
+      Sarcastic: { emoji: "😏", description: "Mocks with wit, sharpening social insight." },
+      Urgent: { emoji: "⏰", description: "Demands quick action, boosting decisiveness." },
+      Confrontational: { emoji: "⚡", description: "Challenges directly, strengthening resolve." },
+      Threatening: { emoji: "⚔️", description: "Conveys menace, testing emotional control." },
+      Encouraging: { emoji: "👍", description: "Boosts confidence, promoting teamwork." },
+      Romantic: { emoji: "💖", description: "Expresses love, deepening relationships." },
+      Empowering: { emoji: "💪", description: "Inspires strength, fostering leadership." },
+      Nostalgic: { emoji: "🕰️", description: "Longs for past, connecting to emotions." },
+      Excited: { emoji: "🎉", description: "Bursts with energy, enhancing positivity." },
+      Pleading: { emoji: "🙏", description: "Seeks empathy, building compassion." },
+      Motivational: { emoji: "🚀", description: "Drives action, fueling ambition." },
+      Cautionary: { emoji: "⚠️", description: "Warns of risk, improving judgment." },
+      Optimistic: { emoji: "☀️", description: "Sees bright side, cultivating hope." },
+      Assertive: { emoji: "✊", description: "States firmly, enhancing communication." },
+      Challenging: { emoji: "🏋️", description: "Demands effort, building perseverance." },
+      Defiant: { emoji: "🛡️", description: "Resists boldly, strengthening courage." },
+      Reassuring: { emoji: "🤗", description: "Calms fears, fostering trust." },
+      Resolute: { emoji: "🔒", description: "Stands unwavering, building determination." },
+      Praising: { emoji: "🏆", description: "Honors achievement, boosting morale." },
+      Contemplative: { emoji: "📖", description: "Muses deeply, enhancing insight." },
+      Eerie: { emoji: "👻", description: "Creates unease, testing emotional balance." },
+      Rebellious: { emoji: "🔥", description: "Defies norms, fostering independence." },
+      Affirming: { emoji: "✅", description: "Confirms value, building self-esteem." },
+      Calming: { emoji: "🌊", description: "Soothes tension, promoting peace." },
+      Triumphant: { emoji: "🎖️", description: "Celebrates victory, enhancing pride." },
+      Ominous: { emoji: "🌑", description: "Foretells doom, testing resilience." },
+      Dreamy: { emoji: "🌙", description: "Evokes wonder, sparking creativity." },
+      Solemn: { emoji: "🕊️", description: "Conveys gravity, fostering respect." },
+      Ambitious: { emoji: "🏔️", description: "Aims high, driving goal-setting." },
+      Carefree: { emoji: "😎", description: "Relaxes fully, reducing stress." },
+      Practical: { emoji: "🛠️", description: "Focuses utility, enhancing problem-solving." },
+      Unifying: { emoji: "🤝", description: "Brings together, strengthening community." }
+    };
+
+    let score = 0;
+    let currentRound = 0;
+    let totalRounds = 20;
+    let currentQuote = null;
+    let selectedRounds = [];
+    let history = [];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function startGame() {
+      selectedRounds = shuffle([...dataBank]).slice(0, totalRounds);
+      currentRound = 0;
+      score = 0;
+      history = [];
+      loadRound();
+    }
+
+    function loadRound() {
+      if (currentRound >= totalRounds) {
+        document.getElementById('quote').innerText = `Game Over! Final Score: ${score}/${totalRounds}`;
+        document.getElementById('options').innerHTML = '';
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('next').disabled = true;
+        document.getElementById('prev').disabled = true;
+        return;
+      }
+
+      currentQuote = selectedRounds[currentRound];
+      document.getElementById('quote').innerText = `"${currentQuote.text}" — ${currentQuote.source}`;
+      document.getElementById('score').innerText = score;
+      document.getElementById('round').innerText = currentRound + 1;
+      document.getElementById('feedback').innerText = '';
+
+      const tones = Object.keys(toneDetails);
+      const options = shuffle([...tones]).slice(0, 4);
+      if (!options.includes(currentQuote.tone)) {
+        options[Math.floor(Math.random() * 4)] = currentQuote.tone;
+      }
+
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      options.forEach(tone => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.innerHTML = `
+          <span class="option-emoji">${toneDetails[tone].emoji}</span>
+          <div class="option-text">
+            <h3>${tone}</h3>
+            <p>${toneDetails[tone].description}</p>
+          </div>
+        `;
+        div.onclick = () => selectOption(tone, div);
+        optionsDiv.appendChild(div);
+      });
+
+      document.getElementById('prev').disabled = currentRound === 0;
+    }
+
+    function selectOption(tone, element) {
+      const options = document.querySelectorAll('.option');
+      options.forEach(opt => opt.style.pointerEvents = 'none');
+
+      if (tone === currentQuote.tone) {
+        score++;
+        element.className = 'option correct';
+        document.getElementById('feedback').innerText = `Correct! ${currentQuote.feedback}`;
+      } else {
+        element.className = 'option incorrect';
+        document.getElementById('feedback').innerText = `Incorrect. ${currentQuote.feedback}`;
+        options.forEach(opt => {
+          if (opt.querySelector('h3').innerText === currentQuote.tone) {
+            opt.className = 'option correct';
+          }
+        });
+      }
+
+      history.push({ quote: currentQuote, selected: tone });
+      document.getElementById('score').innerText = score;
+      document.getElementById('next').disabled = false;
+    }
+
+    document.getElementById('next').onclick = () => {
+      currentRound++;
+      loadRound();
+    };
+
+    document.getElementById('prev').onclick = () => {
+      if (currentRound > 0) {
+        currentRound--;
+        score = history[currentRound].selected === selectedRounds[currentRound].tone ? score - 1 : score;
+        loadRound();
+      }
+    };
+
+    startGame();
+  </script>
+</body>
+</html>
