@@ -1,0 +1,900 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semantic Quote Grid</title>
+  <style>
+    :root {
+      --font-family: "Poppins", "Helvetica Neue", sans-serif;
+      --font-size-small: 0.95rem;
+      --font-size-base: 1.2rem;
+      --font-size-large: 1.45rem;
+      --card-padding: 1.5vh 1.5vw;
+      --card-margin: 0.4vw;
+      --grid-padding: 1vh 2vw;
+      --card-radius: 12px;
+      --border-glow: 0 0 8px rgba(255, 255, 255, 0.25);
+      --transition-speed: 0.3s;
+      --easing-standard: ease-in-out;
+      --frozen-shimmer: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 100%);
+      --emoji-gap: 0.5rem;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      font-family: var(--font-family);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin: 1rem 0 0.5rem;
+      color: #333;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin: 0.5rem 0;
+    }
+
+    #quote-grid {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 78vh;
+      width: 90vw;
+      padding: var(--grid-padding);
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      height: 33.33%;
+      gap: var(--card-margin);
+    }
+
+    .card {
+      border-radius: var(--card-radius);
+      padding: var(--card-padding);
+      margin: var(--card-margin);
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: all var(--transition-speed) var(--easing-standard), background-color 1s ease-in-out;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: var(--border-glow);
+    }
+
+    .card-content {
+      transition: opacity var(--transition-speed), filter 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--emoji-gap);
+    }
+
+    .emoji {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .quote-text {
+      font-size: var(--font-size-base);
+      margin: 0;
+      max-width: 90%;
+    }
+
+    .state-empty .card-content { display: none; }
+    .state-emoji .quote-text { display: none; }
+    .state-text .emoji { display: none; }
+    .state-textemoji { flex-direction: column; }
+
+    .frozen-row .card {
+      animation: frozen-glow 3s infinite, shimmer 2s infinite, pulse 2s infinite;
+      background-image: var(--frozen-shimmer);
+      background-size: 200% 100%;
+      background-repeat: no-repeat;
+      background-blend-mode: overlay;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pop-in {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes frozen-glow {
+      0% { box-shadow: 0 0 2px rgba(255,255,255,0.05); }
+      50% { box-shadow: 0 0 12px rgba(255,255,255,0.2); }
+      100% { box-shadow: 0 0 2px rgba(255,255,255,0.05); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes swing {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes vertical-ripple {
+      0% { transform: translateY(20%); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .card-fade-in { animation: fade-in 0.6s ease-out; }
+    .pop-in { animation: pop-in 0.5s ease-out; }
+    .swing { animation: swing 0.8s ease-in-out infinite; }
+    .vertical-ripple { animation: vertical-ripple 0.7s ease-out; }
+
+    /* Color Classes */
+    .bg-coral-blush { background-color: #F88379; }
+    .bg-dusty-sage { background-color: #A9B7A2; }
+    .bg-deep-sky-blue { background-color: #00BFFF; }
+    .bg-wheat-gold { background-color: #F5DEB3; }
+    .bg-dusk-rose { background-color: #DA8C9A; }
+    .bg-teal-lake { background-color: #388E8E; }
+    .bg-midnight-indigo { background-color: #3B3C70; }
+    .bg-soft-charcoal { background-color: #555D61; }
+    .bg-goldenrod-tan { background-color: #DAA520; }
+    .bg-steel-cloud { background-color: #A2AAB0; }
+    .bg-clay-earth { background-color: #8B6F47; }
+    .bg-pale-lavender { background-color: #D8BFD8; }
+    .bg-ocean-mist { background-color: #7FB5B5; }
+    .bg-tangerine-bloom { background-color: #FFA07A; }
+    .bg-serene-sky { background-color: #87CEEB; }
+    .bg-forest-pine { background-color: #228B22; }
+    .bg-blush-apricot { background-color: #FFDAB9; }
+    .bg-violet-whisper { background-color: #9370DB; }
+    .bg-oxide-red { background-color: #A52A2A; }
+    .bg-ash-grey { background-color: #B2BEB5; }
+    .bg-warm-sand { background-color: #E6D3B3; }
+    .bg-cerulean-depths { background-color: #007BA7; }
+    .bg-sunbaked-brick { background-color: #B86B4B; }
+    .bg-cool-mint { background-color: #98FF98; }
+    .bg-rosewood-smoke { background-color: #65000B; }
+    .bg-periwinkle-dew { background-color: #CCCCFF; }
+
+    .fg-white { color: #FFFFFF; text-shadow: 0 1px 3px rgba(255,255,255,0.2); }
+    .fg-black { color: #111111; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .fg-gray { color: #333333; }
+    .fg-cream { color: #F7F4ED; }
+
+    /* Mobile Adjustments */
+    @media (max-width: 600px) {
+      :root {
+        --font-size-base: 1rem;
+        --card-padding: 1vh 1vw;
+        --emoji-gap: 0.3rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      footer {
+        font-size: 0.7rem;
+      }
+      #quote-grid {
+        width: 96vw;
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: var(--card-margin);
+      }
+      .row {
+        display: contents;
+      }
+      .card {
+        aspect-ratio: 1/1;
+        min-height: 20vh;
+      }
+      .emoji {
+        font-size: 2rem;
+      }
+      .card[data-row="2"][data-col="2"] { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <h2>The Wisdom Grid</h2>
+  <div id="quote-grid">
+    <div class="row row-0">
+      <div class="card" data-row="0" data-col="0"><div class="card-content"></div></div>
+      <div class="card" data-row="0" data-col="1"><div class="card-content"></div></div>
+      <div class="card" data-row="0" data-col="2"><div class="card-content"></div></div>
+    </div>
+    <div class="row row-1">
+      <div class="card" data-row="1" data-col="0"><div class="card-content"></div></div>
+      <div class="card" data-row="1" data-col="1"><div class="card-content"></div></div>
+      <div class="card" data-row="1" data-col="2"><div class="card-content"></div></div>
+    </div>
+    <div class="row row-2">
+      <div class="card" data-row="2" data-col="0"><div class="card-content"></div></div>
+      <div class="card" data-row="2" data-col="1"><div class="card-content"></div></div>
+      <div class="card" data-row="2" data-col="2"><div class="card-content"></div></div>
+    </div>
+  </div>
+  <footer>@Beyond Dictionary 2025</footer>
+
+  <script>
+    // Quotes with Generated Metadata
+    const quotes = [
+      { id: "q-1", text: "Not all else is forward—some is just away.", length: 8, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["progress"], tags: ["change", "perspective"], usedAt: null },
+      { id: "q-2", text: "Truth often dies waiting for something else.", length: 7, tone: ["profound"], emotion: ["loss"], dominant_noun: ["truth"], tags: ["wisdom", "patience"], usedAt: null },
+      { id: "q-3", text: "When strength fades, courage must shine brighter.", length: 7, tone: ["action"], emotion: ["courage"], dominant_noun: ["courage"], tags: ["effort", "resilience"], usedAt: null },
+      { id: "q-4", text: "Filling every moment is a way to tame the unknown.", length: 9, tone: ["action"], emotion: ["control"], dominant_noun: ["moment"], tags: ["purpose", "time"], usedAt: null },
+      { id: "q-5", text: "Doing well is its own quiet applause.", length: 7, tone: ["wise"], emotion: ["satisfaction"], dominant_noun: ["effort"], tags: ["success", "humility"], usedAt: null },
+      { id: "q-6", text: "Think as clearly as you would calculate.", length: 7, tone: ["mind"], emotion: ["clarity"], dominant_noun: ["thought"], tags: ["wisdom", "logic"], usedAt: null },
+      { id: "q-7", text: "Loops become chains when tied by others.", length: 7, tone: ["reflective"], emotion: ["constraint"], dominant_noun: ["loops"], tags: ["freedom", "control"], usedAt: null },
+      { id: "q-8", text: "Speed is the enemy of memory.", length: 6, tone: ["wise"], emotion: ["caution"], dominant_noun: ["memory"], tags: ["time", "reflection"], usedAt: null },
+      { id: "q-9", text: "We follow what reflects our longing.", length: 6, tone: ["heart"], emotion: ["desire"], dominant_noun: ["longing"], tags: ["love", "aspiration"], usedAt: null },
+      { id: "q-10", text: "Something always dies when goodbye is said right.", length: 8, tone: ["profound"], emotion: ["loss"], dominant_noun: ["goodbye"], tags: ["closure", "change"], usedAt: null },
+      { id: "q-11", text: "Those who truly know speak second.", length: 6, tone: ["wise"], emotion: ["humility"], dominant_noun: ["knowledge"], tags: ["wisdom", "patience"], usedAt: null },
+      { id: "q-12", text: "Until it's written, it stays a cloud.", length: 7, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["thought"], tags: ["expression", "legacy"], usedAt: null },
+      { id: "q-13", text: "Some do not speak, they do not want to be seen.", length: 10, tone: ["reflective"], emotion: ["isolation"], dominant_noun: ["silence"], tags: ["privacy", "identity"], usedAt: null },
+      { id: "q-14", text: "Guilt loops in silence until truth is told.", length: 8, tone: ["profound"], emotion: ["regret"], dominant_noun: ["guilt"], tags: ["truth", "confession"], usedAt: null },
+      { id: "q-15", text: "Some loops are stitched from survival.", length: 6, tone: ["reflective"], emotion: ["resilience"], dominant_noun: ["loops"], tags: ["survival", "effort"], usedAt: null },
+      { id: "q-16", text: "As you think, so you become.", length: 6, tone: ["mind"], emotion: ["transformation"], dominant_noun: ["thought"], tags: ["identity", "growth"], usedAt: null },
+      { id: "q-17", text: "Peace is always a good idea.", length: 6, tone: ["wise"], emotion: ["calm"], dominant_noun: ["peace"], tags: ["harmony", "wisdom"], usedAt: null },
+      { id: "q-18", text: "Moving in a loop isn’t the same as moving on.", length: 9, tone: ["reflective"], emotion: ["stagnation"], dominant_noun: ["loop"], tags: ["change", "progress"], usedAt: null },
+      { id: "q-19", text: "Once the earth is turned, nothing lies the same.", length: 9, tone: ["profound"], emotion: ["change"], dominant_noun: ["earth"], tags: ["transformation", "nature"], usedAt: null },
+      { id: "q-20", text: "Lovers pause to think, and lose the kiss.", length: 8, tone: ["heart"], emotion: ["love"], dominant_noun: ["kiss"], tags: ["love", "hesitation"], usedAt: null },
+      { id: "q-21", text: "A thought is just light taking its time.", length: 8, tone: ["soul"], emotion: ["wonder"], dominant_noun: ["thought"], tags: ["philosophy", "imagination"], usedAt: null },
+      { id: "q-22", text: "We learn to love by standing near sorrow.", length: 8, tone: ["heart"], emotion: ["love"], dominant_noun: ["love"], tags: ["empathy", "growth"], usedAt: null },
+      { id: "q-23", text: "The right thing is rarely the easy thing.", length: 8, tone: ["wise"], emotion: ["duty"], dominant_noun: ["duty"], tags: ["ethics", "effort"], usedAt: null },
+      { id: "q-24", text: "The one who defines right controls the many.", length: 8, tone: ["profound"], emotion: ["power"], dominant_noun: ["right"], tags: ["authority", "influence"], usedAt: null },
+      { id: "q-25", text: "Ego is a lazy mind's sweat.", length: 6, tone: ["reflective"], emotion: ["criticism"], dominant_noun: ["ego"], tags: ["self", "humility"], usedAt: null },
+      { id: "q-26", text: "Some love fades when contrast walks in.", length: 7, tone: ["heart"], emotion: ["loss"], dominant_noun: ["love"], tags: ["love", "change"], usedAt: null },
+      { id: "q-27", text: "Contrast cuts confusion into clean lines.", length: 6, tone: ["wise"], emotion: ["clarity"], dominant_noun: ["contrast"], tags: ["understanding", "perspective"], usedAt: null },
+      { id: "q-28", text: "Truth often lives in the tension of opposites.", length: 8, tone: ["profound"], emotion: ["truth"], dominant_noun: ["truth"], tags: ["wisdom", "balance"], usedAt: null },
+      { id: "q-29", text: "What you expect to hold, breaks first.", length: 7, tone: ["reflective"], emotion: ["loss"], dominant_noun: ["expectation"], tags: ["change", "fragility"], usedAt: null },
+      { id: "q-30", text: "When people leave, books stay.", length: 5, tone: ["reflective"], emotion: ["nostalgia"], dominant_noun: ["books"], tags: ["legacy", "memory"], usedAt: null },
+      { id: "q-31", text: "A grid calms the storm we can’t name.", length: 8, tone: ["wise"], emotion: ["calm"], dominant_noun: ["grid"], tags: ["order", "peace"], usedAt: null },
+      { id: "q-32", text: "When storms rise, the heart turns to her.", length: 8, tone: ["heart"], emotion: ["love"], dominant_noun: ["heart"], tags: ["love", "resilience"], usedAt: null },
+      { id: "q-33", text: "What breaks may begin again, better shaped.", length: 7, tone: ["reflective"], emotion: ["hope"], dominant_noun: ["beginning"], tags: ["growth", "change"], usedAt: null },
+      { id: "q-34", text: "Sacred geometry is the grid of the soul.", length: 8, tone: ["soul"], emotion: ["spirituality"], dominant_noun: ["soul"], tags: ["philosophy", "order"], usedAt: null },
+      { id: "q-35", text: "Real profit plants more than it plucks.", length: 7, tone: ["career"], emotion: ["growth"], dominant_noun: ["profit"], tags: ["success", "sustainability"], usedAt: null },
+      { id: "q-36", text: "Sometimes we break from wounds not our own.", length: 8, tone: ["reflective"], emotion: ["empathy"], dominant_noun: ["wounds"], tags: ["healing", "connection"], usedAt: null },
+      { id: "q-37", text: "The broken are seen, not heard.", length: 6, tone: ["profound"], emotion: ["isolation"], dominant_noun: ["broken"], tags: ["empathy", "silence"], usedAt: null },
+      { id: "q-38", text: "The present begins in the smallest stitch.", length: 7, tone: ["reflective"], emotion: ["presence"], dominant_noun: ["present"], tags: ["mindfulness", "time"], usedAt: null },
+      { id: "q-39", text: "Some leave without walking away.", length: 5, tone: ["reflective"], emotion: ["loss"], dominant_noun: ["departure"], tags: ["connection", "change"], usedAt: null },
+      { id: "q-40", text: "The calmest sea forgets it knows how to drown.", length: 9, tone: ["profound"], emotion: ["deception"], dominant_noun: ["sea"], tags: ["nature", "caution"], usedAt: null },
+      { id: "q-41", text: "Some think just to avoid feeling.", length: 6, tone: ["reflective"], emotion: ["avoidance"], dominant_noun: ["thought"], tags: ["emotion", "self"], usedAt: null },
+      { id: "q-42", text: "Tradition walks backward into the future.", length: 6, tone: ["wise"], emotion: ["continuity"], dominant_noun: ["tradition"], tags: ["history", "progress"], usedAt: null },
+      { id: "q-43", text: "Not all that hides in shade fears the light.", length: 9, tone: ["profound"], emotion: ["mystery"], dominant_noun: ["shade"], tags: ["truth", "perspective"], usedAt: null },
+      { id: "q-44", text: "He who thinks first, rules last.", length: 6, tone: ["career"], emotion: ["strategy"], dominant_noun: ["thought"], tags: ["leadership", "wisdom"], usedAt: null },
+      { id: "q-45", text: "What stands alone is not above, but within.", length: 8, tone: ["soul"], emotion: ["introspection"], dominant_noun: ["self"], tags: ["identity", "philosophy"], usedAt: null },
+      { id: "q-46", text: "Beauty often walks in on the pause.", length: 7, tone: ["wise"], emotion: ["appreciation"], dominant_noun: ["beauty"], tags: ["mindfulness", "presence"], usedAt: null },
+      { id: "q-47", text: "Light remembers even what time forgets.", length: 6, tone: ["profound"], emotion: ["memory"], dominant_noun: ["light"], tags: ["legacy", "eternity"], usedAt: null },
+      { id: "q-48", text: "The machine needs process more than the product.", length: 8, tone: ["career"], emotion: ["effort"], dominant_noun: ["process"], tags: ["work", "discipline"], usedAt: null },
+      { id: "q-49", text: "We worship the climb, not the arrival.", length: 7, tone: ["action"], emotion: ["effort"], dominant_noun: ["climb"], tags: ["growth", "journey"], usedAt: null },
+      { id: "q-50", text: "Above judgment, vision begins to blur.", length: 6, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["vision"], tags: ["perspective", "self"], usedAt: null },
+      { id: "q-51", text: "A good process teaches you to lose beautifully.", length: 8, tone: ["career"], emotion: ["resilience"], dominant_noun: ["process"], tags: ["growth", "failure"], usedAt: null },
+      { id: "q-52", text: "The local is less a place, more a feeling we carry.", length: 10, tone: ["heart"], emotion: ["connection"], dominant_noun: ["feeling"], tags: ["home", "identity"], usedAt: null },
+      { id: "q-53", text: "Desire at its highest becomes devotion or destruction.", length: 8, tone: ["profound"], emotion: ["intensity"], dominant_noun: ["desire"], tags: ["passion", "balance"], usedAt: null },
+      { id: "q-54", text: "The sophisticated walk tightropes without trembling.", length: 6, tone: ["wise"], emotion: ["confidence"], dominant_noun: ["sophistication"], tags: ["poise", "strength"], usedAt: null },
+      { id: "q-55", text: "To focus too tightly is to miss the shift.", length: 9, tone: ["reflective"], emotion: ["awareness"], dominant_noun: ["focus"], tags: ["change", "perspective"], usedAt: null },
+      { id: "q-56", text: "True supremacy needs no audience.", length: 5, tone: ["profound"], emotion: ["confidence"], dominant_noun: ["supremacy"], tags: ["self", "strength"], usedAt: null },
+      { id: "q-57", text: "Peace is the art of repeating gently.", length: 7, tone: ["wise"], emotion: ["calm"], dominant_noun: ["peace"], tags: ["harmony", "patience"], usedAt: null },
+      { id: "q-58", text: "Without pattern, even light gets lost in space.", length: 8, tone: ["profound"], emotion: ["order"], dominant_noun: ["pattern"], tags: ["structure", "wisdom"], usedAt: null },
+      { id: "q-59", text: "Stones speak slower, but think longer.", length: 6, tone: ["wise"], emotion: ["patience"], dominant_noun: ["stones"], tags: ["nature", "wisdom"], usedAt: null },
+      { id: "q-60", text: "A single cut can open the way out.", length: 8, tone: ["action"], emotion: ["breakthrough"], dominant_noun: ["cut"], tags: ["change", "freedom"], usedAt: null },
+      { id: "q-61", text: "Less is never more.", length: 4, tone: ["profound"], emotion: ["value"], dominant_noun: ["less"], tags: ["abundance", "perspective"], usedAt: null },
+      { id: "q-62", text: "When you disown your past, your future limps.", length: 8, tone: ["reflective"], emotion: ["regret"], dominant_noun: ["past"], tags: ["history", "identity"], usedAt: null },
+      { id: "q-63", text: "Not all that glitters is honest and bold.", length: 8, tone: ["wise"], emotion: ["caution"], dominant_noun: ["glitter"], tags: ["truth", "appearance"], usedAt: null },
+      { id: "q-64", text: "The highest joy hums, it doesn’t shout.", length: 7, tone: ["heart"], emotion: ["joy"], dominant_noun: ["joy"], tags: ["happiness", "subtlety"], usedAt: null },
+      { id: "q-65", text: "If it doesn't sting, it isn’t real.", length: 7, tone: ["profound"], emotion: ["truth"], dominant_noun: ["reality"], tags: ["authenticity", "emotion"], usedAt: null },
+      { id: "q-66", text: "Nothing real ever ends.", length: 4, tone: ["soul"], emotion: ["eternity"], dominant_noun: ["reality"], tags: ["philosophy", "permanence"], usedAt: null },
+      { id: "q-67", text: "Before unclean, there was just human.", length: 6, tone: ["reflective"], emotion: ["humanity"], dominant_noun: ["human"], tags: ["identity", "acceptance"], usedAt: null },
+      { id: "q-68", text: "A river remembers where we came from.", length: 7, tone: ["profound"], emotion: ["memory"], dominant_noun: ["river"], tags: ["nature", "heritage"], usedAt: null },
+      { id: "q-69", text: "The less it comes, the more it burns.", length: 8, tone: ["heart"], emotion: ["desire"], dominant_noun: ["desire"], tags: ["passion", "scarcity"], usedAt: null },
+      { id: "q-70", text: "If I don’t ask, you can’t deny.", length: 7, tone: ["action"], emotion: ["strategy"], dominant_noun: ["question"], tags: ["communication", "courage"], usedAt: null },
+      { id: "q-71", text: "Seldom is a safe way of never.", length: 7, tone: ["reflective"], emotion: ["caution"], dominant_noun: ["seldom"], tags: ["risk", "opportunity"], usedAt: null },
+      { id: "q-72", text: "The rarest gifts knock once.", length: 5, tone: ["profound"], emotion: ["opportunity"], dominant_noun: ["gifts"], tags: ["chance", "value"], usedAt: null },
+      { id: "q-73", text: "The wise speak seldom, and echo longer.", length: 7, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["wise"], tags: ["communication", "legacy"], usedAt: null },
+      { id: "q-74", text: "To know the name is not to know the thing.", length: 9, tone: ["profound"], emotion: ["understanding"], dominant_noun: ["name"], tags: ["knowledge", "truth"], usedAt: null },
+      { id: "q-75", text: "Seldom is when the heart holds its breath.", length: 8, tone: ["heart"], emotion: ["anticipation"], dominant_noun: ["heart"], tags: ["emotion", "pause"], usedAt: null },
+      { id: "q-76", text: "Art begins when you start to cut.", length: 7, tone: ["action"], emotion: ["creativity"], dominant_noun: ["art"], tags: ["creation", "effort"], usedAt: null },
+      { id: "q-77", text: "Better broken than unfinished.", length: 4, tone: ["reflective"], emotion: ["acceptance"], dominant_noun: ["completion"], tags: ["effort", "closure"], usedAt: null },
+      { id: "q-78", text: "The more they look, the less you breathe.", length: 8, tone: ["reflective"], emotion: ["pressure"], dominant_noun: ["gaze"], tags: ["self", "exposure"], usedAt: null },
+      { id: "q-79", text: "A clean cut is kinder than a dull delay.", length: 8, tone: ["wise"], emotion: ["decisiveness"], dominant_noun: ["cut"], tags: ["action", "clarity"], usedAt: null },
+      { id: "q-80", text: "The wise whisper where emotions shout.", length: 6, tone: ["wise"], emotion: ["restraint"], dominant_noun: ["wise"], tags: ["communication", "calm"], usedAt: null },
+      { id: "q-81", text: "A note moves faster than a promise.", length: 7, tone: ["reflective"], emotion: ["trust"], dominant_noun: ["note"], tags: ["communication", "reliability"], usedAt: null },
+      { id: "q-82", text: "Desire grows louder the more it’s silenced.", length: 7, tone: ["heart"], emotion: ["desire"], dominant_noun: ["desire"], tags: ["passion", "suppression"], usedAt: null },
+      { id: "q-83", text: "To feel desire is to risk being seen.", length: 8, tone: ["heart"], emotion: ["vulnerability"], dominant_noun: ["desire"], tags: ["emotion", "exposure"], usedAt: null },
+      { id: "q-84", text: "Limitations birth the boldest lines.", length: 5, tone: ["action"], emotion: ["creativity"], dominant_noun: ["limitations"], tags: ["innovation", "challenge"], usedAt: null },
+      { id: "q-85", text: "Align and refine—and define beyond it.", length: 6, tone: ["career"], emotion: ["growth"], dominant_noun: ["alignment"], tags: ["success", "effort"], usedAt: null },
+      { id: "q-86", text: "Where all are, be!", length: 4, tone: ["action"], emotion: ["presence"], dominant_noun: ["presence"], tags: ["community", "effort"], usedAt: null },
+      { id: "q-87", text: "Slick words can mask deeper truths.", length: 6, tone: ["reflective"], emotion: ["caution"], dominant_noun: ["truth"], tags: ["communication", "authenticity"], usedAt: null },
+      { id: "q-88", text: "The city forgets that it once had a soul.", length: 9, tone: ["profound"], emotion: ["loss"], dominant_noun: ["soul"], tags: ["identity", "modernity"], usedAt: null },
+      { id: "q-89", text: "You are what you dare to build.", length: 7, tone: ["action"], emotion: ["creation"], dominant_noun: ["creation"], tags: ["effort", "identity"], usedAt: null },
+      { id: "q-90", text: "Every curve says what you stand for.", length: 7, tone: ["reflective"], emotion: ["identity"], dominant_noun: ["curve"], tags: ["self", "expression"], usedAt: null },
+      { id: "q-91", text: "Before we speak, we design.", length: 5, tone: ["career"], emotion: ["intention"], dominant_noun: ["design"], tags: ["creation", "planning"], usedAt: null },
+      { id: "q-92", text: "The body codes what the mind dares not name.", length: 9, tone: ["profound"], emotion: ["truth"], dominant_noun: ["body"], tags: ["self", "expression"], usedAt: null },
+      { id: "q-93", text: "Every grid hides a caste.", length: 5, tone: ["profound"], emotion: ["criticism"], dominant_noun: ["grid"], tags: ["structure", "society"], usedAt: null },
+      { id: "q-94", text: "Creativity flows best when ideas slide effortlessly.", length: 7, tone: ["action"], emotion: ["creativity"], dominant_noun: ["creativity"], tags: ["innovation", "flow"], usedAt: null },
+      { id: "q-95", text: "Where love is, life is!", length: 5, tone: ["heart"], emotion: ["love"], dominant_noun: ["love"], tags: ["life", "connection"], usedAt: null },
+      { id: "q-96", text: "To focus is to exile everything else.", length: 7, tone: ["mind"], emotion: ["concentration"], dominant_noun: ["focus"], tags: ["effort", "clarity"], usedAt: null },
+      { id: "q-97", text: "When the world trembles, the temple steadies.", length: 7, tone: ["soul"], emotion: ["stability"], dominant_noun: ["temple"], tags: ["faith", "resilience"], usedAt: null },
+      { id: "q-98", text: "If time is gold, plastic is a servant.", length: 8, tone: ["wise"], emotion: ["value"], dominant_noun: ["time"], tags: ["priority", "resource"], usedAt: null },
+      { id: "q-99", text: "To be beautiful is to dare to be seen without armor.", length: 10, tone: ["heart"], emotion: ["vulnerability"], dominant_noun: ["beauty"], tags: ["self", "courage"], usedAt: null },
+      { id: "q-100", text: "Restlessness is the thief of peace.", length: 6, tone: ["reflective"], emotion: ["calm"], dominant_noun: ["peace"], tags: ["mindfulness", "tranquility"], usedAt: null },
+      { id: "q-101", text: "What moves is not dead.", length: 5, tone: ["profound"], emotion: ["life"], dominant_noun: ["motion"], tags: ["existence", "change"], usedAt: null },
+      { id: "q-102", text: "Stillness is peace only when it’s chosen.", length: 7, tone: ["wise"], emotion: ["calm"], dominant_noun: ["stillness"], tags: ["choice", "harmony"], usedAt: null },
+      { id: "q-103", text: "The more you choose, the more your patterns choose for you.", length: 10, tone: ["reflective"], emotion: ["habit"], dominant_noun: ["patterns"], tags: ["behavior", "choice"], usedAt: null },
+      { id: "q-104", text: "Nature doesn’t think—it repeats wisely.", length: 5, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["nature"], tags: ["order", "cycle"], usedAt: null },
+      { id: "q-105", text: "A pause turns a reaction into a response.", length: 8, tone: ["wise"], emotion: ["control"], dominant_noun: ["pause"], tags: ["mindfulness", "communication"], usedAt: null },
+      { id: "q-106", text: "We scroll to skip the moment we’re in.", length: 8, tone: ["reflective"], emotion: ["distraction"], dominant_noun: ["moment"], tags: ["mindfulness", "modernity"], usedAt: null },
+      { id: "q-107", text: "The scroll reflects what you dare not ask aloud.", length: 8, tone: ["profound"], emotion: ["introspection"], dominant_noun: ["scroll"], tags: ["self", "expression"], usedAt: null },
+      { id: "q-108", text: "Once the bond is broken, every word is a weapon.", length: 9, tone: ["profound"], emotion: ["conflict"], dominant_noun: ["bond"], tags: ["relationship", "communication"], usedAt: null },
+      { id: "q-109", text: "Every motion is the soul remembering its dance.", length: 8, tone: ["soul"], emotion: ["expression"], dominant_noun: ["motion"], tags: ["life", "spirit"], usedAt: null },
+      { id: "q-110", text: "To respond is to say, “I see you.”", length: 7, tone: ["heart"], emotion: ["connection"], dominant_noun: ["response"], tags: ["empathy", "communication"], usedAt: null },
+      { id: "q-111", text: "A nation is built one shared task at a time.", length: 9, tone: ["action"], emotion: ["unity"], dominant_noun: ["nation"], tags: ["community", "effort"], usedAt: null },
+      { id: "q-112", text: "A shared meal softens even a sharp silence.", length: 8, tone: ["heart"], emotion: ["connection"], dominant_noun: ["meal"], tags: ["community", "harmony"], usedAt: null },
+      { id: "q-113", text: "In the race of life, busy is the default prison!", length: 9, tone: ["reflective"], emotion: ["constraint"], dominant_noun: ["busy"], tags: ["modernity", "freedom"], usedAt: null },
+      { id: "q-114", text: "The spirit fixed in peace never wavers.", length: 7, tone: ["soul"], emotion: ["stability"], dominant_noun: ["spirit"], tags: ["faith", "calm"], usedAt: null },
+      { id: "q-115", text: "Fixed minds trap growth in iron cages.", length: 7, tone: ["reflective"], emotion: ["constraint"], dominant_noun: ["mind"], tags: ["growth", "change"], usedAt: null },
+      { id: "q-116", text: "The sharpest rebels speak with eyes, not fists.", length: 8, tone: ["action"], emotion: ["defiance"], dominant_noun: ["rebels"], tags: ["resistance", "expression"], usedAt: null },
+      { id: "q-117", text: "In brokenness, healing whispers the loudest.", length: 6, tone: ["profound"], emotion: ["healing"], dominant_noun: ["healing"], tags: ["growth", "resilience"], usedAt: null },
+      { id: "q-118", text: "Anger: Like a silent storm, it consumes what it touches.", length: 9, tone: ["profound"], emotion: ["anger"], dominant_noun: ["anger"], tags: ["emotion", "destruction"], usedAt: null },
+      { id: "q-119", text: "Greed sickens what health strives to heal.", length: 7, tone: ["reflective"], emotion: ["criticism"], dominant_noun: ["greed"], tags: ["values", "balance"], usedAt: null },
+      { id: "q-120", text: "Beauty dances briefly before the eye tires.", length: 7, tone: ["heart"], emotion: ["appreciation"], dominant_noun: ["beauty"], tags: ["fleeting", "aesthetics"], usedAt: null },
+      { id: "q-121", text: "Obedience grows fastest under a shadow.", length: 6, tone: ["profound"], emotion: ["control"], dominant_noun: ["obedience"], tags: ["authority", "fear"], usedAt: null },
+      { id: "q-122", text: "Serving without a spine breaks the soul.", length: 7, tone: ["profound"], emotion: ["sacrifice"], dominant_noun: ["soul"], tags: ["dignity", "service"], usedAt: null },
+      { id: "q-123", text: "But thinking is not moving!", length: 5, tone: ["action"], emotion: ["urgency"], dominant_noun: ["thought"], tags: ["effort", "action"], usedAt: null },
+      { id: "q-124", text: "Clear rivers cut the deepest.", length: 5, tone: ["wise"], emotion: ["impact"], dominant_noun: ["rivers"], tags: ["nature", "strength"], usedAt: null },
+      { id: "q-125", text: "Focus begins where noise ends.", length: 5, tone: ["mind"], emotion: ["clarity"], dominant_noun: ["focus"], tags: ["concentration", "calm"], usedAt: null },
+      { id: "q-126", text: "Every quote carries a parent.", length: 5, tone: ["reflective"], emotion: ["legacy"], dominant_noun: ["quote"], tags: ["wisdom", "origin"], usedAt: null },
+      { id: "q-127", text: "When fear sharpens, focus arrives.", length: 5, tone: ["action"], emotion: ["clarity"], dominant_noun: ["focus"], tags: ["challenge", "growth"], usedAt: null },
+      { id: "q-128", text: "Not every calm voice lacks sharp teeth.", length: 7, tone: ["wise"], emotion: ["strength"], dominant_noun: ["voice"], tags: ["deception", "power"], usedAt: null },
+      { id: "q-129", text: "A spinning wheel moves, but never arrives.", length: 7, tone: ["reflective"], emotion: ["stagnation"], dominant_noun: ["wheel"], tags: ["effort", "cycle"], usedAt: null },
+      { id: "q-130", text: "A nation is just a name for a shared ache.", length: 9, tone: ["profound"], emotion: ["unity"], dominant_noun: ["nation"], tags: ["community", "emotion"], usedAt: null },
+      { id: "q-131", text: "The more detailed the system, the slower the soul.", length: 9, tone: ["reflective"], emotion: ["constraint"], dominant_noun: ["soul"], tags: ["structure", "freedom"], usedAt: null },
+      { id: "q-132", text: "The risk of response is the risk of being known.", length: 9, tone: ["heart"], emotion: ["vulnerability"], dominant_noun: ["response"], tags: ["communication", "self"], usedAt: null },
+      { id: "q-133", text: "Lazy have perfected the art of nothingness.", length: 7, tone: ["reflective"], emotion: ["criticism"], dominant_noun: ["laziness"], tags: ["effort", "failure"], usedAt: null },
+      { id: "q-134", text: "Pick no fight with the past. It invites you back.", length: 9, tone: ["wise"], emotion: ["acceptance"], dominant_noun: ["past"], tags: ["history", "peace"], usedAt: null },
+      { id: "q-135", text: "The higher you climb, the colder the air of doubt.", length: 9, tone: ["career"], emotion: ["challenge"], dominant_noun: ["doubt"], tags: ["success", "effort"], usedAt: null },
+      { id: "q-136", text: "To be superb is to dance in the spotlight of your own truth.", length: 12, tone: ["action"], emotion: ["confidence"], dominant_noun: ["truth"], tags: ["self", "excellence"], usedAt: null },
+      { id: "q-137", text: "Every cup contains a universe waiting to be discovered.", length: 8, tone: ["soul"], emotion: ["wonder"], dominant_noun: ["cup"], tags: ["philosophy", "potential"], usedAt: null },
+      { id: "q-138", text: "Excellence is the mountain only the brave dare climb.", length: 8, tone: ["career"], emotion: ["courage"], dominant_noun: ["excellence"], tags: ["success", "effort"], usedAt: null },
+      { id: "q-139", text: "A full heart must not demand more.", length: 7, tone: ["heart"], emotion: ["contentment"], dominant_noun: ["heart"], tags: ["love", "satisfaction"], usedAt: null },
+      { id: "q-140", text: "To see beauty is to glimpse the divine in all things.", length: 10, tone: ["soul"], emotion: ["appreciation"], dominant_noun: ["beauty"], tags: ["spirituality", "aesthetics"], usedAt: null },
+      { id: "q-141", text: "Who moves is not dead.", length: 5, tone: ["profound"], emotion: ["life"], dominant_noun: ["motion"], tags: ["existence", "change"], usedAt: null },
+      { id: "q-142", text: "A detail is a love letter in disguise.", length: 8, tone: ["heart"], emotion: ["appreciation"], dominant_noun: ["detail"], tags: ["care", "expression"], usedAt: null },
+      { id: "q-143", text: "Look into past, and it looks into you.", length: 8, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["past"], tags: ["history", "self"], usedAt: null },
+      { id: "q-144", text: "Where hunger rules, profit waits.", length: 6, tone: ["career"], emotion: ["ambition"], dominant_noun: ["profit"], tags: ["desire", "success"], usedAt: null },
+      { id: "q-145", text: "Only what’s loved enough gets frozen in time.", length: 8, tone: ["heart"], emotion: ["love"], dominant_noun: ["love"], tags: ["memory", "value"], usedAt: null },
+      { id: "q-146", text: "Change is born where else begins.", length: 6, tone: ["profound"], emotion: ["change"], dominant_noun: ["change"], tags: ["growth", "possibility"], usedAt: null },
+      { id: "q-147", text: "To always want else is to never arrive.", length: 8, tone: ["reflective"], emotion: ["restlessness"], dominant_noun: ["desire"], tags: ["contentment", "purpose"], usedAt: null },
+      { id: "q-148", text: "When the world scrapes you, cream listens.", length: 7, tone: ["heart"], emotion: ["empathy"], dominant_noun: ["cream"], tags: ["support", "connection"], usedAt: null },
+      { id: "q-149", text: "One wonder births a thousand questions.", length: 6, tone: ["soul"], emotion: ["curiosity"], dominant_noun: ["wonder"], tags: ["exploration", "philosophy"], usedAt: null },
+      { id: "q-150", text: "A curious mind scrolls even the silence.", length: 7, tone: ["mind"], emotion: ["curiosity"], dominant_noun: ["mind"], tags: ["exploration", "thought"], usedAt: null },
+      { id: "q-151", text: "The poetic lies beautifully to tell the truth.", length: 8, tone: ["profound"], emotion: ["truth"], dominant_noun: ["truth"], tags: ["art", "expression"], usedAt: null },
+      { id: "q-152", text: "Water bends, but never yields.", length: 5, tone: ["wise"], emotion: ["resilience"], dominant_noun: ["water"], tags: ["nature", "strength"], usedAt: null },
+      { id: "q-153", text: "A process doesn’t bloom—it unfolds.", length: 5, tone: ["career"], emotion: ["patience"], dominant_noun: ["process"], tags: ["work", "growth"], usedAt: null },
+      { id: "q-154", text: "Time lives in the eyes of the elderly.", length: 8, tone: ["reflective"], emotion: ["wisdom"], dominant_noun: ["time"], tags: ["age", "experience"], usedAt: null },
+      { id: "q-155", text: "You are the driver of your own dawn.", length: 8, tone: ["action"], emotion: ["empowerment"], dominant_noun: ["driver"], tags: ["self", "purpose"], usedAt: null },
+      { id: "q-156", text: "Every driver carries a hidden passenger.", length: 6, tone: ["profound"], emotion: ["mystery"], dominant_noun: ["driver"], tags: ["self", "unknown"], usedAt: null },
+      { id: "q-157", text: "The true driver leads without shouting.", length: 6, tone: ["career"], emotion: ["leadership"], dominant_noun: ["driver"], tags: ["authority", "humility"], usedAt: null },
+      { id: "q-158", text: "The elderly vanish before they’re gone.", length: 6, tone: ["reflective"], emotion: ["loss"], dominant_noun: ["elderly"], tags: ["age", "memory"], usedAt: null },
+      { id: "q-159", text: "What is truly known grows in silence.", length: 7, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["knowledge"], tags: ["truth", "calm"], usedAt: null },
+      { id: "q-160", text: "Listening is how time stops running.", length: 6, tone: ["wise"], emotion: ["presence"], dominant_noun: ["listening"], tags: ["mindfulness", "connection"], usedAt: null },
+      { id: "q-161", text: "Saying sorry is how the mirror stays clean.", length: 8, tone: ["heart"], emotion: ["regret"], dominant_noun: ["sorry"], tags: ["forgiveness", "self"], usedAt: null },
+      { id: "q-162", text: "Not every sorry is said out loud.", length: 7, tone: ["reflective"], emotion: ["regret"], dominant_noun: ["sorry"], tags: ["forgiveness", "silence"], usedAt: null },
+      { id: "q-163", text: "Better frozen than exposed.", length: 4, tone: ["reflective"], emotion: ["protection"], dominant_noun: ["exposure"], tags: ["self", "safety"], usedAt: null },
+      { id: "q-164", text: "Some listen only to know where to strike.", length: 8, tone: ["profound"], emotion: ["deception"], dominant_noun: ["listening"], tags: ["strategy", "caution"], usedAt: null },
+      { id: "q-165", text: "Every true listener becomes a little wiser.", length: 7, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["listener"], tags: ["communication", "growth"], usedAt: null },
+      { id: "q-166", text: "Each wrinkle is a chapter we forgot to read.", length: 9, tone: ["reflective"], emotion: ["nostalgia"], dominant_noun: ["wrinkle"], tags: ["age", "memory"], usedAt: null },
+      { id: "q-167", text: "Cream climbs quietly but stays on top.", length: 7, tone: ["career"], emotion: ["success"], dominant_noun: ["cream"], tags: ["achievement", "effort"], usedAt: null },
+      { id: "q-168", text: "Why make a goodbye bitter?", length: 5, tone: ["heart"], emotion: ["closure"], dominant_noun: ["goodbye"], tags: ["farewell", "peace"], usedAt: null },
+      { id: "q-169", text: "A cracked cup still holds water, but never without worry.", length: 10, tone: ["reflective"], emotion: ["fragility"], dominant_noun: ["cup"], tags: ["resilience", "caution"], usedAt: null },
+      { id: "q-170", text: "The cup is a mother’s quiet offering.", length: 7, tone: ["heart"], emotion: ["love"], dominant_noun: ["cup"], tags: ["care", "family"], usedAt: null },
+      { id: "q-171", text: "Joy tastes sweetest from a shared cup.", length: 7, tone: ["heart"], emotion: ["joy"], dominant_noun: ["joy"], tags: ["connection", "happiness"], usedAt: null },
+      { id: "q-172", text: "To think is to move without walking.", length: 7, tone: ["mind"], emotion: ["thought"], dominant_noun: ["thought"], tags: ["imagination", "progress"], usedAt: null },
+      { id: "q-173", text: "The heart survives by believing in ahead.", length: 7, tone: ["heart"], emotion: ["hope"], dominant_noun: ["heart"], tags: ["resilience", "future"], usedAt: null },
+      { id: "q-174", text: "To stay unique is to not be erased.", length: 8, tone: ["action"], emotion: ["identity"], dominant_noun: ["uniqueness"], tags: ["self", "resilience"], usedAt: null },
+      { id: "q-175", text: "When truth hurts, we change the topic.", length: 7, tone: ["reflective"], emotion: ["avoidance"], dominant_noun: ["truth"], tags: ["authenticity", "fear"], usedAt: null },
+      { id: "q-176", text: "When no one sees you, even mirrors hesitate.", length: 8, tone: ["reflective"], emotion: ["isolation"], dominant_noun: ["mirrors"], tags: ["self", "identity"], usedAt: null },
+      { id: "q-177", text: "It is fun to be still--when you choose to be!", length: 9, tone: ["wise"], emotion: ["calm"], dominant_noun: ["stillness"], tags: ["choice", "peace"], usedAt: null },
+      { id: "q-178", text: "The wise isn’t always nice—it must be felt.", length: 8, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["wise"], tags: ["truth", "experience"], usedAt: null },
+      { id: "q-179", text: "Sophistication is hunger taught to whisper.", length: 6, tone: ["profound"], emotion: ["restraint"], dominant_noun: ["sophistication"], tags: ["poise", "desire"], usedAt: null },
+      { id: "q-180", text: "Anguish burns without needing a flame.", length: 6, tone: ["profound"], emotion: ["pain"], dominant_noun: ["anguish"], tags: ["emotion", "suffering"], usedAt: null },
+      { id: "q-181", text: "A scroll carries not just words, but vows.", length: 8, tone: ["profound"], emotion: ["commitment"], dominant_noun: ["scroll"], tags: ["promise", "legacy"], usedAt: null },
+      { id: "q-182", text: "We move not to arrive, but to forget we’re empty.", length: 9, tone: ["reflective"], emotion: ["restlessness"], dominant_noun: ["motion"], tags: ["purpose", "self"], usedAt: null },
+      { id: "q-183", text: "The elderly teach with their presence, not their words.", length: 8, tone: ["wise"], emotion: ["wisdom"], dominant_noun: ["elderly"], tags: ["age", "legacy"], usedAt: null },
+      { id: "q-184", text: "We loop what we fear we’ll forget.", length: 7, tone: ["reflective"], emotion: ["fear"], dominant_noun: ["loop"], tags: ["memory", "anxiety"], usedAt: null },
+      { id: "q-185", text: "It’s easier to leave when you don’t unpack.", length: 8, tone: ["reflective"], emotion: ["detachment"], dominant_noun: ["departure"], tags: ["change", "freedom"], usedAt: null },
+      { id: "q-186", text: "Not all else is forward—some is just away.", length: 8, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["progress"], tags: ["change", "perspective"], usedAt: null },
+      { id: "q-187", text: "Truth often dies waiting for something else.", length: 7, tone: ["profound"], emotion: ["loss"], dominant_noun: ["truth"], tags: ["wisdom", "patience"], usedAt: null },
+      { id: "q-188", text: "When strength fades, courage must shine brighter.", length: 7, tone: ["action"], emotion: ["courage"], dominant_noun: ["courage"], tags: ["effort", "resilience"], usedAt: null },
+      { id: "q-189", text: "Filling every moment is a way to tame the unknown.", length: 9, tone: ["action"], emotion: ["control"], dominant_noun: ["moment"], tags: ["purpose", "time"], usedAt: null },
+      { id: "q-190", text: "Doing well is its own quiet applause.", length: 7, tone: ["wise"], emotion: ["satisfaction"], dominant_noun: ["effort"], tags: ["success", "humility"], usedAt: null },
+      { id: "q-191", text: "Think as clearly as you would calculate.", length: 7, tone: ["mind"], emotion: ["clarity"], dominant_noun: ["thought"], tags: ["wisdom", "logic"], usedAt: null },
+      { id: "q-192", text: "Loops become chains when tied by others.", length: 7, tone: ["reflective"], emotion: ["constraint"], dominant_noun: ["loops"], tags: ["freedom", "control"], usedAt: null },
+      { id: "q-193", text: "Speed is the enemy of memory.", length: 6, tone: ["wise"], emotion: ["caution"], dominant_noun: ["memory"], tags: ["time", "reflection"], usedAt: null },
+      { id: "q-194", text: "We follow what reflects our longing.", length: 6, tone: ["heart"], emotion: ["desire"], dominant_noun: ["longing"], tags: ["love", "aspiration"], usedAt: null },
+      { id: "q-195", text: "Something always dies when goodbye is said right.", length: 8, tone: ["profound"], emotion: ["loss"], dominant_noun: ["goodbye"], tags: ["closure", "change"], usedAt: null },
+      { id: "q-196", text: "Those who truly know speak second.", length: 6, tone: ["wise"], emotion: ["humility"], dominant_noun: ["knowledge"], tags: ["wisdom", "patience"], usedAt: null },
+      { id: "q-197", text: "Until it's written, it stays a cloud.", length: 7, tone: ["reflective"], emotion: ["introspection"], dominant_noun: ["thought"], tags: ["expression", "legacy"], usedAt: null },
+      { id: "q-198", text: "Some do not speak, they do not want to be seen.", length: 10, tone: ["reflective"], emotion: ["isolation"], dominant_noun: ["silence"], tags: ["privacy", "identity"], usedAt: null },
+      { id: "q-199", text: "Guilt loops in silence until truth is told.", length: 8, tone: ["profound"], emotion: ["regret"], dominant_noun: ["guilt"], tags: ["truth", "confession"], usedAt: null },
+      { id: "q-200", text: "Some loops are stitched from survival.", length: 6, tone: ["reflective"], emotion: ["resilience"], dominant_noun: ["loops"], tags: ["survival", "effort"], usedAt: null }
+    ];
+
+    // Expanded Emoji Set
+    const emojis = [
+      { id: "e-1", emoji: "💸", tags: ["money", "capitalism", "price"], tone: ["career"], emotion: ["ambition"], usedAt: null },
+      { id: "e-2", emoji: "🌱", tags: ["growth", "nature"], tone: ["wise"], emotion: ["hope"], usedAt: null },
+      { id: "e-3", emoji: "🌾", tags: ["growth", "nature"], tone: ["wise"], emotion: ["calm"], usedAt: null },
+      { id: "e-4", emoji: "🍂", tags: ["nature", "change"], tone: ["reflective"], emotion: ["nostalgia"], usedAt: null },
+      { id: "e-5", emoji: "🌿", tags: ["nature", "simplicity"], tone: ["wise"], emotion: ["calm"], usedAt: null },
+      { id: "e-6", emoji: "🪨", tags: ["nature", "strength"], tone: ["wise"], emotion: ["stability"], usedAt: null },
+      { id: "e-7", emoji: "🌀", tags: ["change", "energy"], tone: ["action"], emotion: ["intensity"], usedAt: null },
+      { id: "e-8", emoji: "🔥", tags: ["passion", "energy"], tone: ["action"], emotion: ["passion"], usedAt: null },
+      { id: "e-9", emoji: "💧", tags: ["emotion", "change"], tone: ["heart"], emotion: ["sorrow"], usedAt: null },
+      { id: "e-10", emoji: "🌪️", tags: ["change", "energy"], tone: ["action"], emotion: ["chaos"], usedAt: null },
+      { id: "e-11", emoji: "💨", tags: ["speed", "energy"], tone: ["action"], emotion: ["urgency"], usedAt: null },
+      { id: "e-12", emoji: "⚡", tags: ["energy", "power"], tone: ["action"], emotion: ["intensity"], usedAt: null },
+      { id: "e-13", emoji: "🌋", tags: ["passion", "power"], tone: ["action"], emotion: ["intensity"], usedAt: null },
+      { id: "e-14", emoji: "✍️", tags: ["writing", "expression"], tone: ["reflective"], emotion: ["creativity"], usedAt: null },
+      { id: "e-15", emoji: "📝", tags: ["writing", "expression"], tone: ["reflective"], emotion: ["thought"], usedAt: null },
+      { id: "e-16", emoji: "📜", tags: ["writing", "legacy"], tone: ["wise"], emotion: ["history"], usedAt: null },
+      { id: "e-17", emoji: "📚", tags: ["knowledge", "expression"], tone: ["mind"], emotion: ["wisdom"], usedAt: null },
+      { id: "e-18", emoji: "💭", tags: ["thought", "expression"], tone: ["reflective"], emotion: ["introspection"], usedAt: null },
+      { id: "e-19", emoji: "🧠", tags: ["thought", "mind"], tone: ["mind"], emotion: ["intelligence"], usedAt: null },
+      { id: "e-20", emoji: "🕊️", tags: ["peace", "spirit"], tone: ["wise"], emotion: ["calm"], usedAt: null },
+      { id: "e-21", emoji: "🌌", tags: ["spirit", "universe"], tone: ["soul"], emotion: ["wonder"], usedAt: null },
+      { id: "e-22", emoji: "⛅", tags: ["nature", "hope"], tone: ["wise"], emotion: ["hope"], usedAt: null },
+      { id: "e-23", emoji: "🌙", tags: ["spirit", "mystery"], tone: ["soul"], emotion: ["calm"], usedAt: null },
+      { id: "e-24", emoji: "🪶", tags: ["spirit", "freedom"], tone: ["soul"], emotion: ["freedom"], usedAt: null },
+      { id: "e-25", emoji: "🎇", tags: ["spirit", "celebration"], tone: ["action"], emotion: ["joy"], usedAt: null },
+      { id: "e-26", emoji: "🧭", tags: ["journey", "truth"], tone: ["reflective"], emotion: ["direction"], usedAt: null },
+      { id: "e-27", emoji: "🛤️", tags: ["journey", "path"], tone: ["reflective"], emotion: ["progress"], usedAt: null },
+      { id: "e-28", emoji: "🚪", tags: ["journey", "opportunity"], tone: ["action"], emotion: ["change"], usedAt: null },
+      { id: "e-29", emoji: "🪞", tags: ["truth", "self"], tone: ["reflective"], emotion: ["introspection"], usedAt: null },
+      { id: "e-30", emoji: "🧳", tags: ["journey", "change"], tone: ["action"], emotion: ["adventure"], usedAt: null },
+      { id: "e-31", emoji: "🔍", tags: ["truth", "search"], tone: ["mind"], emotion: ["curiosity"], usedAt: null },
+      { id: "e-32", emoji: "❤️", tags: ["love", "emotion"], tone: ["heart"], emotion: ["love"], usedAt: null },
+      { id: "e-33", emoji: "🤍", tags: ["love", "purity"], tone: ["heart"], emotion: ["calm"], usedAt: null },
+      { id: "e-34", emoji: "💔", tags: ["love", "emotion"], tone: ["heart"], emotion: ["sorrow"], usedAt: null },
+      { id: "e-35", emoji: "🫂", tags: ["love", "connection"], tone: ["heart"], emotion: ["connection"], usedAt: null },
+      { id: "e-36", emoji: "👣", tags: ["journey", "identity"], tone: ["reflective"], emotion: ["progress"], usedAt: null },
+      { id: "e-37", emoji: "🧵", tags: ["connection", "love"], tone: ["heart"], emotion: ["connection"], usedAt: null },
+      { id: "e-38", emoji: "🎭", tags: ["expression", "identity"], tone: ["action"], emotion: ["creativity"], usedAt: null },
+      { id: "e-39", emoji: "🕺", tags: ["energy", "expression"], tone: ["action"], emotion: ["joy"], usedAt: null },
+      { id: "e-40", emoji: "🎤", tags: ["expression", "confidence"], tone: ["action"], emotion: ["confidence"], usedAt: null },
+      { id: "e-41", emoji: "👁️", tags: ["truth", "self"], tone: ["reflective"], emotion: ["awareness"], usedAt: null },
+      { id: "e-42", emoji: "🎧", tags: ["expression", "self"], tone: ["reflective"], emotion: ["introspection"], usedAt: null },
+      { id: "e-43", emoji: "🗣️", tags: ["expression", "confidence"], tone: ["action"], emotion: ["confidence"], usedAt: null },
+      // New Emojis for Expanded Tones
+      { id: "e-44", emoji: "🛠️", tags: ["work", "effort"], tone: ["career"], emotion: ["effort"], usedAt: null },
+      { id: "e-45", emoji: "💡", tags: ["idea", "thought"], tone: ["mind"], emotion: ["curiosity"], usedAt: null },
+      { id: "e-46", emoji: "🕉️", tags: ["spirit", "philosophy"], tone: ["soul"], emotion: ["spirituality"], usedAt: null },
+      { id: "e-47", emoji: "🫀", tags: ["love", "emotion"], tone: ["heart"], emotion: ["love"], usedAt: null },
+      { id: "e-48", emoji: "⚖️", tags: ["balance", "justice"], tone: ["wise"], emotion: ["fairness"], usedAt: null },
+      { id: "e-49", emoji: "🌍", tags: ["nature", "connection"], tone: ["profound"], emotion: ["unity"], usedAt: null },
+      { id: "e-50", emoji: "🏆", tags: ["success", "achievement"], tone: ["career"], emotion: ["success"], usedAt: null },
+      { id: "e-51", emoji: "🪬", tags: ["spirit", "protection"], tone: ["soul"], emotion: ["calm"], usedAt: null },
+      { id: "e-52", emoji: "🔧", tags: ["work", "process"], tone: ["career"], emotion: ["effort"], usedAt: null },
+      { id: "e-53", emoji: "🧩", tags: ["thought", "solution"], tone: ["mind"], emotion: ["clarity"], usedAt: null },
+      { id: "e-54", emoji: "🌄", tags: ["hope", "beginning"], tone: ["action"], emotion: ["hope"], usedAt: null },
+      { id: "e-55", emoji: "🕰️", tags: ["time", "memory"], tone: ["reflective"], emotion: ["nostalgia"], usedAt: null },
+      { id: "e-56", emoji: "🪞", tags: ["self", "truth"], tone: ["reflective"], emotion: ["introspection"], usedAt: null },
+      { id: "e-57", emoji: "🌊", tags: ["emotion", "change"], tone: ["heart"], emotion: ["flow"], usedAt: null },
+      { id: "e-58", emoji: "🪴", tags: ["growth", "nature"], tone: ["wise"], emotion: ["growth"], usedAt: null },
+      { id: "e-59", emoji: "🔔", tags: ["awareness", "clarity"], tone: ["mind"], emotion: ["awareness"], usedAt: null },
+      { id: "e-60", emoji: "🧘", tags: ["peace", "spirit"], tone: ["soul"], emotion: ["calm"], usedAt: null },
+      { id: "e-61", emoji: "🏃", tags: ["effort", "action"], tone: ["action"], emotion: ["effort"], usedAt: null },
+      { id: "e-62", emoji: "🪁", tags: ["freedom", "joy"], tone: ["heart"], emotion: ["joy"], usedAt: null },
+      { id: "e-63", emoji: "🗝️", tags: ["opportunity", "truth"], tone: ["profound"], emotion: ["opportunity"], usedAt: null }
+    ];
+
+     // Colors from PRD
+    const colors = [
+      { name: "coral-blush", bg: "#F88379", fg: "fg-white" },
+      { name: "dusty-sage", bg: "#A9B7A2", fg: "fg-black" },
+      { name: "deep-sky-blue", bg: "#00BFFF", fg: "fg-white" },
+      { name: "wheat-gold", bg: "#F5DEB3", fg: "fg-black" },
+      { name: "dusk-rose", bg: "#DA8C9A", fg: "fg-white" },
+      { name: "teal-lake", bg: "#388E8E", fg: "fg-white" },
+      { name: "midnight-indigo", bg: "#3B3C70", fg: "fg-cream" },
+      { name: "soft-charcoal", bg: "#555D61", fg: "fg-white" },
+      { name: "goldenrod-tan", bg: "#DAA520", fg: "fg-black" },
+      { name: "steel-cloud", bg: "#A2AAB0", fg: "fg-black" },
+      { name: "clay-earth", bg: "#8B6F47", fg: "fg-white" },
+      { name: "pale-lavender", bg: "#D8BFD8", fg: "fg-black" },
+      { name: "ocean-mist", bg: "#7FB5B5", fg: "fg-black" },
+      { name: "tangerine-bloom", bg: "#FFA07A", fg: "fg-black" },
+      { name: "serene-sky", bg: "#87CEEB", fg: "fg-black" },
+      { name: "forest-pine", bg: "#228B22", fg: "fg-white" },
+      { name: "blush-apricot", bg: "#FFDAB9", fg: "fg-black" },
+      { name: "violet-whisper", bg: "#9370DB", fg: "fg-white" },
+      { name: "oxide-red", bg: "#A52A2A", fg: "fg-white" },
+      { name: "ash-grey", bg: "#B2BEB5", fg: "fg-black" },
+      { name: "warm-sand", bg: "#E6D3B3", fg: "fg-black" },
+      { name: "cerulean-depths", bg: "#007BA7", fg: "fg-white" },
+      { name: "sunbaked-brick", bg: "#B86B4B", fg: "fg-white" },
+      { name: "cool-mint", bg: "#98FF98", fg: "fg-black" },
+      { name: "rosewood-smoke", bg: "#65000B", fg: "fg-cream" },
+      { name: "periwinkle-dew", bg: "#CCCCFF", fg: "fg-black" }
+    ];
+
+    // Global State
+    const QuoteGrid = {
+      grid: [[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]], // Card states
+      quotes: quotes,
+      emojis: emojis,
+      usedQuotes: new Set(),
+      usedEmojis: new Set(),
+      usedColors: new Set(),
+      colorMap: colors,
+      frozenRow: null,
+      stateMemory: {},
+      rowColors: [null, null, null]
+    };
+
+    // Constants
+    const TICK_INTERVAL = 2000;
+    const FREEZE_DURATION = 6000;
+    const QUOTE_MIN_LIFESPAN = 10000;
+    const EMOJI_REPEAT_DELAY = 20000;
+    const COLOR_CHANGE_FALLBACK = 15000;
+
+    // Tone to Animation Mapping
+    const toneEffectMap = {
+      reflective: 'fade-in',
+      wise: 'fade-in',
+      action: 'pop-in',
+      profound: 'fade-in',
+      career: 'pop-in',
+      mind: 'fade-in',
+      heart: 'pop-in',
+      soul: 'fade-in'
+    };
+
+    // Utility Functions
+    function getContrastForeground(bgHex) {
+      const r = parseInt(bgHex.slice(1, 3), 16);
+      const g = parseInt(bgHex.slice(3, 5), 16);
+      const b = parseInt(bgHex.slice(5, 7), 16);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      return luminance > 0.5 ? "fg-black" : "fg-white";
+    }
+
+    function randomFrom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    // QuotePool Module
+    const QuotePool = {
+      getNextQuote() {
+        const unused = QuoteGrid.quotes.filter(q => !QuoteGrid.usedQuotes.has(q.id));
+        if (!unused.length) {
+          QuoteGrid.usedQuotes.clear();
+          return randomFrom(QuoteGrid.quotes);
+        }
+        const selected = randomFrom(unused);
+        QuoteGrid.usedQuotes.add(selected.id);
+        QuoteGrid.stateMemory[selected.id] = Date.now();
+        return selected;
+      },
+      getFreshEmoji() {
+        const now = Date.now();
+        const available = QuoteGrid.emojis.filter(e => !QuoteGrid.usedEmojis.has(e.id) || (QuoteGrid.stateMemory[e.id] && now - QuoteGrid.stateMemory[e.id] > EMOJI_REPEAT_DELAY));
+        const selected = randomFrom(available);
+        QuoteGrid.usedEmojis.add(selected.id);
+        QuoteGrid.stateMemory[selected.id] = now;
+        return selected;
+      }
+    };
+
+    // EmojiMatcher Module
+    const EmojiMatcher = {
+      getBestEmoji(quote) {
+        const { tone, dominant_noun, emotion, tags } = quote;
+        const candidates = QuoteGrid.emojis.filter(e =>
+          tone.some(t => e.tone.includes(t)) ||
+          dominant_noun.some(n => e.tags.includes(n)) ||
+          emotion.some(em => e.emotion.includes(em)) ||
+          tags.some(t => e.tags.includes(t))
+        );
+        if (candidates.length) return randomFrom(candidates);
+        const sentimentMatches = QuoteGrid.emojis.filter(e =>
+          e.emotion.some(em => quote.emotion.includes(em)) ||
+          e.tone.some(t => quote.tone.includes(t))
+        );
+        return sentimentMatches.length ? randomFrom(sentimentMatches) : QuotePool.getFreshEmoji();
+      }
+    };
+
+    // RowLogic Module
+    const RowLogic = {
+      generateRowState(rowIndex) {
+        const isCenter = Math.random() < 0.5;
+        const states = isCenter
+          ? ["empty", "textemoji", "empty"]
+          : ["text", "empty", "text"];
+        return states;
+      }
+    };
+
+    // Renderer Module
+    const Renderer = {
+      renderCardContent(el, stateObj) {
+        const { state, quote, emoji } = stateObj;
+        const contentEl = el.querySelector(".card-content");
+        contentEl.innerHTML = "";
+        el.className = `card bg-${stateObj.color} ${stateObj.fg} state-${state}`;
+
+        let animationClass = 'fade-in';
+        if (quote && quote.tone) {
+          animationClass = toneEffectMap[quote.tone[0]] || 'fade-in';
+        }
+
+        if (state === "emoji") {
+          contentEl.innerHTML = `<span class="emoji pop-in">${emoji.emoji}</span>`;
+          const utterance = new SpeechSynthesisUtterance("Pop!");
+          utterance.volume = 0.5;
+          utterance.rate = 1.5;
+          speechSynthesis.speak(utterance);
+        } else if (state === "text") {
+          contentEl.innerHTML = `<span class="quote-text ${animationClass}" style="font-size: ${Renderer.adjustFontSize(quote)}">${quote.text}</span>`;
+        } else if (state === "textemoji") {
+          contentEl.innerHTML = `
+            <span class="emoji pop-in" style="animation-delay: 0.3s">${emoji.emoji}</span>
+            <span class="quote-text ${animationClass}" style="font-size: ${Renderer.adjustFontSize(quote)}">${quote.text}</span>
+          `;
+        }
+        contentEl.classList.add("card-fade-in");
+        console.log(`Rendering card [${stateObj.row},${stateObj.col}] with state: ${state}, quote: ${quote?.text || 'none'}, emoji: ${emoji?.emoji || 'none'}`);
+      },
+      adjustFontSize(quote) {
+        if (!quote) return "var(--font-size-base)";
+        const words = quote.text.split(" ").length;
+        if (words <= 6) return "var(--font-size-large)";
+        if (words <= 10) return "var(--font-size-base)";
+        return "var(--font-size-small)";
+      },
+      applyRowColor(rowIdx) {
+        const unusedColors = QuoteGrid.colorMap.filter(c => !QuoteGrid.usedColors.has(c.name));
+        if (!unusedColors.length) {
+          QuoteGrid.usedColors.clear();
+        }
+        const color = unusedColors.length ? randomFrom(unusedColors) : randomFrom(QuoteGrid.colorMap);
+        QuoteGrid.rowColors[rowIdx] = color;
+        QuoteGrid.usedColors.add(color.name);
+        console.log(`Row ${rowIdx} assigned ${color.name}`);
+        document.querySelectorAll(`.row-${rowIdx} .card`).forEach(card => {
+          card.classList.remove(...colors.map(c => `bg-${c.name}`));
+          card.classList.add(`bg-${color.name}`, color.fg);
+        });
+      }
+    };
+
+    // GridManager Module
+    const GridManager = {
+      initGrid() {
+        console.log("Initializing grid...");
+        try {
+          for (let r = 0; r < 3; r++) {
+            Renderer.applyRowColor(r);
+            for (let c = 0; c < 3; c++) {
+              const el = document.querySelector(`.card[data-row="${r}"][data-col="${c}"]`);
+              if (el) {
+                const state = RowLogic.generateRowState(r)[c];
+                const newState = {
+                  row: r,
+                  col: c,
+                  state: state,
+                  quote: state.includes("text") ? QuotePool.getNextQuote() : null,
+                  emoji: state.includes("emoji") ? (state === "textemoji" ? EmojiMatcher.getBestEmoji(QuotePool.getNextQuote()) : QuotePool.getFreshEmoji()) : null,
+                  color: QuoteGrid.rowColors[r].name,
+                  fg: getContrastForeground(QuoteGrid.rowColors[r].bg),
+                  lastUpdated: Date.now()
+                };
+                QuoteGrid.grid[r][c] = newState;
+                Renderer.renderCardContent(el, newState);
+                console.log(`Initialized card [${r},${c}] with state: ${state}`);
+              } else {
+                console.error(`Card [${r},${c}] not found in DOM`);
+              }
+            };
+          };
+        } catch (error) {
+          console.error("Error initializing grid:", error);
+        };
+      },
+      updateCard(row, col, specialEffect = null) {
+        if (StateManager.isFrozen(row)) return;
+        const state = specialEffect ? specialEffect.state : RowLogic.generateRowState(row)[col];
+        const cardState = QuoteGrid.grid[row][col];
+        if (cardState.lastUpdated && Date.now() - cardState.lastUpdated < QUOTE_MIN_LIFESPAN && cardState.state !== "empty") return;
+
+        const el = document.querySelector(`.card[data-row="${row}"][data-col="${col}"]`);
+        const color = QuoteGrid.rowColors[row] || randomFrom(QuoteGrid.colorMap);
+        const newState = {
+          row: row,
+          col: col,
+          state: state,
+          quote: state.includes("text") ? QuotePool.getNextQuote() : null,
+          emoji: state.includes("emoji") ? (state === "textemoji" ? EmojiMatcher.getBestEmoji(QuotePool.getNextQuote()) : QuotePool.getFreshEmoji()) : null,
+          color: color.name,
+          fg: getContrastForeground(color.bg),
+          lastUpdated: Date.now()
+        };
+        QuoteGrid.grid[row][col] = newState;
+        if (specialEffect && specialEffect.animation) {
+          el.classList.add(specialEffect.animation);
+          setTimeout(() => el.classList.remove(specialEffect.animation), 700);
+        }
+        Renderer.renderCardContent(el, newState);
+      },
+      updateRow(row, specialEffect = null) {
+        const states = RowLogic.generateRowState(row);
+        for (let c = 0; c < 3; c++) {
+          if (states[c] !== "empty") GridManager.updateCard(row, c, specialEffect);
+        }
+      },
+      triggerEmojiBurst() {
+        for (let r = 0; r < 3; r++) {
+          if (StateManager.isFrozen(r)) continue;
+          for (let c = 0; c < 3; c++) {
+            GridManager.updateCard(r, c, { state: "emoji", animation: "swing" });
+          }
+        }
+        setTimeout(() => GridManager.initGrid(), 3000);
+      },
+      triggerStillnessPause() {
+        QuoteGrid.frozenRow = -1; // Pause all rows
+        document.querySelectorAll(".card").forEach(card => {
+          card.classList.add("frozen-row");
+          const content = card.querySelector(".card-content");
+          if (content) content.style.filter = "blur(5px)";
+        });
+        setTimeout(() => {
+          QuoteGrid.frozenRow = null;
+          document.querySelectorAll(".card").forEach(card => {
+            card.classList.remove("frozen-row");
+            const content = card.querySelector(".card-content");
+            if (content) content.style.filter = "blur(0)";
+          });
+          GridManager.initGrid();
+        }, 5000);
+      },
+      triggerVerticalRipple() {
+        for (let c = 0; c < 3; c++) {
+          for (let r = 0; r < 3; r++) {
+            if (StateManager.isFrozen(r)) continue;
+            setTimeout(() => {
+              GridManager.updateCard(r, c, { state: RowLogic.generateRowState(r)[c], animation: "vertical-ripple" });
+            }, r * 200);
+          }
+        }
+      },
+      triggerHeartbeatGrid() {
+        for (let r = 0; r < 3; r++) {
+          if (StateManager.isFrozen(r)) continue;
+          for (let c = 0; c < 3; c++) {
+            const el = document.querySelector(`.card[data-row="${r}"][data-col="${c}"]`);
+            el.classList.add("pulse");
+            setTimeout(() => el.classList.remove("pulse"), 2000);
+          }
+        }
+      }
+    };
+
+    // StateManager Module
+    const StateManager = {
+      frozenRow: null,
+      lastFreezeAt: null,
+      isFrozen(row) {
+        return QuoteGrid.frozenRow === row && Date.now() - QuoteGrid.stateMemory.lastFreezeAt < FREEZE_DURATION;
+      },
+      getActiveRows() {
+        return [0, 1, 2].filter(r => !StateManager.isFrozen(r));
+      },
+      getCardState(row, col) {
+        return QuoteGrid.grid[row][col];
+      }
+    };
+
+    // TimerEngine Module
+    const TimerEngine = {
+      startLoop() {
+        setInterval(TimerEngine.tick, TICK_INTERVAL);
+        setInterval(TimerEngine.maybeRotateFrozenRow, FREEZE_DURATION);
+        setInterval(TimerEngine.maybeChangeNonFrozenColors, COLOR_CHANGE_FALLBACK);
+      },
+      tick() {
+        const random = Math.random();
+        if (random < 0.05) {
+          GridManager.triggerEmojiBurst();
+        } else if (random < 0.08) {
+          GridManager.triggerStillnessPause();
+        } else if (random < 0.16) {
+          GridManager.triggerVerticalRipple();
+        } else if (random < 0.21) {
+          GridManager.triggerHeartbeatGrid();
+        } else {
+          const activeRows = StateManager.getActiveRows();
+          if (activeRows.length) {
+            const row = randomFrom(activeRows);
+            GridManager.updateRow(row);
+          }
+        }
+      },
+      maybeRotateFrozenRow() {
+        QuoteGrid.frozenRow = (QuoteGrid.frozenRow === null ? 0 : (QuoteGrid.frozenRow + 1) % 3);
+        QuoteGrid.stateMemory.lastFreezeAt = Date.now();
+        document.querySelectorAll(".row").forEach(row => row.classList.remove("frozen-row"));
+        document.querySelector(`.row-${QuoteGrid.frozenRow}`).classList.add("frozen-row");
+        Renderer.applyRowColor(QuoteGrid.frozenRow); // Change color post-freeze
+      },
+      maybeChangeNonFrozenColors() {
+        const activeRows = StateManager.getActiveRows();
+        activeRows.forEach(row => Renderer.applyRowColor(row));
+      }
+    };
+
+    // UXEnhancer Module
+    const UXEnhancer = {
+      addCopyListeners() {
+        document.querySelectorAll(".card").forEach(card => {
+          card.addEventListener("click", () => {
+            const quoteText = card.querySelector(".quote-text")?.textContent;
+            if (quoteText) {
+              navigator.clipboard.writeText(quoteText).then(() => {
+                alert("Quote copied!");
+              });
+            }
+          });
+        });
+      }
+    };
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      GridManager.initGrid();
+      TimerEngine.startLoop();
+      UXEnhancer.addCopyListeners();
+    });
+  </script>
+</body>
+</html>
