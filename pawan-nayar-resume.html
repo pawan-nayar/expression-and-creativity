@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pawan Nayar - Interactive Resume</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -418,6 +419,230 @@
                 padding: 16px;
             }
         }
+        /* Simple Timeline Evolution Styles */
+        .evolution-timeline-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        #timelineViz {
+            width: 100%;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(0, 20, 40, 0.8), rgba(0, 0, 0, 0.9));
+            border-radius: 0.5rem;
+        }
+
+        .skill-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            text-anchor: middle;
+            pointer-events: none;
+            user-select: none;
+            font-size: 16.9px; /* 10% larger than 15.4px */
+        }
+
+        /* Toast notification for timeline */
+        .timeline-toast {
+            position: absolute;
+            bottom: 120px; /* Above the buttons */
+            left: 35%; /* Position over Play Evolution button (first button) */
+            transform: translateX(-50%);
+            background: rgba(0, 255, 255, 0.95);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .timeline-toast::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(0, 255, 255, 0.95);
+        }
+
+        .timeline-toast.visible {
+            opacity: 1;
+        }
+
+        .timeline-toast::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(0, 255, 255, 0.9);
+        }
+
+        .timeline-line {
+            stroke: #00FFFF;
+            stroke-width: 4;
+            fill: none;
+            opacity: 1;
+            stroke-linecap: round;
+        }
+
+        .year-circle {
+            fill: #00FFFF;
+            stroke: #FFFFFF;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 10px #00FFFF);
+        }
+
+        .evolution-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .evolution-btn {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #00FFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .evolution-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .evolution-btn.pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+        }
+
+        @keyframes clap {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .clap-animation {
+            animation: clap 1s ease-in-out;
+        }
+
+        .card-link-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .card-link-icon:hover {
+            opacity: 1;
+        }
+
+        .bg-gray-800\/50 {
+            position: relative;
+        }
+
+        .evolution-btn:active {
+            transform: translateY(0);
+        }
+
+        .evolution-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .current-phase-display {
+            font-size: 1.1rem;
+            color: #00FFFF;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .current-year-display {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            color: #FFFFFF;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .phase-detail {
+            transition: all 0.4s ease;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .phase-detail.active {
+            opacity: 1;
+            max-height: 500px;
+            margin-bottom: 1rem;
+        }
+
+        .phase-details-container {
+            min-height: 0;
+        }
+
+        /* Responsive adjustments for evolution canvas */
+        @media (max-width: 768px) {
+            .evolution-canvas-container {
+                padding: 1rem;
+            }
+            
+            #evolutionCanvas {
+                height: 400px;
+            }
+            
+            .evolution-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .current-year-display {
+                font-size: 1.5rem;
+            }
+            
+            .evolution-controls {
+                gap: 0.5rem;
+            }
+            
+            
+            .evolution-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -602,6 +827,7 @@
                                     <li>Designed unique interactive prototypes translating complex subjects into joyful, intuitive learning experiences, such as Dynamic Crossword Engines, Commerce Glossaries and Toddler Math Systems.</li>
                                     <li>Built proprietary frameworks including FindYourExpression™, a universal short-expression engine; Go2Words™, a word-image pairing engine; and the Wisdom Graph, which is a semantic-emotional lattice mapping over 5 million words across 20+ dimensions, utilizing 50+ JSON datasets (~15 GB).</li>
                                     <li>Leading R&D for LLOS.AI, the Lifelong Learning Operating System, which serves as a modular intelligence platform built for continuous discovery and personalized growth.</li>
+                                    <li>Key clients include Adobe (process docs, design briefs), WebEngage (educational university and 30+ EdTech use cases), EPC Tech (doctors' engagement), BLS (end-to-end digital marketing), and AI models for startups in creative book-writing space and energy transformation.</li>
                                 </ul>
                                 <button class="see-less-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
                                     See less <svg class="ml-2 w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -638,7 +864,8 @@
                                     <li>Directed content ecosystems for Adobe Creative Cloud and Document Cloud, overseeing online help, onboarding learning, social and community leadership, and developer documentation.</li>
                                     <li>Reimagined content's role by evolving from reactive support to proactive, personalized in-product guidance. By embedding intelligent, contextual learning directly within the product experience, drove higher product adoption, faster enterprise rollouts, improved cross-sell, and stronger NPS.</li>
                                     <li>Delivered over <strong class="text-white">$14M in annual savings</strong> by architecting ML-driven content pipelines and cloud-first publishing workflows for legacy software; localized across 35+ languages for global customers.</li>
-                                    <li>Originated the Go2Words experiment that involved a word-image pairing engine that achieved over a billion impressions and became the conceptual seed for the semantic foundations of LLOS.AI.</li>
+                                    <li>Transformed content operations to tech-first approach where team secured <strong class="text-white">7 patents directly</strong> and influenced <strong class="text-white">30+ patents across cross-functional teams</strong>, presented papers at international conferences, and led technical presentations at internal conferences.</li>
+                                    <li>Originated the Go2Words experiment that involved a word-image pairing engine that at its peak crossed 1 million followers, achieved over a billion impressions, and became the conceptual seed for the semantic foundations of LLOS.AI.</li>
                                     <li>Honored with the <strong class="text-white">Adobe Founders' Award</strong> for transformative impact across global content ecosystems and for pioneering scalable, emotionally resonant learning design.</li>
                                 </ul>
                                 <button class="see-less-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
@@ -700,6 +927,9 @@
                     <div class="preview-text">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <a href="https://pawan-nayar.github.io/software-content-demos/github/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">🌍 GitHub Learning Series</h4>
                                 <p class="text-gray-300 text-sm mb-2">Why NOT We 100 Million Future Makers</p>
                                 <div class="text-xs text-gray-400">
@@ -709,6 +939,9 @@
                                 </div>
                             </a>
                             <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">🤖 Claude Ecosystem</h4>
                                 <p class="text-gray-300 text-sm mb-2">AI Reasoning & Applied Mastery</p>
                                 <div class="text-xs text-gray-400">
@@ -718,6 +951,9 @@
                                 </div>
                             </a>
                             <a href="https://pawan-nayar.github.io/software-content-demos/ai_art/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">🎨 AI Art Pedagogy</h4>
                                 <p class="text-gray-300 text-sm mb-2">Visual Storytelling & Creative Play</p>
                                 <div class="text-xs text-gray-400">
@@ -727,6 +963,9 @@
                                 </div>
                             </a>
                             <a href="https://pawan-nayar.github.io/software-content-demos/salesforce/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">☁️ Salesforce Service Cloud</h4>
                                 <p class="text-gray-300 text-sm mb-2">Enterprise API Learning</p>
                                 <div class="text-xs text-gray-400">
@@ -869,8 +1108,11 @@
             <div class="glass-card p-6">
                 <div class="expandable-content">
                     <div class="preview-text">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                             <a href="https://beyonddictionary.com/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">🧠 Content & Learning</h4>
                                 <p class="text-gray-300 text-sm mb-2">BeyondDictionary, Quiz Engines, Interactive Tools</p>
                                 <div class="text-xs text-gray-400">
@@ -880,6 +1122,9 @@
                                 </div>
                             </a>
                             <a href="https://pawan-nayar.github.io/expression-and-creativity/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">📈 Marketing & Expression</h4>
                                 <p class="text-gray-300 text-sm mb-2">SEO Tools, Interactive Articles, Creative Explorers</p>
                                 <div class="text-xs text-gray-400">
@@ -889,12 +1134,27 @@
                                 </div>
                             </a>
                             <a href="https://pawan-nayar.github.io/experience-playground/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
                                 <h4 class="text-cyan-400 font-bold mb-2">🎮 Experience & Play</h4>
                                 <p class="text-gray-300 text-sm mb-2">Games, Simulators, Interactive Learning Tools</p>
                                 <div class="text-xs text-gray-400">
                                     • BODMAS Animated Trainer<br>
                                     • Dynamic Crossword Engine<br>
                                     • Interactive Piano Simulator
+                                </div>
+                            </a>
+                            <a href="https://pawan-nayar.github.io/early_education/" target="_blank" class="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer">
+                                <svg class="card-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                                <h4 class="text-cyan-400 font-bold mb-2">🧸 Early Education</h4>
+                                <p class="text-gray-300 text-sm mb-2">Interactive Early Education Modules</p>
+                                <div class="text-xs text-gray-400">
+                                    • Ages 2–4 Learning Interventions<br>
+                                    • BeyondDictionary × LLOS.AI<br>
+                                    • Engaging & Scalable Design
                                 </div>
                             </a>
                         </div>
@@ -1139,6 +1399,328 @@
             </div>
         </section>
 
+        <!-- 30-Year Evolution Map Section -->
+        <section class="mb-16 md:mb-24 reveal">
+            <h3 class="text-3xl font-bold text-white mb-8">🌍 30-Year Evolution Map (1995–2025)</h3>
+            <div class="glass-card p-6">
+                <p class="text-lg leading-relaxed text-gray-300 mb-8 text-center">
+                    <em>"From Form to Infinity"</em> — An interactive journey through six transformative phases of learning, innovation, and impact.
+                </p>
+                
+                <!-- Simple Timeline Evolution with D3 -->
+                <div class="evolution-timeline-container mb-8">
+                    <div class="timeline-toast" id="timelineToast">👆 Click Play Evolution to start your journey!</div>
+                    <div id="timelineViz"></div>
+                    <div class="evolution-controls">
+                        <button id="playEvolution" class="evolution-btn">▶ Play Evolution</button>
+                        <button id="pauseEvolution" class="evolution-btn">⏸ Pause</button>
+                        <button id="resetEvolution" class="evolution-btn">🔄 Reset</button>
+                    </div>
+                    <div class="evolution-info">
+                        <div id="currentPhase" class="current-phase-display">Ready to begin 30-year journey...</div>
+                    </div>
+                </div>
+                
+                <!-- Phase Details Display -->
+                <div id="phaseDetails" class="phase-details-container" style="display: none;">
+                    
+                    <!-- Phase Detail Cards (Hidden by default) -->
+                    <div id="phase-forge" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-amber-600">
+                            <h4 class="text-2xl font-bold text-amber-400 mb-3">🔥 The Forge (1995–1999)</h4>
+                            <p class="text-lg text-amber-200 mb-4 font-semibold">Crucible of Learning Design</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> data mining, instructional design, sleepless dedication, CBT frameworks, Bloom taxonomy, Microsoft projects, early mastery
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                A four-month crucible redefined learning as commitment, turning exhaustion into conviction and sparking a lifelong obsession with meaning through design.
+                            </p>
+                            <div class="text-sm text-amber-300">
+                                <strong>Motion:</strong> Slow upward bloom — roots breaking through soil<br>
+                                <strong>Color:</strong> Earth brown — endurance and grounding
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phase-voice" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-green-600">
+                            <h4 class="text-2xl font-bold text-green-400 mb-3">📝 The Voice (2000–2004)</h4>
+                            <p class="text-lg text-green-200 mb-4 font-semibold">Voice of the Emerging Architect</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> publications, IEEE STC, editorial leadership, cross-BU culture, innovation systems, early multimedia, professional authorship
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                From sleepless projects to global publication, you began shaping the voice of an emerging discipline that blended design, writing, and innovation.
+                            </p>
+                            <div class="text-sm text-green-300">
+                                <strong>Motion:</strong> Branching weave — multiple voices forming coherence<br>
+                                <strong>Color:</strong> Emerald green — fresh growth and recognition
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phase-bridge" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-yellow-600">
+                            <h4 class="text-2xl font-bold text-yellow-400 mb-3">🌉 The Bridge (2005–2009)</h4>
+                            <p class="text-lg text-yellow-200 mb-4 font-semibold">Breaking Hierarchies through Humanized Knowledge</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> Cadence tutorials, cross-module learning, multimedia demos, breaking hierarchies, user empathy, measurable impact, thought leadership
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                By humanizing technical documentation, you transformed EDA learning, broke structural ceilings, and became a cultural architect of knowledge empathy.
+                            </p>
+                            <div class="text-sm text-yellow-300">
+                                <strong>Motion:</strong> Rippling wave — influence spreading across boundaries<br>
+                                <strong>Color:</strong> Sunlit gold — confidence and illumination
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phase-orbit" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-blue-600">
+                            <h4 class="text-2xl font-bold text-blue-400 mb-3">🌍 The Orbit (2010–2014)</h4>
+                            <p class="text-lg text-blue-200 mb-4 font-semibold">Scaling Empathy through Systems</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> Adobe globalization, SaaS transition, ML automation, community systems, experience design, team scaling, creative transformation
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                You merged content and technology into living systems, turning documentation into guidance, and empathy into a global operational framework.
+                            </p>
+                            <div class="text-sm text-blue-300">
+                                <strong>Motion:</strong> Orbital rotation — uniting global centers of knowledge<br>
+                                <strong>Color:</strong> Deep blue — intelligent calm and clarity
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phase-pattern" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-pink-600">
+                            <h4 class="text-2xl font-bold text-pink-400 mb-3">🧠 The Pattern (2015–2019)</h4>
+                            <p class="text-lg text-pink-200 mb-4 font-semibold">Semantic Renaissance</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> semantic learning, Go2Words engine, machine learning feedback, community intelligence, proactive content, product empathy, vision synthesis
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                Your work evolved from systems to meaning itself, pioneering word–emotion engines that would seed the early DNA of personalized learning.
+                            </p>
+                            <div class="text-sm text-pink-300">
+                                <strong>Motion:</strong> Pulsing network — neural-style convergence<br>
+                                <strong>Color:</strong> Magenta glow — creative cognition
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phase-light" class="phase-detail hidden">
+                        <div class="glass-card p-6 border-l-4 border-cyan-600">
+                            <h4 class="text-2xl font-bold text-cyan-400 mb-3">✨ The Light (2020–2025)</h4>
+                            <p class="text-lg text-cyan-200 mb-4 font-semibold">Universal Personalized Learning</p>
+                            <p class="text-gray-300 mb-4">
+                                <strong>Keywords:</strong> LLOS.AI, BeyondDictionary, CMET framework, microservices for learning, universal personalization, lifelong learning OS, AI creativity
+                            </p>
+                            <p class="text-gray-300 mb-4">
+                                From product to philosophy, you transcended documentation to engineer learning itself—building the world's first lifelong learning operating system.
+                            </p>
+                            <div class="text-sm text-cyan-300">
+                                <strong>Motion:</strong> Expanding galaxy — multidimensional unity and flow<br>
+                                <strong>Color:</strong> Spectral prism — integrative mastery
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Meta Continuum Summary -->
+                <div class="mt-8 glass-card p-6 border border-cyan-400/30">
+                    <div class="expandable-content">
+                        <div class="preview-text">
+                            <h4 class="text-xl font-bold text-cyan-400 mb-4 text-center">🧭 META CONTINUUM — "From Form to Infinity"</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm mb-4">
+                                <div class="text-center">
+                                    <p class="text-amber-400 font-semibold">1995–1999 — The Fire Begins</p>
+                                    <p class="text-gray-300 italic">A near-failed project taught me that learning design is endurance in disguise.</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-green-400 font-semibold">2000–2004 — Finding a Voice</p>
+                                    <p class="text-gray-300 italic">Publications became classrooms; each article expanded my sense of scale and influence.</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-yellow-400 font-semibold">2005–2009 — Breaking the Walls</p>
+                                    <p class="text-gray-300 italic">I made content breathe — turning documents into dialogue and empathy into a process.</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-blue-400 font-semibold">2010–2019 — Systems Learn to Feel</p>
+                                    <p class="text-gray-300 italic">I learned to scale empathy — merging machine learning with storytelling to create living ecosystems.</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-pink-400 font-semibold">2020–2025 — Meaning Becomes System</p>
+                                    <p class="text-gray-300 italic">Through BeyondDictionary, I'm returning to the seed — building systems that teach, feel, and evolve.</p>
+                                </div>
+                            </div>
+                            <button class="see-more-btn text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center mx-auto">
+                                Explore Full Journey <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                        <div class="full-content hidden">
+                            <h4 class="text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM — "From Form to Infinity"</h4>
+                            
+                            <!-- 1995-1999: The Fire Begins -->
+                            <div class="mb-8 glass-card p-6 border-l-4 border-amber-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold text-amber-400 mb-2">1995–1999 — The Fire Begins</h5>
+                                        <p class="text-amber-200 font-medium mb-3">A near-failed project taught me that learning design is endurance in disguise.</p>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-amber-300">IView:</strong> He was the one who turned an impossible project into a benchmark — the person others reported to when they wanted to understand "how instruction design really works."
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-300 mb-3">
+                                            <strong class="text-amber-300">PeerManagerView:</strong> In 1997, a project many believed would fail became the crucible that defined his path. Working a hundred-hour weeks, he helped turn chaos into clarity, discovering that instructional design was less about software and more about human perseverance.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm">
+                                            <strong class="text-amber-300">DefiningSkills:</strong>
+                                            <div class="flex flex-wrap gap-1 mt-2">
+                                                <span class="bg-amber-600/20 text-amber-300 px-2 py-1 rounded text-xs">instructional design</span>
+                                                <span class="bg-amber-600/20 text-amber-300 px-2 py-1 rounded text-xs">perseverance</span>
+                                                <span class="bg-amber-600/20 text-amber-300 px-2 py-1 rounded text-xs">data mining</span>
+                                                <span class="bg-amber-600/20 text-amber-300 px-2 py-1 rounded text-xs">cognitive structuring</span>
+                                                <span class="bg-amber-600/20 text-amber-300 px-2 py-1 rounded text-xs">adaptive learning</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2000-2004: Finding a Voice -->
+                            <div class="mb-8 glass-card p-6 border-l-4 border-green-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold text-green-400 mb-2">2000–2004 — Finding a Voice</h5>
+                                        <p class="text-green-200 font-medium mb-3">Publications became classrooms; each article expanded my sense of scale and influence.</p>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-green-300">IView:</strong> Colleagues saw him as a thought leader in the making — the editor who could turn raw insight into elegance and who raised India's profile in global technical communication.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-300 mb-3">
+                                            <strong class="text-green-300">DocumentaryView:</strong> Across the early 2000s, his ideas began to travel. From IEEE and STC publications to editorial leadership, he gave form to a new vocabulary of learning — where writing, design, and cognition met in the same sentence.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm">
+                                            <strong class="text-green-300">DefiningSkills:</strong>
+                                            <div class="flex flex-wrap gap-1 mt-2">
+                                                <span class="bg-green-600/20 text-green-300 px-2 py-1 rounded text-xs">editorial leadership</span>
+                                                <span class="bg-green-600/20 text-green-300 px-2 py-1 rounded text-xs">technical writing</span>
+                                                <span class="bg-green-600/20 text-green-300 px-2 py-1 rounded text-xs">IEEE publication</span>
+                                                <span class="bg-green-600/20 text-green-300 px-2 py-1 rounded text-xs">knowledge modeling</span>
+                                                <span class="bg-green-600/20 text-green-300 px-2 py-1 rounded text-xs">community influence</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2005-2009: Breaking the Walls -->
+                            <div class="mb-8 glass-card p-6 border-l-4 border-yellow-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold text-yellow-400 mb-2">2005–2009 — Breaking the Walls</h5>
+                                        <p class="text-yellow-200 font-medium mb-3">I made content breathe — turning documents into dialogue and empathy into a process.</p>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-yellow-300">PeerManagerView:</strong> Within Cadence, he became the bridge between engineering and experience — the first technical writer invited to core conferences and the force behind a culture of interactive learning.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-300 mb-3">
+                                            <strong class="text-yellow-300">DocumentaryView:</strong> At Cadence, he turned static manuals into living media. Tutorials, FAQs, and demos became tools of empathy, bridging engineers and users — a quiet revolution that made learning both technical and human.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm">
+                                            <strong class="text-yellow-300">DefiningSkills:</strong>
+                                            <div class="flex flex-wrap gap-1 mt-2">
+                                                <span class="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-xs">multimedia communication</span>
+                                                <span class="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-xs">empathy design</span>
+                                                <span class="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-xs">process innovation</span>
+                                                <span class="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-xs">cross-BU integration</span>
+                                                <span class="bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded text-xs">user advocacy</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2010-2019: Systems Learn to Feel -->
+                            <div class="mb-8 glass-card p-6 border-l-4 border-blue-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold text-blue-400 mb-2">2010–2019 — Systems Learn to Feel</h5>
+                                        <p class="text-blue-200 font-medium mb-3">I learned to scale empathy — merging machine learning with storytelling to create living ecosystems.</p>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-blue-300">PeerManagerView:</strong> At Adobe, he was known as the architect who made content intelligent. The director who saved millions while making knowledge humane — a leader in the company's top percentile.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-300 mb-3">
+                                            <strong class="text-blue-300">DocumentaryView:</strong> Joining Adobe, he scaled that vision globally. Content became intelligent, cloud-based, and emotionally aware. His teams transformed support into experience — proving that empathy can operate at enterprise scale.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm">
+                                            <strong class="text-blue-300">DefiningSkills:</strong>
+                                            <div class="flex flex-wrap gap-1 mt-2">
+                                                <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs">global leadership</span>
+                                                <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs">ML automation</span>
+                                                <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs">content architecture</span>
+                                                <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs">emotional intelligence</span>
+                                                <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded text-xs">SaaS transformation</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2020-2025: Meaning Becomes System -->
+                            <div class="mb-6 glass-card p-6 border-l-4 border-cyan-600">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold text-cyan-400 mb-2">2020–2025 — Meaning Becomes System</h5>
+                                        <p class="text-cyan-200 font-medium mb-3">Through BeyondDictionary, I'm returning to the seed — building systems that teach, feel, and evolve.</p>
+                                        <div class="text-sm text-gray-300">
+                                            <strong class="text-cyan-300">PeerManagerView:</strong> In Cretorial, peers describe him as a founder-architect whose ideas move between art, AI, and learning — creating frameworks that others now treat as new disciplines.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-300 mb-3">
+                                            <strong class="text-cyan-300">DocumentaryView:</strong> Through BeyondDictionary, he reimagined learning itself. Every word became an ecosystem, every interface a mirror of understanding — the culmination of three decades devoted to turning knowledge into connection.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm">
+                                            <strong class="text-cyan-300">DefiningSkills:</strong>
+                                            <div class="flex flex-wrap gap-1 mt-2">
+                                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded text-xs">LLOS.AI architecture</span>
+                                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded text-xs">CMET framework</span>
+                                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded text-xs">semantic design</span>
+                                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded text-xs">AI creativity</span>
+                                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded text-xs">lifelong learning systems</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="see-less-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center mx-auto">
+                                Show Less <svg class="ml-2 w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Services Section -->
         <section class="mb-16 md:mb-24 reveal">
             <h3 class="text-3xl font-bold text-white mb-8">🛠️ Services & Areas of Research</h3>
@@ -1252,7 +1834,7 @@
                         </div>
                     </div>
                 </div>
-                
+                <br>
                 <div class="mt-4 text-center">
                     <button onclick="openSkillQuiz()" class="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors text-sm font-medium">
                         🚀 Experience Interactive Demo
@@ -2344,7 +2926,435 @@
         let toastSystem;
         document.addEventListener('DOMContentLoaded', () => {
             toastSystem = new ToastNotificationSystem();
+            initializeEvolutionMap();
         });
+
+        // Simple Timeline with D3 Force Simulation
+        class TimelineEvolution {
+            constructor() {
+                this.isPlaying = false;
+                this.currentYear = 1995;
+                this.animationId = null;
+                this.hasShownToast = false;
+                this.isTabActive = true;
+                
+                // Skills data by year
+                this.skillsByYear = {
+                    1995: ["data mining", "instructional design"],
+                    1996: ["sleepless dedication", "CBT frameworks"],
+                    1997: ["Bloom taxonomy", "Microsoft projects"],
+                    1998: ["early mastery", "learning design"],
+                    1999: ["conviction", "meaning through design"],
+                    2000: ["publications", "IEEE STC"],
+                    2001: ["editorial leadership", "cross-BU culture"],
+                    2002: ["innovation systems", "early multimedia"],
+                    2003: ["professional authorship", "global publication"],
+                    2004: ["emerging discipline", "design writing"],
+                    2005: ["Cadence tutorials", "cross-module learning"],
+                    2006: ["multimedia demos", "breaking hierarchies"],
+                    2007: ["user empathy", "measurable impact"],
+                    2008: ["thought leadership", "humanized knowledge"],
+                    2009: ["cultural architect", "knowledge empathy"],
+                    2010: ["Adobe globalization", "SaaS transition"],
+                    2011: ["ML automation", "community systems"],
+                    2012: ["experience design", "team scaling"],
+                    2013: ["creative transformation", "living systems"],
+                    2014: ["global operational framework", "empathy scale"],
+                    2015: ["semantic learning", "Go2Words engine"],
+                    2016: ["machine learning feedback", "community intelligence"],
+                    2017: ["proactive content", "product empathy"],
+                    2018: ["vision synthesis", "word-emotion engines"],
+                    2019: ["personalized learning DNA", "meaning systems"],
+                    2020: ["LLOS.AI", "BeyondDictionary"],
+                    2021: ["CMET framework", "microservices learning"],
+                    2022: ["universal personalization", "lifelong learning OS"],
+                    2023: ["AI creativity", "learning philosophy"],
+                    2024: ["learning engineering", "universal systems"],
+                    2025: ["lifelong learning mastery", "infinite potential"]
+                };
+                
+                this.activeSkills = [];
+                this.setupVisualization();
+                this.setupControls();
+                this.setupVisibilityHandling();
+                this.setupToastNotification();
+            }
+            
+            setupVisualization() {
+                const container = d3.select('#timelineViz');
+                const width = 1000;
+                const height = 400;
+                const timelineY = height - 40; // Timeline at bottom with 10% margin (40px)
+                const textMargin = width * 0.04; // 4% margin for text
+                
+                this.svg = container.append('svg')
+                    .attr('width', '100%')
+                    .attr('height', height)
+                    .attr('viewBox', `0 0 ${width} ${height}`);
+                
+                // Background timeline (full length, faded)
+                this.svg.append('line')
+                    .attr('x1', textMargin)
+                    .attr('y1', timelineY)
+                    .attr('x2', width - textMargin)
+                    .attr('y2', timelineY)
+                    .style('stroke', '#00FFFF')
+                    .style('stroke-width', '2px')
+                    .style('opacity', '0.3');
+                
+                // Timeline line - make it visible from start
+                this.timelineLine = this.svg.append('line')
+                    .attr('class', 'timeline-line')
+                    .attr('x1', textMargin)
+                    .attr('y1', timelineY)
+                    .attr('x2', textMargin + 50) // Start with some visible length
+                    .attr('y2', timelineY)
+                    .style('stroke', '#00FFFF')
+                    .style('stroke-width', '4px')
+                    .style('opacity', '1');
+                
+                // Year circle
+                this.yearCircle = this.svg.append('circle')
+                    .attr('class', 'year-circle')
+                    .attr('cx', textMargin)
+                    .attr('cy', timelineY)
+                    .attr('r', 8);
+                
+                // Year labels container
+                this.yearLabelsGroup = this.svg.append('g').attr('class', 'year-labels');
+                
+                // Add year markers every 5 years
+                for (let year = 1995; year <= 2025; year += 5) {
+                    const x = textMargin + ((year - 1995) / 30) * (width - 2 * textMargin);
+                    
+                    // Year marker line
+                    this.svg.append('line')
+                        .attr('x1', x)
+                        .attr('y1', timelineY - 5)
+                        .attr('x2', x)
+                        .attr('y2', timelineY + 5)
+                        .attr('stroke', '#00FFFF')
+                        .attr('stroke-width', 1);
+                    
+                    // Year label
+                    this.svg.append('text')
+                        .attr('x', x)
+                        .attr('y', timelineY + 20)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#FFFFFF')
+                        .attr('font-size', '12px')
+                        .attr('font-family', 'Inter, sans-serif')
+                        .text(year);
+                }
+                
+                // Current year label (dynamic)
+                this.currentYearLabel = this.svg.append('text')
+                    .attr('x', width - textMargin - 20) // Right side with margin
+                    .attr('y', height * 0.15) // 15% from top
+                    .attr('text-anchor', 'end')
+                    .attr('fill', '#00FFFF')
+                    .attr('font-size', '18px')
+                    .attr('font-weight', 'bold')
+                    .attr('font-family', 'Inter, sans-serif')
+                    .text('1995');
+                
+                // Skills container
+                this.skillsGroup = this.svg.append('g').attr('class', 'skills-group');
+                
+                // Pre-calculated positions within inner grid (10% margins)
+                this.innerMargin = 0.1; // 10% margin on all sides
+                this.innerWidth = (width - 2 * textMargin) * (1 - 2 * this.innerMargin);
+                this.innerHeight = (timelineY - height * 0.15) * (1 - 2 * this.innerMargin);
+                this.innerStartX = textMargin + (width - 2 * textMargin) * this.innerMargin;
+                this.innerStartY = height * 0.15 + (timelineY - height * 0.15) * this.innerMargin;
+                
+                // Pre-calculate 8 fixed positions that never collide
+                this.fixedPositions = [
+                    { x: this.innerStartX + this.innerWidth * 0.2, y: this.innerStartY + this.innerHeight * 0.2 },
+                    { x: this.innerStartX + this.innerWidth * 0.8, y: this.innerStartY + this.innerHeight * 0.2 },
+                    { x: this.innerStartX + this.innerWidth * 0.1, y: this.innerStartY + this.innerHeight * 0.5 },
+                    { x: this.innerStartX + this.innerWidth * 0.9, y: this.innerStartY + this.innerHeight * 0.5 },
+                    { x: this.innerStartX + this.innerWidth * 0.3, y: this.innerStartY + this.innerHeight * 0.8 },
+                    { x: this.innerStartX + this.innerWidth * 0.7, y: this.innerStartY + this.innerHeight * 0.8 },
+                    { x: this.innerStartX + this.innerWidth * 0.5, y: this.innerStartY + this.innerHeight * 0.1 },
+                    { x: this.innerStartX + this.innerWidth * 0.5, y: this.innerStartY + this.innerHeight * 0.6 }
+                ];
+                
+                this.positionIndex = 0; // Current position to use
+                this.skillQueue = []; // Queue of max 4 skills
+                
+                
+                // Store dimensions for use in other methods
+                this.width = width;
+                this.height = height;
+                this.timelineY = timelineY;
+                this.textMargin = textMargin;
+            }
+            
+            setupControls() {
+                document.getElementById('playEvolution').addEventListener('click', () => this.play());
+                document.getElementById('pauseEvolution').addEventListener('click', () => this.pause());
+                document.getElementById('resetEvolution').addEventListener('click', () => this.reset());
+            }
+            
+            setupVisibilityHandling() {
+                // Handle Alt+Tab and window focus changes
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.isTabActive = false;
+                        if (this.isPlaying) {
+                            this.pause();
+                            this.lastPauseTime = Date.now();
+                        }
+                    } else {
+                        this.isTabActive = true;
+                        // Adjust skill birth times to account for pause duration
+                        if (this.lastPauseTime) {
+                            const pauseDuration = Date.now() - this.lastPauseTime;
+                            this.activeSkills.forEach(skill => {
+                                skill.birthTime += pauseDuration;
+                            });
+                            this.lastPauseTime = null;
+                        }
+                    }
+                });
+                
+                window.addEventListener('blur', () => {
+                    this.isTabActive = false;
+                    if (this.isPlaying) {
+                        this.pause();
+                        this.lastPauseTime = Date.now();
+                    }
+                });
+                
+                window.addEventListener('focus', () => {
+                    this.isTabActive = true;
+                    // Adjust skill birth times to account for pause duration
+                    if (this.lastPauseTime) {
+                        const pauseDuration = Date.now() - this.lastPauseTime;
+                        this.activeSkills.forEach(skill => {
+                            skill.birthTime += pauseDuration;
+                        });
+                        this.lastPauseTime = null;
+                    }
+                });
+            }
+            
+            setupToastNotification() {
+                // Show toast when timeline section comes into view
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !this.hasShownToast) {
+                            this.showToast();
+                            this.hasShownToast = true;
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                const timelineContainer = document.querySelector('.evolution-timeline-container');
+                if (timelineContainer) {
+                    observer.observe(timelineContainer);
+                }
+            }
+            
+            showToast() {
+                const toast = document.getElementById('timelineToast');
+                const playButton = document.getElementById('playEvolution');
+                
+                if (toast) {
+                    toast.classList.add('visible');
+                    
+                    // Hide toast immediately if user clicks play button
+                    const hideToastOnPlay = () => {
+                        toast.classList.remove('visible');
+                        playButton.classList.remove('pulse');
+                    };
+                    
+                    playButton.addEventListener('click', hideToastOnPlay, { once: true });
+                    
+                    // Hide toast after 3 seconds
+                    setTimeout(() => {
+                        toast.classList.remove('visible');
+                        // Start pulsing play button after toast disappears
+                        if (playButton && !this.isPlaying) {
+                            playButton.classList.add('pulse');
+                        }
+                        // Remove the event listener if timeout completes
+                        playButton.removeEventListener('click', hideToastOnPlay);
+                    }, 3000);
+                }
+            }
+            
+            play() {
+                if (!this.isPlaying && this.currentYear <= 2025) {
+                    this.isPlaying = true;
+                    // Remove pulse animation when play is clicked
+                    const playButton = document.getElementById('playEvolution');
+                    if (playButton) {
+                        playButton.classList.remove('pulse');
+                    }
+                    this.animate();
+                }
+            }
+            
+            pause() {
+                this.isPlaying = false;
+                if (this.animationId) {
+                    clearTimeout(this.animationId);
+                }
+            }
+            
+            reset() {
+                this.pause();
+                this.currentYear = 1995;
+                this.activeSkills = [];
+                this.updateVisualization();
+                this.updateDisplay();
+            }
+            
+            animate() {
+                if (!this.isPlaying) {
+                    return;
+                }
+                
+                if (this.currentYear > 2025) {
+                    document.getElementById('currentPhase').textContent = '✨ Evolution Complete - The Future Awaits';
+                    this.isPlaying = false;
+                    return;
+                }
+                
+                // Remove old skills before adding new ones
+                this.removeOldSkills();
+                
+                // Add all skills for current year at once
+                const yearSkills = this.skillsByYear[this.currentYear] || [];
+                yearSkills.forEach(skill => {
+                    this.addSkill(skill);
+                });
+                
+                this.updateVisualization();
+                this.updateDisplay();
+                
+                this.currentYear++;
+                
+                // 3 seconds per year (90 seconds total for 30 years)
+                this.animationId = setTimeout(() => this.animate(), 3000);
+            }
+            
+            addSkill(skillText) {
+                // If queue is full (4 skills), remove the oldest
+                if (this.skillQueue.length >= 4) {
+                    const oldestSkill = this.skillQueue.shift(); // Remove first (oldest)
+                    this.activeSkills = this.activeSkills.filter(skill => skill.id !== oldestSkill.id);
+                }
+                
+                // Get next pre-calculated position
+                const position = this.fixedPositions[this.positionIndex % this.fixedPositions.length];
+                this.positionIndex++;
+                
+                // Create skill at exact pre-calculated position
+                const skill = {
+                    id: Date.now() + Math.random(),
+                    text: skillText,
+                    birthYear: this.currentYear,
+                    birthTime: Date.now(),
+                    x: position.x,
+                    y: position.y,
+                    opacity: 1,
+                    width: skillText.length * 8 + 20
+                };
+                
+                // Add to queue and active skills
+                this.skillQueue.push(skill);
+                this.activeSkills.push(skill);
+            }
+            
+            removeOldSkills() {
+                // Queue system handles removal automatically in addSkill()
+                // This function is now just for cleanup and doesn't need to do much
+                
+                // Just ensure we never have more than 4 skills (safety check)
+                if (this.activeSkills.length > 4) {
+                    this.activeSkills = this.activeSkills.slice(-4);
+                    this.skillQueue = this.skillQueue.slice(-4);
+                }
+            }
+            
+            updateVisualization() {
+                // Update timeline line
+                const timelineX = this.textMargin + ((this.currentYear - 1995) / 30) * (this.width - 2 * this.textMargin);
+                this.timelineLine.attr('x2', timelineX);
+                this.yearCircle.attr('cx', timelineX);
+                
+                // Update current year label (stays in top-right)
+                this.currentYearLabel
+                    .text(this.currentYear);
+                
+                
+                // Update skill elements (no simulation needed - fixed grid positions)
+                const skillElements = this.skillsGroup.selectAll('.skill-text')
+                    .data(this.activeSkills, d => d.id);
+                
+                // Enter new skills
+                skillElements.enter()
+                    .append('text')
+                    .attr('class', 'skill-text')
+                    .style('fill', '#00FFFF')
+                    .style('font-size', '16.9px') // 10% larger
+                    .style('font-weight', 'bold')
+                    .style('font-family', 'Inter, sans-serif')
+                    .style('text-anchor', 'middle')
+                    .style('pointer-events', 'none')
+                    .style('user-select', 'none')
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y)
+                    .text(d => d.text)
+                    .style('opacity', 0)
+                    .transition()
+                    .duration(500)
+                    .style('opacity', d => d.opacity);
+                
+                // Update existing skills - fixed positions, only opacity changes
+                skillElements
+                    .style('opacity', d => d.opacity)
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y)
+                    .text(d => d.text);
+                
+                // Remove exiting skills
+                skillElements.exit()
+                    .transition()
+                    .duration(300)
+                    .style('opacity', 0)
+                    .remove();
+            }
+            
+            updateDisplay() {
+                // No need to update external year display - only using the one in black grid
+                
+                const phases = {
+                    1995: '🔥 The Forge',
+                    2000: '📝 Voice', 
+                    2005: '🌉 The Bridge',
+                    2010: '🌍 The Orbit',
+                    2015: '🧠 The Pattern',
+                    2020: '✨ The Light'
+                };
+                
+                let currentPhase = 'Ready to begin...';
+                for (const [year, phase] of Object.entries(phases)) {
+                    if (this.currentYear >= parseInt(year)) {
+                        currentPhase = phase;
+                    }
+                }
+                
+                document.getElementById('currentPhase').textContent = currentPhase;
+            }
+        }
+        
+        function initializeEvolutionMap() {
+            window.timelineViz = new TimelineEvolution();
+        }
 
     </script>
 
@@ -2423,6 +3433,17 @@
         </svg>
     </button>
 
+    <script>
+        // Add clap animation to main title on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const mainTitle = document.querySelector('h1');
+                if (mainTitle) {
+                    mainTitle.classList.add('clap-animation');
+                }
+            }, 500);
+        });
+    </script>
 
 </body>
 </html>
