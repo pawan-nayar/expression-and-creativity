@@ -3434,8 +3434,100 @@
     </button>
 
     <script>
-        // Add clap animation to main title on page load
+        // Mobile device detection and redirect message
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.innerWidth <= 768);
+        }
+        
+        function showMobileMessage() {
+            document.body.innerHTML = `
+                <div style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+                    color: #E0E0E0;
+                    font-family: 'Inter', sans-serif;
+                    padding: 2rem;
+                    text-align: center;
+                ">
+                    <div style="
+                        background: rgba(31, 41, 55, 0.8);
+                        border: 1px solid rgba(75, 85, 99, 0.3);
+                        border-radius: 1rem;
+                        padding: 2rem;
+                        max-width: 400px;
+                        backdrop-filter: blur(10px);
+                    ">
+                        <h1 style="
+                            color: #00FFFF;
+                            font-size: 1.5rem;
+                            margin-bottom: 1rem;
+                            font-weight: bold;
+                        ">📱 Pawan Nayar</h1>
+                        
+                        <p style="
+                            font-size: 1rem;
+                            line-height: 1.6;
+                            margin-bottom: 1.5rem;
+                            color: #D1D5DB;
+                        ">
+                            This interactive resume experience is optimized for desktop and laptop viewing.
+                        </p>
+                        
+                        <p style="
+                            font-size: 0.9rem;
+                            color: #9CA3AF;
+                            margin-bottom: 1.5rem;
+                        ">
+                            Please visit on a desktop or laptop to explore the full interactive timeline, animations, and detailed content.
+                        </p>
+                        
+                        <div style="
+                            background: rgba(0, 255, 255, 0.1);
+                            border: 1px solid rgba(0, 255, 255, 0.3);
+                            border-radius: 0.5rem;
+                            padding: 1rem;
+                            margin-bottom: 1.5rem;
+                        ">
+                            <p style="
+                                font-size: 0.8rem;
+                                color: #00FFFF;
+                                margin: 0;
+                            ">
+                                💡 A mobile-optimized version is coming soon!
+                            </p>
+                        </div>
+                        
+                        <a href="mailto:pawan@cretorial.ai" style="
+                            display: inline-block;
+                            background: #00FFFF;
+                            color: #0a0a1a;
+                            padding: 0.75rem 1.5rem;
+                            border-radius: 0.5rem;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: 0.9rem;
+                            transition: all 0.3s ease;
+                        ">
+                            📧 Contact Me
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Check for mobile on page load
         document.addEventListener('DOMContentLoaded', () => {
+            if (isMobileDevice()) {
+                showMobileMessage();
+                return;
+            }
+            
+            // Desktop: Add clap animation to main title
             setTimeout(() => {
                 const mainTitle = document.querySelector('h1');
                 if (mainTitle) {
