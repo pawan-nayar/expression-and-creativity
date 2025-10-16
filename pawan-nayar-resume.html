@@ -2325,7 +2325,7 @@
                     <!-- MIT Sloan -->
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2">
-                            <div class="text-2xl font-bold text-red-600">MIT</div>
+                            <img src="mit_logo.png" alt="MIT Logo" class="w-full h-full object-contain">
                         </div>
                         <div class="flex-grow">
                             <h4 class="text-xl font-bold text-white">MIT Sloan School of Management</h4>
@@ -3938,7 +3938,7 @@
     </div>
 
     <!-- Cinematic Brain Animation Section -->
-    <section class="brain-philosophy-section py-8">
+    <section class="brain-philosophy-section py-4">
         <div class="container mx-auto max-w-5xl px-6 text-center">
             <!-- Brain Animation Container -->
             <div class="brain-container relative mx-auto" style="width: 900px; height: 600px;">
@@ -4031,9 +4031,9 @@
             </div>
             
             <!-- Final Philosophical Quote -->
-            <div class="philosophy-quote mt-8 opacity-0" id="finalQuote">
+            <div class="philosophy-quote mt-4 opacity-0" id="finalQuote">
                 <p class="text-2xl md:text-3xl font-light text-gray-300 leading-relaxed italic">
-                    "When learning feels personal, it becomes universal. And when universality becomes human again, we rediscover why we learn at all. Then each person says I can because we can. The we of I + AI."
+                    "When learning feels personal, it becomes universal. And when universality becomes human again, we rediscover why we learn at all. Then each person says I can because we can. The we of I + AI." 🧠
                 </p>
             </div>
         </div>
@@ -4272,6 +4272,11 @@
             // Enhanced brain glow
             brainOutline.style.stroke = 'rgba(0, 255, 255, 0.9)';
             brainOutline.style.filter = 'drop-shadow(0 0 25px rgba(0, 255, 255, 0.8))';
+            
+            // Auto-scroll to ensure quote is visible
+            setTimeout(() => {
+                finalQuote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
             
             // Show final quote with word-by-word animation
             const text = finalQuote.querySelector('p').textContent;
