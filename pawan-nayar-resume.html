@@ -369,9 +369,11 @@
             z-index: 9998;
             opacity: 0;
             transition: opacity 0.3s ease;
+            display: none; /* Force hidden by default */
         }
         .toast-backdrop.visible {
             opacity: 1;
+            display: block;
         }
 
         .profile-photo {
@@ -526,6 +528,52 @@
             box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
         }
 
+        /* Pulsing animation for Play button */
+        .evolution-btn.pulse {
+            animation: pulse-play 2s infinite;
+        }
+
+        @keyframes pulse-play {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+                background: rgba(0, 255, 255, 0.1);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+                background: rgba(255, 215, 0, 0.2);
+                border-color: rgba(255, 215, 0, 0.6);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+                background: rgba(0, 255, 255, 0.1);
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+        }
+
+        /* CTA text styling */
+        .timeline-cta {
+            position: absolute;
+            bottom: -50px; /* Position below the timeline area */
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700; /* Gold color for better visibility */
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Inter', sans-serif;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            background: rgba(255, 215, 0, 0.1); /* Gold background */
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            z-index: 10;
+        }
+
         .evolution-btn.pulse {
             animation: pulse 1.5s infinite;
         }
@@ -660,14 +708,14 @@
                     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" class="h-8"/>
                 </a>
                 <a href="https://www.beyonddictionary.com/" target="_blank" class="inline-block">
-                    <img src="https://img.shields.io/badge/BeyondDictionary-8A2BE2?style=for-the-badge&logo=openai&logoColor=white" alt="BeyondDictionary" class="h-8"/>
+                    <img src="https://img.shields.io/badge/📚_BeyondDictionary-8A2BE2?style=for-the-badge&logoColor=white" alt="BeyondDictionary" class="h-8"/>
                 </a>
                 <a href="https://pawan-nayar.github.io/software-content-demos/" target="_blank" class="inline-block">
                     <img src="https://img.shields.io/badge/Software_Content_Demos-FF6B35?style=for-the-badge&logo=github&logoColor=white" alt="Software Content Demos" class="h-8"/>
                 </a>
             </div>
             <p class="text-lg leading-relaxed text-gray-300 max-w-4xl mx-auto">
-                I'm a content engineer with over 30 years of experience building systems that connect words, knowledge, and creativity. From Microsoft CBT projects in 1995, to Cadence and Adobe, to today's BeyondDictionary → <strong class="text-cyan-400">LLOS.AI</strong>, my work has always centered on one vision: scaling content engineering for the next billion learners and creators.
+                I'm a content engineer with over 30 years of experience building systems that connect words, knowledge, and creativity. From Microsoft learning projects in 1995, to Cadence and Adobe, to today's BeyondDictionary → <strong class="text-cyan-400">LLOS.AI</strong>, my work has always centered on one vision: scaling content engineering for the next billion learners and creators.
             </p>
         </header>
 
@@ -801,7 +849,7 @@
                     <div class="glass-card p-6">
                         <p class="text-sm text-cyan-400 mb-1">2020 - Present</p>
                         <div class="flex items-center space-x-3 mb-3">
-                            <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFHzBT2D4p7JQ/company-logo_200_200/company-logo_200_200/0/1649668567899/cretorial_logo?e=2147483647&v=beta&t=GXZAGsrYxAXhKCQVgc26fv3cI1rXDNWFJbBGgyhxCws" alt="Cretorial Logo" class="w-8 h-8 rounded bg-white p-1 opacity-90">
+                            <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFHzBT2D4p7JQ/company-logo_200_200/company-logo_200_200/0/1649668567899/cretorial_logo?e=2147483647&v=beta&t=GXZAGsrYxAXhKCQVgc26fv3cI1rXDNWFJbBGgyhxCws" alt="Cretorial Logo" class="w-12 h-12 rounded bg-white p-1 opacity-90">
                             <div>
                                 <h4 class="text-xl font-bold text-white">Founder & Chief Thought Officer</h4>
                                 <p class="text-md font-medium text-gray-400">Cretorial Media Services Pvt. Ltd.</p>
@@ -880,7 +928,7 @@
                     <div class="glass-card p-6">
                         <p class="text-sm text-cyan-400 mb-1">1999 - 2008</p>
                         <div class="flex items-center space-x-3 mb-3">
-                            <img src="https://www.cadence.com/content/dam/cadence-www/global/en_US/images/site-images/icons/navigation-icons/cadence-logo-black.png" alt="Cadence Logo" class="w-8 h-8 bg-white rounded p-1 opacity-90">
+                            <img src="https://www.cadence.com/content/dam/cadence-www/global/en_US/images/site-images/icons/navigation-icons/cadence-logo-black.png" alt="Cadence Logo" class="w-16 h-8 bg-white rounded p-1 opacity-90 object-contain">
                             <div>
                                 <h4 class="text-xl font-bold text-white">Technical Publications Manager</h4>
                                 <p class="text-md font-medium text-gray-400">Cadence Design Systems</p>
@@ -917,10 +965,10 @@
 
         <!-- Software Content Demos Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🧭 Software Content Demos — The Operating System for Learning Content</h3>
+            <h3 class="text-3xl font-bold text-white mb-8">🧭 Software Content Demos: The Operating System for Learning Content</h3>
             <div class="glass-card p-6 mb-6">
                 <p class="text-lg leading-relaxed text-gray-300 mb-4">
-                    A suite of <strong class="text-cyan-400">100+ interactive HTML workbenches</strong> for learning, reasoning, and creativity — part of the <strong class="text-cyan-400">LLOS.AI × BeyondDictionary</strong> research initiative. Each demo blends empathy, pedagogy, and interactivity to reimagine software content as a living system.
+                    A suite of <strong class="text-cyan-400">100+ interactive HTML workbenches</strong> for learning, reasoning, and creativity, part of the <strong class="text-cyan-400">LLOS.AI × BeyondDictionary</strong> research initiative. Each demo blends empathy, pedagogy, and interactivity to reimagine software content as a living system.
                 </p>
                 
                 <div class="expandable-content">
@@ -982,7 +1030,7 @@
                     <div class="full-content hidden">
                         <!-- GitHub Learning Series -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🌍 GitHub Learning Series — Teaching 100 Million Future Makers</h4>
+                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🌍 GitHub Learning Series: Teaching 100 Million Future Makers</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1007,7 +1055,7 @@
 
                         <!-- Claude Ecosystem -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🤖 Claude Ecosystem — AI Reasoning & Applied Mastery</h4>
+                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🤖 Claude Ecosystem: AI Reasoning & Applied Mastery</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1040,7 +1088,7 @@
 
                         <!-- AI Art Pedagogy -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🎨 AI Art Pedagogy — Visual Storytelling & Creative Play</h4>
+                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🎨 AI Art Pedagogy: Visual Storytelling & Creative Play</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1092,7 +1140,7 @@
                             </div>
                         </div>
 
-                        <p class="text-sm text-gray-400 italic">Together, these 17+ demos form the Software Content Operating System — unifying documentation, design, and pedagogy into one reflective, generative ecosystem.</p>
+                        <p class="text-sm text-gray-400 italic">Together, these 17+ demos form the Software Content Operating System, unifying documentation, design, and pedagogy into one reflective, generative ecosystem.</p>
                         
                         <button class="see-less-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
                             Show Less <svg class="ml-2 w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -1104,7 +1152,7 @@
 
         <!-- Showcase Projects Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">📂 Showcase Projects from LLOS — Evidence of the Vision in Action</h3>
+            <h3 class="text-3xl font-bold text-white mb-8">📂 Showcase Projects from LLOS: Evidence of the Vision in Action</h3>
             <div class="glass-card p-6">
                 <div class="expandable-content">
                     <div class="preview-text">
@@ -1211,14 +1259,14 @@
         <section class="mb-16 md:mb-24 reveal">
             <h3 class="text-3xl font-bold text-white mb-8">🌐 Universal Personalized Learning Linkmap</h3>
             <div class="glass-card p-6">
-                <p class="text-gray-300 mb-6">A curated journey through the lifelong learning continuum — from sensory play to philosophical synthesis.</p>
+                <p class="text-gray-300 mb-6">A curated journey through the lifelong learning continuum, from sensory play to philosophical synthesis.</p>
                 
                 <!-- Ages 3-12: Play -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧩 Ages 3–12 — Play: Joyful Discovery & Association</h4>
+                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧩 Ages 3-12: Play (Joyful Discovery & Association)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/experience-playground/counting_more_less_basic_math_for_age_3_to_5.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            📊 Counting More/Less (Ages 3–5)
+                            📊 Counting More/Less (Ages 3-5)
                         </a>
                         <a href="https://pawan-nayar.github.io/experience-playground/common_math_operations_for_6_to_8_year_old_addition_subtraction_division_multiplication_and_knowledge_calculator.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🧮 Math Explorer (Ages 6–8)
@@ -1235,7 +1283,7 @@
 
                 <!-- Ages 12-24: Simulation -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧠 Ages 12–24 — Simulation: Exploration & Curiosity</h4>
+                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧠 Ages 12-24: Simulation (Exploration & Curiosity)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/markdown_for_non_coders.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             📝 Markdown for Non-Coders
@@ -1253,9 +1301,9 @@
                     <p class="text-sm text-gray-400"><strong>Quadrant Strength:</strong> Logic + imagination + language identity → exploration through simulation.</p>
                 </div>
 
-                <!-- Ages 24-50: Reflection -->
+                <!-- Ages 25-50: Reflection -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🌍 Ages 24–50 — Reflection: Mastery & Systems Learning</h4>
+                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🌍 Ages 25-50: Reflection (Mastery & Systems Learning)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/claude-console-interactive.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🤖 Claude Console Interactive
@@ -1270,9 +1318,9 @@
                     <p class="text-sm text-gray-400"><strong>Quadrant Strength:</strong> Enterprise systems + applied reflection + strategic adaptability.</p>
                 </div>
 
-                <!-- Ages 50-93: Philosophy -->
+                <!-- Ages 50-103: Philosophy -->
                 <div class="mb-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🔮 Ages 50–93 — Philosophy: Wisdom & Synthesis</h4>
+                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🔮 Ages 51-103: Philosophy (Wisdom & Synthesis)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/deepthink_repl_workflow.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🧘 DeepThink REPL Workflow
@@ -1281,7 +1329,7 @@
                             🌌 Word Relationship Galaxy
                         </a>
                         <a href="https://pawan-nayar.github.io/expression-and-creativity/proverb_article_money_talks.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            💰 Proverb Article — Money Talks
+                            💰 Proverb Article: Money Talks
                         </a>
                         <a href="https://pawan-nayar.github.io/experience-playground/spiritual_management_alignment_principle_from_ramayana.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🕉️ Spiritual Management Principles
@@ -1293,7 +1341,7 @@
                 <!-- Summary -->
                 <div class="border-t border-gray-700 pt-4">
                     <p class="text-sm text-gray-300 italic">
-                        <strong class="text-cyan-400">The 4×4 Continuum:</strong> Each age range builds upon the previous, creating a seamless progression from tactile discovery to philosophical synthesis — proving that learning is not just acquisition, but transformation.
+                        <strong class="text-cyan-400">The 4×4 Continuum:</strong> Each age range builds upon the previous, creating a seamless progression from tactile discovery to philosophical synthesis, proving that learning is not just acquisition, but transformation.
                     </p>
                 </div>
             </div>
@@ -1302,6 +1350,7 @@
         <!-- Publications Section -->
         <section class="mb-16 md:mb-24 reveal">
             <h3 class="text-3xl font-bold text-white mb-8">📚 Publications</h3>
+            <p class="text-gray-300 mb-6 text-lg">A journey through technical communication, AI storytelling, and thought leadership, spanning from early tech journalism (1998) to cutting-edge AI creativity (2025).</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-card p-6">
                     <h4 class="text-xl font-bold text-white">Ultimate Midjourney for Creative Professionals</h4>
@@ -1316,60 +1365,83 @@
                     <a href="https://www.amazon.in/Secrets-Buried-Self-Echoes-Across-ebook/dp/B0CNRCYHYF" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Live →</a>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">IEEE / STC Publications</h4>
-                    <p class="text-cyan-400 mb-2">On instructional design and software documentation</p>
-                    <p class="text-gray-300 mb-3">Foundational research on applying instructional design principles to technical documentation.</p>
+                    <h4 class="text-xl font-bold text-white">🟠 Content Creation & Curation Challenges</h4>
+                    <p class="text-cyan-400 mb-2">STC India Conference (2013)</p>
+                    <p class="text-gray-300 mb-3">In 2013, as mobile devices eclipsed desktops and cloud ecosystems redefined workplaces, this article captured the urgency of adapting content strategies to a hyperconnected world. Their prophetic line: <em>"Content is King, Curation is Kingdom"</em> became foundational for digital communicators.</p>
                     <div class="flex gap-4">
-                        <a href="https://procomm.ieee.org/wp-content/uploads/2013/05/may_jun01.pdf" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Part 1 →</a>
-                        <a href="https://procomm.ieee.org/wp-content/uploads/2013/05/jul_aug01.pdf" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Part 2 →</a>
+                        <a href="STC_India_Conference_2013_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
+                        <a href="STC_India_Conference_2013_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
                     </div>
                 </div>
                 <div class="glass-card p-6">
                     <h4 class="text-xl font-bold text-white">Patent & Prior Art Research</h4>
-                    <p class="text-cyan-400 mb-2">IPCOM-000220959 (Prior Art Database)</p>
-                    <p class="text-gray-300 mb-3">Method to determine a relevance-driven basket of words related by perceptive characteristics — foundational work in semantic word relationships and AI-driven content discovery.</p>
+                    <p class="text-cyan-400 mb-2">IPCOM-000220959 (Prior Art Database, 2010)</p>
+                    <p class="text-gray-300 mb-3">Method to determine a relevance-driven basket of words related by perceptive characteristics; foundational work in semantic word relationships and AI-driven content discovery.</p>
                     <a href="https://priorart.ip.com/IPCOM/000220959" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">IPCOM Database →</a>
+                </div>
+                <div class="glass-card p-6">
+                    <h4 class="text-xl font-bold text-white">🟢 IEEE PCS Publications</h4>
+                    <p class="text-cyan-400 mb-2">Professional Communication Society (2001)</p>
+                    <p class="text-gray-300 mb-3">Foundational research on applying instructional design principles to technical documentation; pioneering work that bridged educational theory with software documentation practices.</p>
+                    <div class="flex gap-4">
+                        <a href="https://procomm.ieee.org/wp-content/uploads/2013/05/may_jun01.pdf#page=21" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">🟢 May–June (Page 21) →</a>
+                        <a href="https://procomm.ieee.org/wp-content/uploads/2013/05/jul_aug01.pdf#page=17&zoom=100" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">🟣 July–August (Page 17) →</a>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">💡 If PDF doesn't jump to the article, manually navigate to page 21 (May-June) or page 17 (July-August)</p>
+                </div>
+                <div class="glass-card p-6">
+                    <h4 class="text-xl font-bold text-white">🟢 Exploring Windows 98</h4>
+                    <p class="text-cyan-400 mb-2">PC User, Computer Today (June 1998)</p>
+                    <p class="text-gray-300 mb-3">In 1998, the Internet was young, and Windows 98 promised to bring the Web to every desktop. This review chronicled Microsoft's ambition to blend Windows 95's stability with Internet Explorer's connectivity, bridging the offline-to-online leap for a generation of PC enthusiasts.</p>
+                    <div class="flex gap-4">
+                        <a href="Windows98_ComputerToday_1998_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
+                        <a href="Windows98_ComputerToday_1998_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
+                    </div>
                 </div>
                 <div class="glass-card p-6 md:col-span-2">
                     <h4 class="text-xl font-bold text-white">Academic Research Contributions</h4>
                     <p class="text-cyan-400 mb-2">IPCC 2005 Conference</p>
-                    <p class="text-gray-300 mb-3"><strong>"What Part Writer? What Part Programmer? A Survey of Practices and Knowledge Used in Programmer Writing"</strong> — Contributor to pioneering study on the intersection of technical writing and programming practices, exploring how developers approach documentation and communication.</p>
+                    <p class="text-gray-300 mb-3"><strong>"What Part Writer? What Part Programmer? A Survey of Practices and Knowledge Used in Programmer Writing"</strong> - Contributor to pioneering study on the intersection of technical writing and programming practices, exploring how developers approach documentation and communication.</p>
                     <p class="text-sm text-gray-400 italic">This research laid early groundwork for understanding the hybrid nature of technical communication in software development.</p>
                 </div>
             </div>
             
             <!-- Featured LinkedIn Articles -->
             <div class="glass-card p-6 mt-6">
-                <h4 class="text-xl font-bold text-white mb-6">📝 Featured LinkedIn Articles — Thought Leadership</h4>
+                <h4 class="text-xl font-bold text-white mb-6">📝 Featured LinkedIn Articles: Thought Leadership</h4>
                 <div class="space-y-6">
                     <div class="border-l-4 border-cyan-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">1️⃣ What Makes an Expression Creative?</h5>
-                        <p class="text-gray-300 text-sm mb-2">Dissects the anatomy of creativity—emotion, timing, truth, and resonance. Written pre-AI, it framed creativity as measurable yet mystical, blending human intuition with disciplined design thinking.</p>
-                        <a href="#" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
+                        <p class="text-cyan-400 text-xs mb-1">June 2022 • Pre-ChatGPT Era</p>
+                        <p class="text-gray-300 text-sm mb-2">Dissects the anatomy of creativity: emotion, timing, truth, and resonance. Written months before ChatGPT launched, it prophetically framed creativity as measurable yet mystical, establishing frameworks that became essential for human-AI collaboration.</p>
+                        <a href="https://www.linkedin.com/pulse/what-makes-expression-creative-pawan-nayar/?trackingId=d6rHylMQKeRzwhK%2BgEKsiw%3D%3D" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
                     </div>
                     
                     <div class="border-l-4 border-pink-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">2️⃣ Don't Call Prompts, Prompt Engineering Please!</h5>
-                        <p class="text-gray-300 text-sm mb-2">Redefines prompt writing as mindful craftsmanship, not syntax. Shows how empathy, clarity, and intent shape AI's responses—years before "prompt engineering" became mainstream.</p>
-                        <a href="#" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
+                        <p class="text-pink-400 text-xs mb-1">October 2023 • Early AI Adoption Wave</p>
+                        <p class="text-gray-300 text-sm mb-2">Redefines prompt writing as mindful craftsmanship, not technical syntax. Written during the first AI hype cycle, it advocated for empathy and intent over mechanical optimization, predicting the shift toward conversational AI design.</p>
+                        <a href="https://www.linkedin.com/pulse/dont-call-prompts-prompt-engineering-please-pawan-nayar-pj4df/?trackingId=%2BgUogZvzXP%2FKV6Bp03wJpw%3D%3D" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
                     </div>
                     
                     <div class="border-l-4 border-yellow-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">3️⃣ From Words to Wisdom: How Tokens Help AI Understand Everything</h5>
-                        <p class="text-gray-300 text-sm mb-2">Explains the sacred science of tokenization—how machines translate language into meaning. Bridges philosophy and computation, predicting today's focus on semantic representation and AI interpretability.</p>
-                        <a href="#" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
+                        <p class="text-yellow-400 text-xs mb-1">November 2023 • Deep AI Architecture Era</p>
+                        <p class="text-gray-300 text-sm mb-2">Explains the sacred science of tokenization: how machines translate language into meaning. Written when most users saw AI as magic, it demystified the computational linguistics that power modern LLMs, bridging philosophy with technical reality.</p>
+                        <a href="https://www.linkedin.com/pulse/from-words-wisdom-how-tokens-help-ai-understand-everything-nayar-kvx8f/?trackingId=T4e%2BodpPBu8rlblD4fr2xQ%3D%3D" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
                     </div>
                     
                     <div class="border-l-4 border-green-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">4️⃣ A Vedic Odyssey for Inner Serenity: Discovery with AI</h5>
-                        <p class="text-gray-300 text-sm mb-2">Fuses ancient wisdom with modern AI, using technology as a lens for spiritual rediscovery. Ahead of its time for treating AI not as a tool but as a mirror for human consciousness.</p>
-                        <a href="#" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
+                        <p class="text-green-400 text-xs mb-1">September 2023 • AI Consciousness Emergence</p>
+                        <p class="text-gray-300 text-sm mb-2">Fuses ancient Vedic wisdom with modern AI, using technology as a lens for spiritual rediscovery. Pioneered the concept of AI as a mirror for human consciousness, years before mainstream discussions of AI sentience and spiritual applications.</p>
+                        <a href="https://www.linkedin.com/pulse/vedic-odyssey-inner-serenity-discovery-ai-pawan-nayar/?trackingId=LhVcZxKysaqTFK5fgVTo8Q%3D%3D" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
                     </div>
                 </div>
                 
                 <div class="mt-6 pt-4 border-t border-gray-700">
                     <p class="text-sm text-gray-400 italic">
-                        <strong class="text-cyan-400">Thought Leadership Timeline:</strong> These articles showcase prescient insights into AI, creativity, and consciousness—written before these topics became mainstream, demonstrating forward-thinking vision in content engineering and human-AI collaboration.
+                        <strong class="text-cyan-400">Thought Leadership Timeline:</strong> These articles showcase prescient insights into AI, creativity, and consciousness, written before these topics became mainstream, demonstrating forward-thinking vision in content engineering and human-AI collaboration.
                     </p>
                 </div>
             </div>
@@ -1380,7 +1452,7 @@
             <h3 class="text-3xl font-bold text-white mb-8">💎 Proprietary Research & Future Work</h3>
             <div class="glass-card p-6">
                 <p class="text-lg leading-relaxed text-gray-300 mb-4">
-                    <strong class="text-cyan-400">Go2Words™</strong>, <strong class="text-cyan-400">FindYourExpression™</strong>, <strong class="text-cyan-400">Wisdom Graph</strong>, <strong class="text-cyan-400">LLOS.AI (2026)</strong> — interconnected systems forming the Lifelong Learning Operating System.
+                    <strong class="text-cyan-400">Go2Words™</strong>, <strong class="text-cyan-400">FindYourExpression™</strong>, <strong class="text-cyan-400">Wisdom Graph</strong>, <strong class="text-cyan-400">LLOS.AI (2026)</strong>: interconnected systems forming the Lifelong Learning Operating System.
                 </p>
                 <div class="bg-gray-800/30 p-4 rounded-lg">
                     <h4 class="text-cyan-400 font-bold mb-2">🌐 Ecosystem Map</h4>
@@ -1404,15 +1476,16 @@
             <h3 class="text-3xl font-bold text-white mb-8">🌍 30-Year Evolution Map (1995–2025)</h3>
             <div class="glass-card p-6">
                 <p class="text-lg leading-relaxed text-gray-300 mb-8 text-center">
-                    <em>"From Form to Infinity"</em> — An interactive journey through six transformative phases of learning, innovation, and impact.
+                    <em>"From Form to Infinity"</em> is an interactive journey through six transformative phases of learning, innovation, and impact.
                 </p>
                 
                 <!-- Simple Timeline Evolution with D3 -->
                 <div class="evolution-timeline-container mb-8">
-                    <div class="timeline-toast" id="timelineToast">👆 Click Play Evolution to start your journey!</div>
-                    <div id="timelineViz"></div>
+                    <div id="timelineViz">
+                        <div class="timeline-cta" id="timelineCTA">▶ Click Play Evolution to start your journey!</div>
+                    </div>
                     <div class="evolution-controls">
-                        <button id="playEvolution" class="evolution-btn">▶ Play Evolution</button>
+                        <button id="playEvolution" class="evolution-btn pulse">▶ Play Evolution</button>
                         <button id="pauseEvolution" class="evolution-btn">⏸ Pause</button>
                         <button id="resetEvolution" class="evolution-btn">🔄 Reset</button>
                     </div>
@@ -1427,7 +1500,7 @@
                     <!-- Phase Detail Cards (Hidden by default) -->
                     <div id="phase-forge" class="phase-detail hidden">
                         <div class="glass-card p-6 border-l-4 border-amber-600">
-                            <h4 class="text-2xl font-bold text-amber-400 mb-3">🔥 The Forge (1995–1999)</h4>
+                            <h4 class="text-2xl font-bold text-amber-400 mb-3">🔥 The Forge (1995-1999)</h4>
                             <p class="text-lg text-amber-200 mb-4 font-semibold">Crucible of Learning Design</p>
                             <p class="text-gray-300 mb-4">
                                 <strong>Keywords:</strong> data mining, instructional design, sleepless dedication, CBT frameworks, Bloom taxonomy, Microsoft projects, early mastery
@@ -1436,15 +1509,15 @@
                                 A four-month crucible redefined learning as commitment, turning exhaustion into conviction and sparking a lifelong obsession with meaning through design.
                             </p>
                             <div class="text-sm text-amber-300">
-                                <strong>Motion:</strong> Slow upward bloom — roots breaking through soil<br>
-                                <strong>Color:</strong> Earth brown — endurance and grounding
+                                <strong>Motion:</strong> Slow upward bloom (roots breaking through soil)<br>
+                                <strong>Color:</strong> Earth brown (endurance and grounding)
                             </div>
                         </div>
                     </div>
                     
                     <div id="phase-voice" class="phase-detail hidden">
                         <div class="glass-card p-6 border-l-4 border-green-600">
-                            <h4 class="text-2xl font-bold text-green-400 mb-3">📝 The Voice (2000–2004)</h4>
+                            <h4 class="text-2xl font-bold text-green-400 mb-3">📝 The Voice (2000-2004)</h4>
                             <p class="text-lg text-green-200 mb-4 font-semibold">Voice of the Emerging Architect</p>
                             <p class="text-gray-300 mb-4">
                                 <strong>Keywords:</strong> publications, IEEE STC, editorial leadership, cross-BU culture, innovation systems, early multimedia, professional authorship
@@ -1453,15 +1526,15 @@
                                 From sleepless projects to global publication, you began shaping the voice of an emerging discipline that blended design, writing, and innovation.
                             </p>
                             <div class="text-sm text-green-300">
-                                <strong>Motion:</strong> Branching weave — multiple voices forming coherence<br>
-                                <strong>Color:</strong> Emerald green — fresh growth and recognition
+                                <strong>Motion:</strong> Branching weave (multiple voices forming coherence)<br>
+                                <strong>Color:</strong> Emerald green (fresh growth and recognition)
                             </div>
                         </div>
                     </div>
                     
                     <div id="phase-bridge" class="phase-detail hidden">
                         <div class="glass-card p-6 border-l-4 border-yellow-600">
-                            <h4 class="text-2xl font-bold text-yellow-400 mb-3">🌉 The Bridge (2005–2009)</h4>
+                            <h4 class="text-2xl font-bold text-yellow-400 mb-3">🌉 The Bridge (2005-2009)</h4>
                             <p class="text-lg text-yellow-200 mb-4 font-semibold">Breaking Hierarchies through Humanized Knowledge</p>
                             <p class="text-gray-300 mb-4">
                                 <strong>Keywords:</strong> Cadence tutorials, cross-module learning, multimedia demos, breaking hierarchies, user empathy, measurable impact, thought leadership
@@ -1470,8 +1543,8 @@
                                 By humanizing technical documentation, you transformed EDA learning, broke structural ceilings, and became a cultural architect of knowledge empathy.
                             </p>
                             <div class="text-sm text-yellow-300">
-                                <strong>Motion:</strong> Rippling wave — influence spreading across boundaries<br>
-                                <strong>Color:</strong> Sunlit gold — confidence and illumination
+                                <strong>Motion:</strong> Rippling wave (influence spreading across boundaries)<br>
+                                <strong>Color:</strong> Sunlit gold (confidence and illumination)
                             </div>
                         </div>
                     </div>
@@ -1487,8 +1560,8 @@
                                 You merged content and technology into living systems, turning documentation into guidance, and empathy into a global operational framework.
                             </p>
                             <div class="text-sm text-blue-300">
-                                <strong>Motion:</strong> Orbital rotation — uniting global centers of knowledge<br>
-                                <strong>Color:</strong> Deep blue — intelligent calm and clarity
+                                <strong>Motion:</strong> Orbital rotation (uniting global centers of knowledge)<br>
+                                <strong>Color:</strong> Deep blue (intelligent calm and clarity)
                             </div>
                         </div>
                     </div>
@@ -1504,25 +1577,25 @@
                                 Your work evolved from systems to meaning itself, pioneering word–emotion engines that would seed the early DNA of personalized learning.
                             </p>
                             <div class="text-sm text-pink-300">
-                                <strong>Motion:</strong> Pulsing network — neural-style convergence<br>
-                                <strong>Color:</strong> Magenta glow — creative cognition
+                                <strong>Motion:</strong> Pulsing network (neural-style convergence)<br>
+                                <strong>Color:</strong> Magenta glow (creative cognition)
                             </div>
                         </div>
                     </div>
                     
                     <div id="phase-light" class="phase-detail hidden">
                         <div class="glass-card p-6 border-l-4 border-cyan-600">
-                            <h4 class="text-2xl font-bold text-cyan-400 mb-3">✨ The Light (2020–2025)</h4>
+                            <h4 class="text-2xl font-bold text-cyan-400 mb-3">✨ The Light (2020-2025)</h4>
                             <p class="text-lg text-cyan-200 mb-4 font-semibold">Universal Personalized Learning</p>
                             <p class="text-gray-300 mb-4">
                                 <strong>Keywords:</strong> LLOS.AI, BeyondDictionary, CMET framework, microservices for learning, universal personalization, lifelong learning OS, AI creativity
                             </p>
                             <p class="text-gray-300 mb-4">
-                                From product to philosophy, you transcended documentation to engineer learning itself—building the world's first lifelong learning operating system.
+                                From product to philosophy, you transcended documentation to engineer learning itself, building the world's first lifelong learning operating system.
                             </p>
                             <div class="text-sm text-cyan-300">
-                                <strong>Motion:</strong> Expanding galaxy — multidimensional unity and flow<br>
-                                <strong>Color:</strong> Spectral prism — integrative mastery
+                                <strong>Motion:</strong> Expanding galaxy (multidimensional unity and flow)<br>
+                                <strong>Color:</strong> Spectral prism (integrative mastery)
                             </div>
                         </div>
                     </div>
@@ -1532,27 +1605,27 @@
                 <div class="mt-8 glass-card p-6 border border-cyan-400/30">
                     <div class="expandable-content">
                         <div class="preview-text">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4 text-center">🧭 META CONTINUUM — "From Form to Infinity"</h4>
+                            <h4 class="text-xl font-bold text-cyan-400 mb-4 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm mb-4">
                                 <div class="text-center">
-                                    <p class="text-amber-400 font-semibold">1995–1999 — The Fire Begins</p>
+                                    <p class="text-amber-400 font-semibold">1995-1999: The Fire Begins</p>
                                     <p class="text-gray-300 italic">A near-failed project taught me that learning design is endurance in disguise.</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-green-400 font-semibold">2000–2004 — Finding a Voice</p>
+                                    <p class="text-green-400 font-semibold">2000-2004: Finding a Voice</p>
                                     <p class="text-gray-300 italic">Publications became classrooms; each article expanded my sense of scale and influence.</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-yellow-400 font-semibold">2005–2009 — Breaking the Walls</p>
-                                    <p class="text-gray-300 italic">I made content breathe — turning documents into dialogue and empathy into a process.</p>
+                                    <p class="text-yellow-400 font-semibold">2005-2009: Breaking the Walls</p>
+                                    <p class="text-gray-300 italic">I made content breathe, turning documents into dialogue and empathy into a process.</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-blue-400 font-semibold">2010–2019 — Systems Learn to Feel</p>
-                                    <p class="text-gray-300 italic">I learned to scale empathy — merging machine learning with storytelling to create living ecosystems.</p>
+                                    <p class="text-blue-400 font-semibold">2010-2019: Systems Learn to Feel</p>
+                                    <p class="text-gray-300 italic">I learned to scale empathy, merging machine learning with storytelling to create living ecosystems.</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-pink-400 font-semibold">2020–2025 — Meaning Becomes System</p>
-                                    <p class="text-gray-300 italic">Through BeyondDictionary, I'm returning to the seed — building systems that teach, feel, and evolve.</p>
+                                    <p class="text-pink-400 font-semibold">2020-2025: Meaning Becomes System</p>
+                                    <p class="text-gray-300 italic">Through BeyondDictionary, I'm returning to the seed, building systems that teach, feel, and evolve.</p>
                                 </div>
                             </div>
                             <button class="see-more-btn text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center mx-auto">
@@ -1560,16 +1633,16 @@
                             </button>
                         </div>
                         <div class="full-content hidden">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM — "From Form to Infinity"</h4>
+                            <h4 class="text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
                             
                             <!-- 1995-1999: The Fire Begins -->
                             <div class="mb-8 glass-card p-6 border-l-4 border-amber-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
-                                        <h5 class="text-lg font-bold text-amber-400 mb-2">1995–1999 — The Fire Begins</h5>
+                                        <h5 class="text-lg font-bold text-amber-400 mb-2">1995-1999: The Fire Begins</h5>
                                         <p class="text-amber-200 font-medium mb-3">A near-failed project taught me that learning design is endurance in disguise.</p>
                                         <div class="text-sm text-gray-300">
-                                            <strong class="text-amber-300">IView:</strong> He was the one who turned an impossible project into a benchmark — the person others reported to when they wanted to understand "how instruction design really works."
+                                            <strong class="text-amber-300">IView:</strong> He was the one who turned an impossible project into a benchmark, the person others reported to when they wanted to understand "how instruction design really works."
                                         </div>
                                     </div>
                                     <div>
@@ -1596,15 +1669,15 @@
                             <div class="mb-8 glass-card p-6 border-l-4 border-green-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
-                                        <h5 class="text-lg font-bold text-green-400 mb-2">2000–2004 — Finding a Voice</h5>
+                                        <h5 class="text-lg font-bold text-green-400 mb-2">2000-2004: Finding a Voice</h5>
                                         <p class="text-green-200 font-medium mb-3">Publications became classrooms; each article expanded my sense of scale and influence.</p>
                                         <div class="text-sm text-gray-300">
-                                            <strong class="text-green-300">IView:</strong> Colleagues saw him as a thought leader in the making — the editor who could turn raw insight into elegance and who raised India's profile in global technical communication.
+                                            <strong class="text-green-300">IView:</strong> Colleagues saw him as a thought leader in the making, the editor who could turn raw insight into elegance and who raised India's profile in global technical communication.
                                         </div>
                                     </div>
                                     <div>
                                         <div class="text-sm text-gray-300 mb-3">
-                                            <strong class="text-green-300">DocumentaryView:</strong> Across the early 2000s, his ideas began to travel. From IEEE and STC publications to editorial leadership, he gave form to a new vocabulary of learning — where writing, design, and cognition met in the same sentence.
+                                            <strong class="text-green-300">DocumentaryView:</strong> Across the early 2000s, his ideas began to travel. From IEEE and STC publications to editorial leadership, he gave form to a new vocabulary of learning where writing, design, and cognition met in the same sentence.
                                         </div>
                                     </div>
                                     <div>
@@ -1626,7 +1699,7 @@
                             <div class="mb-8 glass-card p-6 border-l-4 border-yellow-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
-                                        <h5 class="text-lg font-bold text-yellow-400 mb-2">2005–2009 — Breaking the Walls</h5>
+                                        <h5 class="text-lg font-bold text-yellow-400 mb-2">2005-2009: Breaking the Walls</h5>
                                         <p class="text-yellow-200 font-medium mb-3">I made content breathe — turning documents into dialogue and empathy into a process.</p>
                                         <div class="text-sm text-gray-300">
                                             <strong class="text-yellow-300">PeerManagerView:</strong> Within Cadence, he became the bridge between engineering and experience — the first technical writer invited to core conferences and the force behind a culture of interactive learning.
@@ -1656,7 +1729,7 @@
                             <div class="mb-8 glass-card p-6 border-l-4 border-blue-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
-                                        <h5 class="text-lg font-bold text-blue-400 mb-2">2010–2019 — Systems Learn to Feel</h5>
+                                        <h5 class="text-lg font-bold text-blue-400 mb-2">2010-2019: Systems Learn to Feel</h5>
                                         <p class="text-blue-200 font-medium mb-3">I learned to scale empathy — merging machine learning with storytelling to create living ecosystems.</p>
                                         <div class="text-sm text-gray-300">
                                             <strong class="text-blue-300">PeerManagerView:</strong> At Adobe, he was known as the architect who made content intelligent. The director who saved millions while making knowledge humane — a leader in the company's top percentile.
@@ -1686,7 +1759,7 @@
                             <div class="mb-6 glass-card p-6 border-l-4 border-cyan-600">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
-                                        <h5 class="text-lg font-bold text-cyan-400 mb-2">2020–2025 — Meaning Becomes System</h5>
+                                        <h5 class="text-lg font-bold text-cyan-400 mb-2">2020-2025: Meaning Becomes System</h5>
                                         <p class="text-cyan-200 font-medium mb-3">Through BeyondDictionary, I'm returning to the seed — building systems that teach, feel, and evolve.</p>
                                         <div class="text-sm text-gray-300">
                                             <strong class="text-cyan-300">PeerManagerView:</strong> In Cretorial, peers describe him as a founder-architect whose ideas move between art, AI, and learning — creating frameworks that others now treat as new disciplines.
@@ -1853,8 +1926,8 @@
                 <div class="space-y-6">
                     <!-- MIT Sloan -->
                     <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/MIT_logo.svg" alt="MIT Logo" class="w-full h-full">
+                        <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2">
+                            <div class="text-2xl font-bold text-red-600">MIT</div>
                         </div>
                         <div class="flex-grow">
                             <h4 class="text-xl font-bold text-white">MIT Sloan School of Management</h4>
@@ -1870,8 +1943,8 @@
                     
                     <!-- IGNOU -->
                     <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center p-1">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/IGNOU_Logo.png" alt="IGNOU Logo" class="w-full h-full">
+                        <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2">
+                            <div class="text-lg font-bold text-blue-600">🎓</div>
                         </div>
                         <div class="flex-grow">
                             <h4 class="text-xl font-bold text-white">Indira Gandhi National Open University</h4>
@@ -1912,7 +1985,7 @@
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">AI-Driven Learning Systems</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Knowledge Graphs</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Generative Storytelling</span>
-                    <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">NLP & Semantic Design</span>
+                    <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">NLP</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Prompt Engineering</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">EdTech Strategy</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Technical Writing</span>
@@ -1925,7 +1998,6 @@
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Global Team Leadership</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Research Communication</span>
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Vision Design</span>
-                    <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">Mentorship</span>
                 </div>
             </div>
         </section>
@@ -1935,7 +2007,7 @@
             <h3 class="text-3xl font-bold text-white mb-8">⚠️ Copyright & Usage Notice</h3>
             <div class="glass-card p-6">
                 <p class="text-gray-300 leading-relaxed">
-                    All demos, prototypes, articles, and interactive assets showcased here are <strong class="text-cyan-400">Copyright © Cretorial Media Services, 2020–2025</strong>.
+                    All demos, prototypes, articles, and interactive assets showcased here are <strong class="text-cyan-400">Copyright © Cretorial Media Services, 2020-2025</strong>.
                     They represent original research, design, and system development work by <strong class="text-cyan-400">Pawan Nayar</strong> and the Cretorial team.
                     These assets are shared solely as <strong class="text-cyan-400">discussion starters with leadership teams</strong>, partners, and collaborators — not for redistribution, replication, or public reuse without explicit written consent.
                 </p>
@@ -2925,7 +2997,16 @@
         // Initialize the toast system
         let toastSystem;
         document.addEventListener('DOMContentLoaded', () => {
-            toastSystem = new ToastNotificationSystem();
+            // Force clear any stuck toast backdrops
+            const stuckBackdrops = document.querySelectorAll('.toast-backdrop');
+            stuckBackdrops.forEach(backdrop => backdrop.remove());
+            
+            // Clear any stuck toast containers
+            const stuckToasts = document.querySelectorAll('.toast-container');
+            stuckToasts.forEach(toast => toast.remove());
+            
+            // DISABLE toast system to prevent floating boxes
+            // toastSystem = new ToastNotificationSystem();
             initializeEvolutionMap();
         });
 
@@ -3047,7 +3128,7 @@
                         .text(year);
                 }
                 
-                // Current year label (dynamic)
+                // Current year label (dynamic) - initially hidden
                 this.currentYearLabel = this.svg.append('text')
                     .attr('x', width - textMargin - 20) // Right side with margin
                     .attr('y', height * 0.15) // 15% from top
@@ -3056,6 +3137,7 @@
                     .attr('font-size', '18px')
                     .attr('font-weight', 'bold')
                     .attr('font-family', 'Inter, sans-serif')
+                    .style('opacity', 0) // Start hidden
                     .text('1995');
                 
                 // Skills container
@@ -3141,20 +3223,21 @@
             }
             
             setupToastNotification() {
+                // DISABLED to prevent floating boxes
                 // Show toast when timeline section comes into view
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting && !this.hasShownToast) {
-                            this.showToast();
-                            this.hasShownToast = true;
-                        }
-                    });
-                }, { threshold: 0.5 });
+                // const observer = new IntersectionObserver((entries) => {
+                //     entries.forEach(entry => {
+                //         if (entry.isIntersecting && !this.hasShownToast) {
+                //             this.showToast();
+                //             this.hasShownToast = true;
+                //         }
+                //     });
+                // }, { threshold: 0.5 });
                 
-                const timelineContainer = document.querySelector('.evolution-timeline-container');
-                if (timelineContainer) {
-                    observer.observe(timelineContainer);
-                }
+                // const timelineContainer = document.querySelector('.evolution-timeline-container');
+                // if (timelineContainer) {
+                //     observer.observe(timelineContainer);
+                // }
             }
             
             showToast() {
@@ -3188,6 +3271,17 @@
             play() {
                 if (!this.isPlaying && this.currentYear <= 2025) {
                     this.isPlaying = true;
+                    
+                    // Hide CTA and show year
+                    const cta = document.getElementById('timelineCTA');
+                    if (cta) {
+                        cta.style.opacity = '0';
+                        setTimeout(() => cta.style.display = 'none', 500);
+                    }
+                    
+                    // Show the year label
+                    this.currentYearLabel.transition().duration(500).style('opacity', 1);
+                    
                     // Remove pulse animation when play is clicked
                     const playButton = document.getElementById('playEvolution');
                     if (playButton) {
@@ -3427,7 +3521,7 @@
     </div>
 
     <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top" onclick="scrollToTop()" title="Back to Top">
+    <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m18 15-6-6-6 6"/>
         </svg>
