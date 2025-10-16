@@ -52,6 +52,175 @@
             overflow: hidden;
         }
 
+        /* Brain Animation Styles */
+        .brain-philosophy-section {
+            background: linear-gradient(180deg, rgba(10, 10, 26, 0.8) 0%, rgba(10, 10, 26, 1) 100%);
+            position: relative;
+        }
+
+        .brain-philosophy-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stage-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 1s ease;
+            pointer-events: none;
+            width: 200px;
+        }
+
+        .stage-container.right-side {
+            align-items: flex-end;
+        }
+
+        .stage-number {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        .stage-emoji {
+            font-size: 24px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
+            position: relative;
+        }
+
+        .stage-emoji::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
+            z-index: -1;
+            animation: haloGlow 3s ease-in-out infinite;
+        }
+
+        .stage-text {
+            font-size: 12px;
+            color: #E0E0E0;
+            text-align: center;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+        }
+
+        .stage-container.right-side .stage-text {
+            text-align: right;
+        }
+
+        .stage-node {
+            transition: all 0.8s ease;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
+        }
+
+        .neural-path {
+            transition: all 0.8s ease;
+            filter: drop-shadow(0 0 4px rgba(0, 255, 255, 0.8));
+        }
+
+        /* Animation keyframes */
+        @keyframes brainPulse {
+            0%, 100% { 
+                stroke: rgba(0, 255, 255, 0.3);
+                filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3));
+            }
+            50% { 
+                stroke: rgba(0, 255, 255, 0.6);
+                filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6));
+            }
+        }
+
+        @keyframes nodeGlow {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pathFlow {
+            0% { stroke-dasharray: 0, 100; }
+            100% { stroke-dasharray: 100, 0; }
+        }
+
+        @keyframes fadeInUp {
+            0% { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .brain-animate #brainOutline {
+            animation: brainPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes haloGlow {
+            0%, 100% { 
+                background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
+            }
+            50% { 
+                background: radial-gradient(circle, rgba(0, 255, 255, 0.6) 0%, transparent 70%);
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% { 
+                opacity: 0; 
+                transform: translateX(-100px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
+        @keyframes slideInRight {
+            0% { 
+                opacity: 0; 
+                transform: translateX(100px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
         /* Styling for the timeline in the experience section */
         .timeline-item {
             position: relative;
@@ -3768,6 +3937,108 @@
         </div>
     </div>
 
+    <!-- Cinematic Brain Animation Section -->
+    <section class="brain-philosophy-section py-8">
+        <div class="container mx-auto max-w-5xl px-6 text-center">
+            <!-- Brain Animation Container -->
+            <div class="brain-container relative mx-auto" style="width: 900px; height: 600px;">
+                <!-- Brain SVG with proper 7-position circle -->
+                <svg id="brainSvg" width="900" height="600" viewBox="0 0 900 600" class="opacity-0">
+                    <!-- Brain outline centered -->
+                    <path id="brainOutline" d="M350 300 C350 220, 400 160, 450 160 C500 160, 550 220, 550 300 C550 380, 500 440, 450 440 C400 440, 350 380, 350 300 Z" 
+                          fill="none" stroke="rgba(0, 255, 255, 0.3)" stroke-width="2"/>
+                    
+                    <!-- Byline text INSIDE the brain circle -->
+                    <text id="brainBylineText" x="450" y="285" text-anchor="middle" fill="rgba(0, 255, 255, 0.8)" font-size="16" font-weight="500" font-family="Inter, sans-serif" opacity="0">Lifelong Learning with AI</text>
+                    <text id="brainBylineStages" x="450" y="305" text-anchor="middle" fill="rgba(0, 255, 255, 0.6)" font-size="14" font-weight="400" font-family="Inter, sans-serif" opacity="0">7 Stages</text>
+                    
+                    <!-- 7 Life Stage Nodes - PROPER equidistant positioning -->
+                    <!-- Stage 1: 0° (3 o'clock) -->
+                    <circle id="stage1" cx="550" cy="300" r="12" fill="rgba(255, 182, 193, 0)" class="stage-node"/>
+                    <!-- Stage 2: 51.4° (4:30) -->
+                    <circle id="stage2" cx="530" cy="370" r="12" fill="rgba(255, 215, 0, 0)" class="stage-node"/>
+                    <!-- Stage 3: 102.8° (6 o'clock) -->
+                    <circle id="stage3" cx="450" cy="400" r="12" fill="rgba(255, 105, 180, 0)" class="stage-node"/>
+                    <!-- Stage 4: 154.2° (7:30) -->
+                    <circle id="stage4" cx="370" cy="370" r="12" fill="rgba(0, 191, 255, 0)" class="stage-node"/>
+                    <!-- Stage 5: 205.6° (9 o'clock) -->
+                    <circle id="stage5" cx="350" cy="300" r="12" fill="rgba(255, 215, 0, 0)" class="stage-node"/>
+                    <!-- Stage 6: 257° (10:30) -->
+                    <circle id="stage6" cx="370" cy="230" r="12" fill="rgba(147, 112, 219, 0)" class="stage-node"/>
+                    <!-- Stage 7: 308.4° (12 o'clock) -->
+                    <circle id="stage7" cx="450" cy="200" r="12" fill="rgba(186, 85, 211, 0)" class="stage-node"/>
+                    
+                    <!-- Neural Pathways connecting stages in clockwise sequence -->
+                    <path id="path1" d="M550 300 Q540 335 530 370" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                    <path id="path2" d="M530 370 Q490 385 450 400" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                    <path id="path3" d="M450 400 Q410 385 370 370" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                    <path id="path4" d="M370 370 Q360 335 350 300" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                    <path id="path5" d="M350 300 Q360 265 370 230" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                    <path id="path6" d="M370 230 Q410 215 450 200" fill="none" stroke="rgba(0, 255, 255, 0)" stroke-width="3" class="neural-path"/>
+                </svg>
+                
+                <!-- Stage Labels - PROPERLY spaced around the circle -->
+                <div class="stage-labels absolute inset-0">
+                    <!-- Stage 1: Far Right (0°) -->
+                    <div id="stage1-container" class="stage-container opacity-0" style="right: 50px; top: 270px;">
+                        <div class="stage-number">1</div>
+                        <div class="stage-emoji">👶🤖</div>
+                        <div class="stage-text">Infant: AI gentle guide</div>
+                    </div>
+                    
+                    <!-- Stage 2: Bottom Right (51.4°) -->
+                    <div id="stage2-container" class="stage-container opacity-0" style="right: 120px; top: 400px;">
+                        <div class="stage-number">2</div>
+                        <div class="stage-emoji">🧒💡</div>
+                        <div class="stage-text">Schoolboy: AI tutor</div>
+                    </div>
+                    
+                    <!-- Stage 3: Bottom (102.8°) -->
+                    <div id="stage3-container" class="stage-container opacity-0" style="left: 50%; transform: translateX(-50%); top: 450px;">
+                        <div class="stage-number">3</div>
+                        <div class="stage-emoji">💕🪄</div>
+                        <div class="stage-text">Teen: AI creative partner</div>
+                    </div>
+                    
+                    <!-- Stage 4: Bottom Left (154.2°) -->
+                    <div id="stage4-container" class="stage-container opacity-0" style="left: 120px; top: 400px;">
+                        <div class="stage-number">4</div>
+                        <div class="stage-emoji">🧑‍💻⚡</div>
+                        <div class="stage-text">Young Adult: AI skills</div>
+                    </div>
+                    
+                    <!-- Stage 5: Far Left (205.6°) -->
+                    <div id="stage5-container" class="stage-container opacity-0" style="left: 50px; top: 270px;">
+                        <div class="stage-number">5</div>
+                        <div class="stage-emoji">👔🧠</div>
+                        <div class="stage-text">Mature: AI leadership</div>
+                    </div>
+                    
+                    <!-- Stage 6: Top Left (257°) -->
+                    <div id="stage6-container" class="stage-container opacity-0" style="left: 120px; top: 150px;">
+                        <div class="stage-number">6</div>
+                        <div class="stage-emoji">🧓🤝</div>
+                        <div class="stage-text">Older: AI collaborator</div>
+                    </div>
+                    
+                    <!-- Stage 7: Top (308.4°) -->
+                    <div id="stage7-container" class="stage-container opacity-0" style="left: 50%; transform: translateX(-50%); top: 120px;">
+                        <div class="stage-number">7</div>
+                        <div class="stage-emoji">🦽📚</div>
+                        <div class="stage-text">Elder: AI memory keeper</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final Philosophical Quote -->
+            <div class="philosophy-quote mt-8 opacity-0" id="finalQuote">
+                <p class="text-2xl md:text-3xl font-light text-gray-300 leading-relaxed italic">
+                    "When learning feels personal, it becomes universal. And when universality becomes human again, we rediscover why we learn at all. Then each person says I can because we can. The we of I + AI."
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3876,7 +4147,148 @@
                     mainTitle.classList.add('clap-animation');
                 }
             }, 500);
+
+            // Initialize brain animation
+            initializeBrainAnimation();
         });
+
+        // --- Brain Animation System ---
+        function initializeBrainAnimation() {
+            const brainSection = document.querySelector('.brain-philosophy-section');
+            if (!brainSection) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startBrainAnimation();
+                        observer.unobserve(entry.target); // Only animate once
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            observer.observe(brainSection);
+        }
+
+        function startBrainAnimation() {
+            const brainSvg = document.getElementById('brainSvg');
+            const brainContainer = document.querySelector('.brain-container');
+            const bylineText = document.getElementById('brainBylineText');
+            const bylineStages = document.getElementById('brainBylineStages');
+            
+            // Step 1: Show brain outline and byline inside (800ms)
+            brainSvg.style.opacity = '1';
+            brainContainer.classList.add('brain-animate');
+            
+            setTimeout(() => {
+                bylineText.style.opacity = '1';
+                bylineStages.style.opacity = '1';
+            }, 400);
+            
+            // Step 2: Animate life stages with structured timing (21 seconds total)
+            setTimeout(() => {
+                animateLifeStages();
+            }, 1200);
+        }
+
+        function animateQuote(quote, callback) {
+            const text = quote.textContent;
+            const words = text.split(' ');
+            quote.textContent = '';
+            quote.style.opacity = '1';
+            
+            let wordIndex = 0;
+            const wordInterval = setInterval(() => {
+                if (wordIndex < words.length) {
+                    quote.textContent += (wordIndex > 0 ? ' ' : '') + words[wordIndex];
+                    wordIndex++;
+                } else {
+                    clearInterval(wordInterval);
+                    callback();
+                }
+            }, 150); // Each word appears every 150ms
+        }
+
+        function animateLifeStages() {
+            const stages = [
+                { container: 'stage1-container', node: 'stage1', path: null, color: 'rgba(255, 182, 193, 1)' },
+                { container: 'stage2-container', node: 'stage2', path: 'path1', color: 'rgba(255, 215, 0, 1)' },
+                { container: 'stage3-container', node: 'stage3', path: 'path2', color: 'rgba(255, 105, 180, 1)' },
+                { container: 'stage4-container', node: 'stage4', path: 'path3', color: 'rgba(0, 191, 255, 1)' },
+                { container: 'stage5-container', node: 'stage5', path: 'path4', color: 'rgba(255, 215, 0, 1)' },
+                { container: 'stage6-container', node: 'stage6', path: 'path5', color: 'rgba(147, 112, 219, 1)' },
+                { container: 'stage7-container', node: 'stage7', path: 'path6', color: 'rgba(186, 85, 211, 1)' }
+            ];
+
+            let currentStage = 0;
+
+            function animateNextStage() {
+                if (currentStage >= stages.length) {
+                    // All stages complete - show final quote
+                    setTimeout(() => {
+                        showFinalQuote();
+                    }, 2000);
+                    return;
+                }
+
+                const stage = stages[currentStage];
+                
+                // Step 1: Light up neural pathway (if exists)
+                if (stage.path) {
+                    const path = document.getElementById(stage.path);
+                    path.style.stroke = 'rgba(0, 255, 255, 0.8)';
+                    path.style.strokeDasharray = '5, 5';
+                    path.style.animation = 'pathFlow 0.8s ease-out forwards';
+                }
+                
+                // Step 2: Light up brain node (500ms after path)
+                setTimeout(() => {
+                    const node = document.getElementById(stage.node);
+                    node.style.fill = stage.color;
+                    node.style.animation = 'nodeGlow 0.8s ease-out forwards';
+                }, stage.path ? 500 : 0);
+                
+                // Step 3: Show stage container with number, emoji, and text (800ms after node)
+                setTimeout(() => {
+                    const container = document.getElementById(stage.container);
+                    container.style.opacity = '1';
+                    container.style.animation = 'fadeInUp 1s ease-out forwards';
+                }, (stage.path ? 500 : 0) + 800);
+                
+                // Step 4: Move to next stage after 3 seconds total
+                setTimeout(() => {
+                    currentStage++;
+                    animateNextStage();
+                }, 3000);
+            }
+
+            // Start the sequence
+            animateNextStage();
+        }
+
+        function showFinalQuote() {
+            const finalQuote = document.getElementById('finalQuote');
+            const brainOutline = document.getElementById('brainOutline');
+            
+            // Enhanced brain glow
+            brainOutline.style.stroke = 'rgba(0, 255, 255, 0.9)';
+            brainOutline.style.filter = 'drop-shadow(0 0 25px rgba(0, 255, 255, 0.8))';
+            
+            // Show final quote with word-by-word animation
+            const text = finalQuote.querySelector('p').textContent;
+            const words = text.split(' ');
+            finalQuote.querySelector('p').textContent = '';
+            finalQuote.style.opacity = '1';
+            
+            let wordIndex = 0;
+            const wordInterval = setInterval(() => {
+                if (wordIndex < words.length) {
+                    finalQuote.querySelector('p').textContent += (wordIndex > 0 ? ' ' : '') + words[wordIndex];
+                    wordIndex++;
+                } else {
+                    clearInterval(wordInterval);
+                }
+            }, 200); // Each word appears every 200ms
+        }
     </script>
 
 </body>
