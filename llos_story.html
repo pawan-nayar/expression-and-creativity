@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyond Dictionary & LLOS.AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    :root {
+      --accent: #fd7e14;
+      --accent-dark: #ff6a00;
+      --bg-main: #fffdfb;
+      --bg-card: #ffffff;
+      --text-dark: #212529;
+      --text-muted: #6c757d;
+      --border: #e9ecef;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-dark);
+      overflow: hidden;
+    }
+
+    /* Screen Management */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s;
+      overflow-y: auto;
+      padding: 16px;
+      padding-top: 60px;
+      padding-bottom: 90px;
+    }
+    
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(253, 126, 20, 0.3);
+    }
+
+    /* Navigation */
+    .nav-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      padding: 11px 24px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 2px 8px rgba(253, 126, 20, 0.2);
+    }
+
+    .nav-btn.primary:hover {
+      box-shadow: 0 4px 14px rgba(253, 126, 20, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn.secondary {
+      background: var(--bg-card);
+      color: var(--text-dark);
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn.secondary:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Tooltip System */
+    .token {
+      position: relative;
+      cursor: pointer;
+      padding: 0 3px;
+      border-bottom: 1px dashed var(--accent);
+      transition: all 0.2s;
+      display: inline;
+    }
+
+    .token:hover {
+      background: rgba(253, 126, 20, 0.08);
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      width: 280px;
+      max-width: 90vw;
+      margin-bottom: 10px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s;
+      z-index: 50;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: var(--accent);
+    }
+
+    .token:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Card System */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.25s;
+      height: 100%;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 24px rgba(253, 126, 20, 0.15);
+      transform: translateY(-2px);
+      border-color: rgba(253, 126, 20, 0.3);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .card-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Comparison Cards */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .compare-side {
+      padding: 14px;
+      border-radius: 8px;
+    }
+
+    .compare-side.left { 
+      border-left: 3px solid var(--accent); 
+      background: rgba(253, 126, 20, 0.05); 
+    }
+    
+    .compare-side.right { 
+      border-left: 3px solid #6c757d; 
+      background: rgba(108, 117, 125, 0.05); 
+    }
+
+    .compare-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+
+    /* Service Pills */
+    .service-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .service-pill:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(253, 126, 20, 0.2);
+      background: rgba(253, 126, 20, 0.03);
+    }
+
+    .service-pill .emoji {
+      font-size: 17px;
+      opacity: 0.65;
+      transition: all 0.3s;
+    }
+
+    .service-pill:hover .emoji {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Role Filter */
+    .role-selector {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .role-btn {
+      padding: 10px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .role-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(253, 126, 20, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .role-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(253, 126, 20, 0.25);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(253, 126, 20, 0.25);
+    }
+
+    /* Dimension Cards */
+    .dimension-card {
+      position: relative;
+      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.25s;
+    }
+
+    .dimension-card:hover {
+      box-shadow: 0 8px 24px rgba(253, 126, 20, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .dimension-card .emoji {
+      font-size: 36px;
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      opacity: 0.2;
+    }
+
+    /* LLOS Animation */
+    .llos-stage {
+      display: grid;
+      place-items: center;
+      min-height: 450px;
+      background: #000;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .llos-logo {
+      display: flex;
+      gap: 0.05em;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .llos-chunk {
+      font-size: clamp(70px, 14vw, 200px);
+      opacity: 0;
+      filter: blur(12px);
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 0%, #7dd3fc 45%, #a78bfa 85%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .llos-tag {
+      position: absolute;
+      bottom: 18%;
+      font-size: clamp(14px, 2.2vw, 20px);
+      color: #e9e9ee;
+      opacity: 0;
+      filter: blur(10px);
+    }
+
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.95); filter: blur(10px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes dotIn {
+      0% { opacity: 0; transform: scale(0); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes tagIn {
+      from { opacity: 0; filter: blur(10px); }
+      to { opacity: 1; filter: blur(0); }
+    }
+
+    .llos-chunk.ll { animation: fadeSlideIn 1s ease-out 0s forwards; }
+    .llos-chunk.os { animation: fadeSlideIn 1s ease-out 1.2s forwards; }
+    .llos-chunk.dot { animation: dotIn 0.6s ease 2.4s forwards; }
+    .llos-chunk.ai { animation: fadeSlideIn 1s ease-out 3.6s forwards; }
+    .llos-tag.animate { animation: tagIn 0.9s ease 4.8s forwards; }
+
+    /* Hover Card for Services */
+    .hover-card {
+      position: fixed;
+      z-index: 150;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+      max-width: 340px;
+      display: none;
+      pointer-events: none;
+    }
+
+    .hover-card.show {
+      display: block;
+    }
+
+    .hover-card-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .hover-card-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .hover-card-examples {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+
+    .hover-card-examples div {
+      margin-bottom: 6px;
+    }
+
+    /* Example Rotation Indicator */
+    .example-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .example-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+
+    .example-dot.active {
+      background: var(--accent);
+      width: 28px;
+      border-radius: 4px;
+    }
+
+    /* LLOS Context Sections */
+    .context-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .context-block h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .context-block p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    .context-block ul {
+      margin-left: 20px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    .context-block strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Two-row equation layout */
+    .equation-row {
+      font-size: 16px;
+      line-height: 2;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Screen 1: Introduction (CENTER-ALIGNED, TWO ROWS) -->
+  <div id="screen-1" class="screen active">
+    <div class="max-w-5xl mx-auto text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4" style="color: var(--accent);">🌍 What is Beyond Dictionary?</h1>
+      <p class="text-lg mb-8" style="color: var(--text-muted); max-width: 850px; margin-left: auto; margin-right: auto;">
+        A lifelong learning operating system — a precursor to LLOS.AI — uniting vocabulary, creativity, context and roles into growth that adapts as you do.
+      </p>
+
+      <div class="equation-row">
+        <span class="token"><span>📖 Dictionary</span><div class="tooltip">Beyond Dictionary redefines the traditional dictionary. Every word is linked with collocations, proverbs, emotional cues and quizzes.</div></span><span>, </span>
+        <span class="token"><span>🎓 Coursera</span><div class="tooltip">Structured pathways like MOOCs are built in. Learners can move from quick references to deep thematic mastery.</div></span><span>, </span>
+        <span class="token"><span>💼 LinkedIn Learning</span><div class="tooltip">Each word connects to roles, careers and job simulations. Designers, managers, coders discover how vocabulary translates into employable skills.</div></span><span>, </span>
+        <span class="token"><span>❤️ Spiritual Coaching</span><div class="tooltip">Language is taught with heart as well as mind. Each entry carries cultural resonance, reflective prompts and resilience cues.</div></span>
+        <span> and </span>
+        <span class="token"><span>🎮 Workplace Simulator</span><div class="tooltip">Interactive scenarios turn words into practice. From pitching ideas to resolving conflict, learners rehearse workplace realities.</div></span><span>.</span>
+      </div>
+
+      <div class="equation-row">
+        <span class="token"><span>🧑 Age</span><div class="tooltip">From toddlers learning 500 foundation words to professionals mastering management glossaries, Beyond Dictionary adapts across the entire lifespan.</div></span><span>, </span>
+        <span class="token"><span>🌍 Context</span><div class="tooltip">Every entry shifts by context — in literature, science, scripture or the office — giving learners layered meanings and clarity.</div></span><span>, </span>
+        <span class="token"><span>👩‍💼 Role</span><div class="tooltip">Students, designers, coders, managers and teachers see tailored word usage and examples that match their realities.</div></span><span>, </span>
+        <span class="token"><span>🎨 Interest</span><div class="tooltip">Words unlock hobbies and passions, whether in poetry, coding, cooking, design or leadership.</div></span>
+        <span> — an optimized system for </span>
+        <span class="token"><span>🌱 Lifelong Learning</span><div class="tooltip">Beyond Dictionary grows with you for decades, shaping vocabulary, reflection and communication.</div></span><span>, </span>
+        <span class="token"><span>🔤 Vocabulary</span><div class="tooltip">400,000+ word pages connect synonyms, antonyms, collocations, proverbs, cultural insights, quizzes and creative play.</div></span><span>, </span>
+        <span class="token"><span>✨ Creativity</span><div class="tooltip">Each word becomes a springboard into imagination, AI prompts, storytelling and design.</div></span>
+        <span> and </span>
+        <span class="token"><span>🏆 Success</span><div class="tooltip">Words are tied directly to human and workplace outcomes. By weaving emotional intelligence, role-play and applied communication, learners thrive.</div></span><span>.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Contrast-First Learning -->
+  <div id="screen-2" class="screen">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-5">
+        <span class="badge">Method</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-3" style="color: var(--accent);">Faster Mastery — Contrast-First Learning</h2>
+        <p class="text-base mb-4" style="color: var(--text-muted); max-width: 950px;">
+          We teach by difference: <strong>X vs Y</strong>, <strong>is vs is-not</strong>, and <strong>cross-domain links</strong> that sharpen judgment and speed retention.
+        </p>
+      </div>
+
+      <div class="grid-3 mb-4">
+        <!-- Confusion Pair -->
+        <div class="card">
+          <div class="badge mb-3">Confusion Pair</div>
+          <h3 class="card-title" id="cpTitle">Resistance vs. Resistivity</h3>
+          <div class="compare-container">
+            <div class="compare-side left">
+              <div class="compare-label">Resistance (R)</div>
+              <p class="text-xs mb-2" style="color: var(--text-muted);">Opposes current; depends on material + geometry.</p>
+              <div class="text-xs"><strong>Unit:</strong> Ohm (Ω)</div>
+            </div>
+            <div class="compare-side right">
+              <div class="compare-label">Resistivity (ρ)</div>
+              <p class="text-xs mb-2" style="color: var(--text-muted);">Material property; inherent to substance.</p>
+              <div class="text-xs"><strong>Unit:</strong> Ω·m</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Is vs Is-Not -->
+        <div class="card">
+          <div class="badge mb-3">Is vs Is-Not</div>
+          <h3 class="card-title" id="isTitle">Assertiveness</h3>
+          <div class="compare-container">
+            <div class="compare-side left">
+              <div class="compare-label">Is</div>
+              <p class="text-xs" style="color: var(--text-muted);">Clear, respectful, boundary-setting; invites dialogue.</p>
+            </div>
+            <div class="compare-side right">
+              <div class="compare-label">Is-Not</div>
+              <p class="text-xs" style="color: var(--text-muted);">Aggressive, dismissive, or vague; shuts others down.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cross-Domain -->
+        <div class="card">
+          <div class="badge mb-3">Cross-Domain</div>
+          <h3 class="card-title" id="cdTitle">"Light" Across Domains</h3>
+          <div class="text-xs leading-relaxed" style="color: var(--text-muted);">
+            <div class="mb-2"><strong>Physics:</strong> Lens formula & refraction</div>
+            <div class="mb-2"><strong>Photography:</strong> Composition, exposure, mood</div>
+            <div class="mb-2"><strong>Literature:</strong> Metaphor of hope/knowledge</div>
+            <div><strong>Workplace:</strong> "Shed light on the issue"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 class="font-bold mb-2" style="font-size: 15px;">Why Contrast Works</h4>
+        <div class="grid-3 text-xs" style="color: var(--text-muted); gap: 14px;">
+          <div>• <strong>Disambiguation built-in:</strong> every concept ships with contrast cards</div>
+          <div>• <strong>Retention by difference:</strong> boundaries stick better than plain definitions</div>
+          <div>• <strong>Judgment over rote:</strong> learners know which option to choose and when</div>
+        </div>
+      </div>
+
+      <div class="example-dots">
+        <div class="example-dot active"></div>
+        <div class="example-dot"></div>
+        <div class="example-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Five Dimensions -->
+  <div id="screen-3" class="screen">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold mb-3" style="color: var(--accent);">🔥 The 5 Dimensions of Beyond Dictionary</h2>
+      <p class="text-base mb-5" style="color: var(--text-muted); max-width: 950px;">
+        Together they form a Lifelong Learning Operating System (LLOS.AI) — a universe where words, learning, and human growth converge.
+      </p>
+
+      <div class="grid-2 gap-4">
+        <div class="dimension-card">
+          <div class="emoji">📖</div>
+          <h3 class="font-bold text-lg mb-2" style="color: var(--accent);">1. The Language Universe</h3>
+          <p class="text-sm mb-2" style="color: var(--text-muted); font-style: italic;">Language shapes daily choices and lifelong opportunities.</p>
+          <p class="text-sm" style="color: var(--text-dark);">125+ microservices expand every word into meaning, culture, and application. Understanding this ecosystem helps learners communicate with clarity, connect across cultures, and unlock creativity.</p>
+        </div>
+
+        <div class="dimension-card">
+          <div class="emoji">🎓</div>
+          <h3 class="font-bold text-lg mb-2" style="color: var(--accent);">2. Education as a Bridge</h3>
+          <p class="text-sm mb-2" style="color: var(--text-muted); font-style: italic;">Education connects classroom knowledge to real-world success.</p>
+          <p class="text-sm" style="color: var(--text-dark);">Structured journeys, syllabus-linked resources, and practice tools strengthen confidence. Learners move from memorization toward mastery, ensuring school learning directly contributes to career readiness.</p>
+        </div>
+
+        <div class="dimension-card">
+          <div class="emoji">💼</div>
+          <h3 class="font-bold text-lg mb-2" style="color: var(--accent);">3. Training & Workforce Futures</h3>
+          <p class="text-sm mb-2" style="color: var(--text-muted); font-style: italic;">Continuous learning secures livelihoods in a changing economy.</p>
+          <p class="text-sm" style="color: var(--text-dark);">Enterprises scale staff training, gig platforms prepare thousands of workers, and professionals upgrade skills to remain employable. Each interaction builds opportunities for better earnings and resilience.</p>
+        </div>
+
+        <div class="dimension-card">
+          <div class="emoji">🎨</div>
+          <h3 class="font-bold text-lg mb-2" style="color: var(--accent);">4. Passions & Life Needs</h3>
+          <p class="text-sm mb-2" style="color: var(--text-muted); font-style: italic;">Learning adapts to passions, roles, and personal needs.</p>
+          <p class="text-sm" style="color: var(--text-dark);">Cooking, music, caregiving, coding, or design — vocabulary aligns with hobbies and responsibilities. This creates relevance, joy, and utility, allowing knowledge to serve both daily life and long-term aspirations.</p>
+        </div>
+
+        <div class="dimension-card" style="grid-column: 1 / -1;">
+          <div class="emoji">🌱</div>
+          <h3 class="font-bold text-lg mb-2" style="color: var(--accent);">5. Human Growth & Becoming</h3>
+          <p class="text-sm mb-2" style="color: var(--text-muted); font-style: italic;">Growth extends beyond skills into wisdom and empathy.</p>
+          <p class="text-sm" style="color: var(--text-dark);">Words connect to philosophy, spirituality, and leadership. This dimension nurtures reflection and compassion, preparing individuals to contribute meaningfully to communities and to live with resilience and purpose.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 4: Dimension 1 Deep Dive -->
+  <div id="screen-4" class="screen">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-4">
+        <span class="badge">Dimension 1</span>
+        <h2 class="text-3xl font-bold mt-2 mb-2" style="color: var(--accent);">Where Others Stop — We Connect the Whole Story</h2>
+        <p class="text-sm mb-4" style="color: var(--text-muted);">Hover or tap to see what each offers — and how Beyond Dictionary expands it.</p>
+      </div>
+
+      <div class="grid-4" id="servicesGrid" style="max-height: calc(100vh - 280px); overflow-y: auto;">
+        <!-- Services will be inserted here by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 5: Microservices Universe -->
+  <div id="screen-5" class="screen">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-4">
+        <h2 class="text-3xl font-bold mb-2" style="color: var(--accent);">📘 One Word — A Universe of Connections</h2>
+        <p class="text-sm mb-3" style="color: var(--text-muted);">Select a role to see the universal and specific microservices tailored for you.</p>
+        
+        <div class="role-selector">
+          <button class="role-btn active" data-role="all">All Services</button>
+          <button class="role-btn" data-role="student">Student</button>
+          <button class="role-btn" data-role="writer">Writer</button>
+          <button class="role-btn" data-role="blogger">Blogger</button>
+          <button class="role-btn" data-role="manager">Manager</button>
+          <button class="role-btn" data-role="marketer">Marketer</button>
+          <button class="role-btn" data-role="designer">Designer</button>
+          <button class="role-btn" data-role="programmer">Programmer</button>
+          <button class="role-btn" data-role="voice_artist">Voice Artist</button>
+          <button class="role-btn" data-role="nlp_expert">NLP Expert</button>
+        </div>
+      </div>
+
+      <div class="grid-4" id="microservicesGrid" style="max-height: calc(100vh - 320px); overflow-y: auto;">
+        <!-- Microservices will be inserted here by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 6: LLOS Context - The Problem -->
+  <div id="screen-6" class="screen">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold mb-4" style="color: var(--accent);">💡 The Bottleneck We Ignore</h2>
+      
+      <div class="context-block">
+        <p><strong>850M people have touched AI tools worldwide.</strong> But beneath those headline numbers lies an uncomfortable truth.</p>
+        <ul>
+          <li>Most are <strong>shallow users</strong> — experimenting briefly, then dropping off.</li>
+          <li><strong>100K–200K coders, ML engineers, and advanced prompt designers</strong> drive ~90% of meaningful usage.</li>
+          <li>The <strong>world's top 1% of non-coder talent</strong> — doctors, lawyers, designers, teachers, entrepreneurs, scientists — remain underserved.</li>
+        </ul>
+        <p><strong>The result: AI is powerful but bottlenecked.</strong></p>
+      </div>
+
+      <div class="context-block">
+        <h3>Why? Content Engineering Failure</h3>
+        <p>AI majors (OpenAI, Anthropic, DeepMind, Gemini, Grok) deepen this bottleneck with how they share knowledge:</p>
+        <ul>
+          <li>Docs written <strong>for experts</strong> in narrow, technical voices.</li>
+          <li>Content that's descriptive but <strong>not pedagogical</strong>.</li>
+          <li>No scaffolding, no interactivity, no role-awareness.</li>
+          <li>One-size-fits-all tutorials that flatten diverse talent into a coder-shaped mold.</li>
+        </ul>
+      </div>
+
+      <div class="context-block">
+        <h3>Examples of What's Missing</h3>
+        <p><strong>Anthropic's own Prompt Engineering documentation:</strong> Comprehensive and well-structured. But what do non-technical professionals really need?</p>
+        <ul>
+          <li><strong>Role-specific workflows:</strong> Doctor using Claude for patient notes, teacher for lesson plans, lawyer for case research.</li>
+          <li><strong>Troubleshooting patterns:</strong> When responses drift, how to refine context, how to handle edge cases.</li>
+          <li><strong>Contextual mastery:</strong> Not just "how to prompt" but "how to integrate Claude into your daily work" with industry examples.</li>
+        </ul>
+        <p>That's the difference between <strong>excellent documentation</strong> and a <strong>Lifelong Learning Operating System.</strong> We've built that bridge — see the <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/index.html" target="_blank" style="color: var(--accent); font-weight: 600; text-decoration: underline;">Anthropic case study</a> for the full scaffolding approach.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 7: LLOS Context - The Unlock -->
+  <div id="screen-7" class="screen">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold mb-4" style="color: var(--accent);">🚀 The Unlock: 1 Million → 1 Billion</h2>
+      
+      <div class="context-block">
+        <h3>Imagine a shift:</h3>
+        <ul>
+          <li>Identify <strong>1M top non-coders worldwide</strong> — the best 1% talent in every field.</li>
+          <li>Give them <strong>personalized scaffolding</strong>: role-specific workflows, contextual pedagogy, interactive training modules, creative games.</li>
+          <li>Each of them achieves <strong>10x impact</strong> — faster research, safer medicine, smarter classrooms, deeper creativity.</li>
+          <li>These 1M then cascade their practices to <strong>1B others</strong>: students, teams, patients, clients, readers, and citizens.</li>
+        </ul>
+        <p><strong>This is how AI moves from coder-centric hype to societal infrastructure.</strong></p>
+        <p><strong>This is how we unlock $10 trillion in real impact over the next decade.</strong></p>
+      </div>
+
+      <div class="context-block">
+        <h3>The Method: Content Engineering at Scale</h3>
+        <p>The bridge is a <strong>Lifelong Learning Operating System (LLOS)</strong> — not a dictionary, not a course, not documentation. A <strong>content architecture</strong> that can:</p>
+        <ul>
+          <li><strong>Teach:</strong> children, students, professionals, enterprises, creatives.</li>
+          <li><strong>Test:</strong> through interactive games, quizzes, carousels, simulations, and sandboxes.</li>
+          <li><strong>Scale:</strong> across fields, languages, industries, and cultures.</li>
+        </ul>
+      </div>
+
+      <div class="context-block">
+        <h3>Evidence Already Built</h3>
+        <p>Over years of work, thousands of prototypes prove this isn't theory:</p>
+        <ul>
+          <li><strong>Children:</strong> Pre-literacy dictionary with 1,000+ modules. Kids who can't read still learn through sound, emoji, and story.</li>
+          <li><strong>Students:</strong> Entire CBSE curriculum re-engineered. Every chapter has 200+ scaffolded questions, 200 FAQs, reasoning engines.</li>
+          <li><strong>Professionals:</strong> Anthropic's Prompt Engineering guide rebuilt as comprehensive scaffolding. From basics to advanced techniques, role-specific workflows, interactive examples, troubleshooting patterns, and contextual mastery — going far beyond standard documentation.</li>
+          <li><strong>Enterprises:</strong> Salesforce Service Cloud guides written as five-part arcs: industry-specific integrations, pitfalls, compliance realities.</li>
+          <li><strong>Creatives:</strong> AI art training for gaming designers. Structured five-step frameworks, role-specific prompt mastery.</li>
+        </ul>
+        <p>Each case shows the same DNA: <strong>role-awareness, interactivity, pedagogy, and emotional intelligence.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 8: LLOS Vision -->
+  <div id="screen-8" class="screen">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold mb-3 text-center" style="color: var(--accent);">The Vision: LLOS.AI</h2>
+      <p class="text-base mb-5 text-center" style="color: var(--text-muted); max-width: 750px; margin-left: auto; margin-right: auto;">
+        Beyond Dictionary is the first step toward a Lifelong Learning Operating System — unifying languages, learners, and growth across decades.
+      </p>
+
+      <div class="llos-stage">
+        <div class="llos-logo">
+          <span class="llos-chunk ll">LL</span>
+          <span class="llos-chunk os">OS</span>
+          <span class="llos-chunk dot">.</span>
+          <span class="llos-chunk ai">AI</span>
+        </div>
+        <div class="llos-tag">Lifelong Learning Operating System</div>
+      </div>
+
+      <div class="grid-3 mt-5 gap-3">
+        <div class="card">
+          <div class="card-title">10M+ Articles</div>
+          <p class="card-text">Comprehensive knowledge across domains</p>
+        </div>
+        <div class="card">
+          <div class="card-title">100M+ Quizzes</div>
+          <p class="card-text">Interactive practice for mastery</p>
+        </div>
+        <div class="card">
+          <div class="card-title">10M+ Glossaries</div>
+          <p class="card-text">Specialized vocabularies for every field</p>
+        </div>
+      </div>
+
+      <div class="context-block mt-5">
+        <h3>The Mission</h3>
+        <ul>
+          <li>Reach <strong>1M top non-coders.</strong></li>
+          <li>Build their <strong>personalized AI scaffolding.</strong></li>
+          <li>Cascade their workflows to <strong>1B learners, workers, and creators.</strong></li>
+          <li>Contribute to <strong>$10T+ societal uplift over the next decade.</strong></li>
+        </ul>
+        <p style="margin-top: 12px;">We recognize this isn't ours alone to deliver. The world needs democratic AI education at scale. LLOS.AI is a framework and process — working alongside LLM majors, platforms, educators, and communities — to unlock this transformation together.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 9: Thank You & Contact -->
+  <div id="screen-9" class="screen">
+    <div class="max-w-4xl mx-auto text-center">
+      <div style="font-size: 64px; margin-bottom: 20px;">🎉</div>
+      <h2 class="text-4xl font-bold mb-4" style="color: var(--accent);">Thank You for Exploring!</h2>
+      <p class="text-lg mb-6" style="color: var(--text-dark); max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+        You've just experienced the foundation of a <strong>Lifelong Learning Operating System</strong> — where words become bridges, learning adapts to life, and growth never stops.
+      </p>
+
+      <div class="card" style="max-width: 600px; margin: 0 auto 40px; padding: 32px; text-align: left;">
+        <h3 class="text-2xl font-bold mb-4" style="color: var(--accent); text-align: center;">Let's Build the Future Together</h3>
+        <p class="text-base mb-6" style="color: var(--text-muted); line-height: 1.7; text-align: center;">
+          This is just the beginning. If you believe in scaffolding that unlocks human potential — from children to professionals, from classrooms to enterprises — let's connect.
+        </p>
+        
+        <div style="background: rgba(253, 126, 20, 0.05); border: 2px solid var(--accent); border-radius: 12px; padding: 24px; text-align: center;">
+          <div style="font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">Pawan Nayar</div>
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">Founder, Beyond Dictionary & LLOS.AI</div>
+          <a href="mailto:pnayar@cretorial.com" style="display: inline-block; padding: 14px 32px; background: var(--accent); color: white; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.25); transition: all 0.25s;">
+            📧 Email Pawan
+          </a>
+        </div>
+      </div>
+
+      <div class="grid-3" style="max-width: 900px; margin: 0 auto; gap: 20px;">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 10px;">🌍</div>
+          <div class="card-title" style="margin-bottom: 6px;">400,000+ Words</div>
+          <p class="card-text">Mapped, scaffolded, alive</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 10px;">🎓</div>
+          <div class="card-title" style="margin-bottom: 6px;">1M → 1B</div>
+          <p class="card-text">Top talent to global impact</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 10px;">✨</div>
+          <div class="card-title" style="margin-bottom: 6px;">$10T Decade</div>
+          <p class="card-text">Unlocking human potential</p>
+        </div>
+      </div>
+
+      <p class="text-sm mt-8" style="color: var(--text-muted);">
+        Built with care. Designed for impact. Ready to transform learning.
+      </p>
+
+      <button class="nav-btn secondary mt-6" onclick="location.reload()" style="margin-top: 24px;">
+        ← Back to Start
+      </button>
+    </div>
+  </div>
+
+  <!-- Hover Card for Services -->
+  <div id="hoverCard" class="hover-card">
+    <div class="hover-card-title" id="hoverTitle"></div>
+    <div class="hover-card-desc" id="hoverDesc"></div>
+    <div class="hover-card-examples" id="hoverExamples"></div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="nav-bottom">
+    <button class="nav-btn secondary" id="btnPrev">← Previous</button>
+    <div class="text-sm font-semibold" style="color: var(--text-muted);" id="screenCounter">1 / 9</div>
+    <button class="nav-btn primary" id="btnNext">Next →</button>
+  </div>
+
+  <script>
+    // ===== STATE =====
+    const state = {
+      currentScreen: 1,
+      totalScreens: 9,
+      selectedRole: 'all',
+      contrastExampleIndex: 0
+    };
+
+    // ===== SERVICES DATA (Screen 4) =====
+    const services = [
+      { title: 'Oxford', desc: 'Formal dictionary.', examples: ['Defines words; <b>we add Hinglish cards</b>.', 'Notes usage; <b>we add exam practice</b>.'] },
+      { title: 'Cambridge', desc: 'Dictionary.', examples: ['Defines words; <b>we add Hindi</b>.', 'Shows grammar; <b>we add workplace comms</b>.'] },
+      { title: 'Merriam-Webster', desc: 'Dictionary.', examples: ['Defines; <b>we add storytelling</b>.', 'Usage notes; <b>we add bilingual cards</b>.'] },
+      { title: 'Collins', desc: 'Dictionary.', examples: ['Defines; <b>we add Hinglish</b>.', 'Covers synonyms; <b>we add SEO hashtags</b>.'] },
+      { title: 'Linguee', desc: 'Translations.', examples: ['Translates; <b>we add Hinglish bridge</b>.', 'Shows sentences; <b>we add exam recall</b>.'] },
+      { title: 'Goodreads', desc: 'Quotes.', examples: ['Quotes; <b>we add role context</b>.', 'Shows books; <b>we add classroom practice</b>.'] },
+      { title: 'StackOverflow', desc: 'Code Q&A.', examples: ['Code help; <b>we add regex microservices</b>.', 'Community answers; <b>we add role coaching</b>.'] },
+      { title: 'Bhagavad Gita', desc: 'Scripture.', examples: ['Verses; <b>we add 5k commentary</b>.', 'Teachings; <b>we add quizzes</b>.'] },
+      { title: 'Cooking/Food', desc: 'Recipes.', examples: ['Recipes; <b>we add cultural stories</b>.', 'Instructions; <b>we add bilingual cues</b>.'] },
+      { title: 'Visual Keywords', desc: 'Design cues.', examples: ['Keywords; <b>we add SEO</b>.', 'Fonts; <b>we add palettes</b>.'] },
+      { title: 'AI Art Prompts', desc: 'Creative prompts.', examples: ['Gives prompts; <b>we add Hinglish text</b>.', 'Links art; <b>we add role examples</b>.'] },
+      { title: 'Wikipedia', desc: 'Encyclopedia.', examples: ['Explains facts; <b>we add age-optimized layers</b>.', 'Lists info; <b>we add quizzes</b>.'] },
+      { title: 'Wiktionary', desc: 'Open dictionary.', examples: ['Lists words; <b>we add creative sentences</b>.', 'Community-based; <b>we add structured exams</b>.'] },
+      { title: 'Urban Dictionary', desc: 'Slang.', examples: ['Slang terms; <b>we add respectful bilingual contexts</b>.', 'Raw entries; <b>we add academic balance</b>.'] },
+      { title: 'Etymonline', desc: 'Etymology.', examples: ['Shows roots; <b>we add stories</b>.', 'Explains origin; <b>we add audio</b>.'] },
+      { title: 'RhymeZone', desc: 'Rhymes.', examples: ['Lists rhymes; <b>we add poetic coaching</b>.', 'Basic tool; <b>we add Hindi/English combos</b>.'] },
+    ];
+
+    // ===== MICROSERVICES DATA (Screen 5) =====
+    const microservices = [
+      { id: 'def', title: 'Definition', emoji: '📖', desc: 'Clear, simple meaning - the essential foundation.', roles: ['all'] },
+      { id: 'nuances', title: 'Core Nuances', emoji: '🎨', desc: 'Emotional shades - positive, neutral, or negative.', roles: ['all'] },
+      { id: 'usage', title: 'Usage Tip', emoji: '💡', desc: 'Real-world advice on correct usage.', roles: ['all'] },
+      { id: 'pronunciation', title: 'Pronunciation', emoji: '🗣️', desc: 'Learn the correct pronunciation.', roles: ['all'] },
+      { id: 'adv_pronunciation', title: 'Advanced Pronunciation', emoji: '🎙️', desc: 'Phonetic symbols, accents, for voice artists.', roles: ['voice_artist'] },
+      { id: 'art_speech', title: 'Art of Speech', emoji: '🎭', desc: 'Noun, verb, adjective explained.', roles: ['all'] },
+      { id: 'transformation', title: 'Word Transformation', emoji: '🔄', desc: 'Word family - proud, proudly, prideful.', roles: ['all'] },
+      { id: 'synonyms', title: 'Synonyms', emoji: '🤝', desc: 'Alternative words organized by theme.', roles: ['all'] },
+      { id: 'antonyms', title: 'Antonyms', emoji: '⚖️', desc: 'Opposites to grasp full spectrum.', roles: ['all'] },
+      { id: 'semantic_diff', title: 'Semantic Differentiation', emoji: '🔎', desc: 'Subtle differences - honor vs vanity.', roles: ['all'] },
+      { id: 'age_optimized', title: 'Age Optimized', emoji: '🎂', desc: 'Explained for children, teens, adults.', roles: ['all'] },
+      { id: 'cultural', title: 'Cultural Meaning', emoji: '🌍', desc: 'Global perspectives on the word.', roles: ['all'] },
+      { id: 'contextual', title: 'Contextual Insights', emoji: '💬', desc: 'Real-world examples from life.', roles: ['all'] },
+      { id: 'fun_play', title: 'Fun Play', emoji: '😂', desc: 'Jokes, wordplay, humor.', roles: ['all'] },
+      { id: 'activity', title: 'Activity Zone', emoji: '🎲', desc: 'Crosswords, emoji builders, games.', roles: ['student'] },
+      { id: 'hashtags', title: 'Hashtags', emoji: '#️⃣', desc: 'Social media hashtags.', roles: ['blogger', 'marketer'] },
+      { id: 'creative_phrases', title: 'Creative Phrases', emoji: '✨', desc: 'Memorable phrases for writing.', roles: ['writer', 'blogger'] },
+      { id: 'emoji', title: 'Emoji Highlights', emoji: '😊', desc: 'Visual shortcuts for digital communication.', roles: ['blogger'] },
+      { id: 'creative_sentences', title: 'Creative Sentences', emoji: '✏️', desc: 'Poetic, humorous, persuasive examples.', roles: ['writer'] },
+      { id: 'writing_suggestions', title: 'Writing Prompts', emoji: '💡', desc: 'Story ideas and character prompts.', roles: ['writer'] },
+      { id: 'ai_art', title: 'AI Art Prompts', emoji: '🎨', desc: 'Text-to-art generator prompts.', roles: ['designer'] },
+      { id: 'history', title: 'History Trivia', emoji: '📜', desc: 'Word origins through time.', roles: ['all'] },
+      { id: 'books', title: 'Popular Books', emoji: '📚', desc: 'Usage in famous literature.', roles: ['student', 'writer'] },
+      { id: 'movies', title: 'Popular Movies', emoji: '🎬', desc: 'Themes in cinema.', roles: ['student'] },
+      { id: 'global_proverbs', title: 'Global Proverbs', emoji: '🌍', desc: 'Wisdom from world cultures.', roles: ['all'] },
+      { id: 'email_phrases', title: 'Professional Emails', emoji: '📧', desc: 'Ready-to-use work phrases.', roles: ['manager'] },
+      { id: 'slack', title: 'Slack Speak', emoji: '💬', desc: 'Modern chat communication.', roles: ['manager'] },
+      { id: 'manager', title: 'Manager Perspective', emoji: '🧑‍💼', desc: 'Leadership language tools.', roles: ['manager'] },
+      { id: 'writer_overview', title: 'Writer Overview', emoji: '✍️', desc: 'Themes and narrative toolkit.', roles: ['writer'] },
+      { id: 'marketer', title: 'Marketing Playbook', emoji: '📊', desc: 'Campaign frameworks and slogans.', roles: ['marketer'] },
+      { id: 'designer', title: 'Designer Overview', emoji: '🎨', desc: 'Visual language and typography.', roles: ['designer'] },
+      { id: 'typography', title: 'Typography', emoji: 'Aa', desc: 'Font, color, effects guidance.', roles: ['designer'] },
+      { id: 'iconography', title: 'Iconography', emoji: '⚫️', desc: 'Symbol library for design.', roles: ['designer'] },
+      { id: 'html_tags', title: 'HTML Semantic Tags', emoji: '💻', desc: 'Semantic markup for web.', roles: ['programmer'] },
+      { id: 'voice_artist', title: 'Voice Artist Guide', emoji: '🎤', desc: 'Delivery styles and tone.', roles: ['voice_artist'] },
+      { id: 'nlp', title: 'NLP Expert Data', emoji: '⚙️', desc: 'Computational linguistics data.', roles: ['nlp_expert'] },
+    ];
+
+    const roleMapping = {
+      all: microservices.map(m => m.id),
+      student: ['def', 'nuances', 'usage', 'pronunciation', 'art_speech', 'transformation', 'synonyms', 'antonyms', 'age_optimized', 'contextual', 'activity', 'books', 'movies'],
+      writer: ['def', 'creative_phrases', 'creative_sentences', 'writing_suggestions', 'writer_overview', 'synonyms', 'antonyms', 'global_proverbs'],
+      blogger: ['hashtags', 'creative_phrases', 'emoji', 'semantic_diff'],
+      manager: ['email_phrases', 'slack', 'manager', 'contextual', 'cultural'],
+      marketer: ['marketer', 'hashtags', 'creative_phrases', 'cultural'],
+      designer: ['designer', 'ai_art', 'typography', 'iconography'],
+      programmer: ['html_tags', 'nlp', 'def'],
+      voice_artist: ['adv_pronunciation', 'voice_artist', 'pronunciation'],
+      nlp_expert: ['nlp', 'semantic_diff', 'transformation']
+    };
+
+    // ===== CONTRAST EXAMPLES DATA =====
+    const contrastExamples = [
+      {
+        cp: { title: 'Resistance vs. Resistivity', left: 'Resistance (R)', right: 'Resistivity (ρ)', leftNote: 'Opposes current; depends on material + geometry.', rightNote: 'Material property; inherent to substance.', leftUnit: 'Ohm (Ω)', rightUnit: 'Ω·m' },
+        is: { title: 'Assertiveness', leftNote: 'Clear, respectful, boundary-setting; invites dialogue.', rightNote: 'Aggressive, dismissive, or vague; shuts others down.' },
+        cd: { title: '"Light" Across Domains', physics: 'Lens formula & refraction', photo: 'Composition, exposure, mood', lit: 'Metaphor of hope/knowledge', work: '"Shed light on the issue"' }
+      },
+      {
+        cp: { title: 'Electric Current vs. Drift Velocity', left: 'Current (I)', right: 'Drift Velocity (vd)', leftNote: 'Rate of charge flow through conductor.', rightNote: 'Average velocity of charge carriers.', leftUnit: 'Ampere (A)', rightUnit: 'm/s' },
+        is: { title: 'Quality', leftNote: 'Measured, observable, customer-centric improvements.', rightNote: 'Vague claims, vanity metrics, unowned defects.' },
+        cd: { title: '"Image" Across Domains', physics: 'Pixels vs vectors; export intent & DPI', photo: 'Brand mood, art direction, accessibility', lit: 'Imagery as symbol & motif', work: 'Screenshot hygiene, alt-text, license' }
+      },
+      {
+        cp: { title: 'Empathy vs. Sympathy', left: 'Empathy', right: 'Sympathy', leftNote: 'Feel with; perspective-taking; active listening.', rightNote: 'Feel for; distance remains; can sound patronizing.', leftUnit: 'Practice', rightUnit: 'Emotion' },
+        is: { title: 'Priority', leftNote: 'Time-boxed, owner-named, trade-offs explicit.', rightNote: 'Everything "P0"; no sequencing; no owner.' },
+        cd: { title: '"Network" Across Domains', physics: 'Graphs & connectivity; algorithms', photo: 'Community & distribution; reach', lit: 'Motifs of webs & ties', work: 'Stakeholder maps; influence' }
+      }
+    ];
+
+    // ===== NAVIGATION =====
+    const progressBar = document.getElementById('progressBar');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const screenCounter = document.getElementById('screenCounter');
+
+    function updateProgress() {
+      const percent = (state.currentScreen / state.totalScreens) * 100;
+      progressBar.style.width = percent + '%';
+      screenCounter.textContent = `${state.currentScreen} / ${state.totalScreens}`;
+      
+      btnPrev.disabled = state.currentScreen === 1;
+      
+      if (state.currentScreen === state.totalScreens) {
+        btnNext.style.display = 'none';
+      } else {
+        btnNext.style.display = 'block';
+        btnNext.textContent = state.currentScreen === state.totalScreens - 1 ? 'Finish 🎉' : 'Next →';
+      }
+    }
+
+    function showScreen(num) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(`screen-${num}`).classList.add('active');
+      state.currentScreen = num;
+      updateProgress();
+
+      if (num === 8) {
+        setTimeout(triggerLlosAnimation, 400);
+      }
+    }
+
+    btnNext.addEventListener('click', () => {
+      if (state.currentScreen < state.totalScreens) {
+        showScreen(state.currentScreen + 1);
+      }
+    });
+
+    btnPrev.addEventListener('click', () => {
+      if (state.currentScreen > 1) {
+        showScreen(state.currentScreen - 1);
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && state.currentScreen < state.totalScreens) {
+        btnNext.click();
+      } else if (e.key === 'ArrowLeft' && state.currentScreen > 1) {
+        btnPrev.click();
+      }
+    });
+
+    // ===== SCREEN 4: SERVICES GRID =====
+    const servicesGrid = document.getElementById('servicesGrid');
+    const hoverCard = document.getElementById('hoverCard');
+    const hoverTitle = document.getElementById('hoverTitle');
+    const hoverDesc = document.getElementById('hoverDesc');
+    const hoverExamples = document.getElementById('hoverExamples');
+
+    function renderServices() {
+      servicesGrid.innerHTML = services.map(s => `
+        <div class="service-pill" data-title="${s.title}" data-desc="${s.desc}" data-examples='${JSON.stringify(s.examples)}'>
+          <span>${s.title}</span>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('#servicesGrid .service-pill').forEach(pill => {
+        pill.addEventListener('mouseenter', (e) => {
+          const rect = pill.getBoundingClientRect();
+          const title = pill.dataset.title;
+          const desc = pill.dataset.desc;
+          const examples = JSON.parse(pill.dataset.examples);
+
+          hoverTitle.textContent = title;
+          hoverDesc.textContent = desc;
+          hoverExamples.innerHTML = examples.map(ex => `<div>• ${ex}</div>`).join('');
+
+          hoverCard.style.left = rect.left + 'px';
+          hoverCard.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+          hoverCard.classList.add('show');
+        });
+
+        pill.addEventListener('mouseleave', () => {
+          hoverCard.classList.remove('show');
+        });
+      });
+    }
+
+    // ===== SCREEN 5: MICROSERVICES =====
+    const microservicesGrid = document.getElementById('microservicesGrid');
+
+    function renderMicroservices(role = 'all') {
+      const filtered = microservices.filter(m => {
+        if (role === 'all') return true;
+        return m.roles.includes(role) || roleMapping[role]?.includes(m.id);
+      });
+
+      microservicesGrid.innerHTML = filtered.map(m => `
+        <div class="service-pill" data-title="${m.title}" data-desc="${m.desc}">
+          <span class="emoji">${m.emoji}</span>
+          <span>${m.title}</span>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('#microservicesGrid .service-pill').forEach(pill => {
+        pill.addEventListener('mouseenter', (e) => {
+          const rect = pill.getBoundingClientRect();
+          hoverTitle.textContent = pill.dataset.title;
+          hoverDesc.textContent = pill.dataset.desc;
+          hoverExamples.innerHTML = '';
+
+          hoverCard.style.left = rect.left + 'px';
+          hoverCard.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+          hoverCard.classList.add('show');
+        });
+
+        pill.addEventListener('mouseleave', () => {
+          hoverCard.classList.remove('show');
+        });
+      });
+    }
+
+    // Role selector
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const role = btn.dataset.role;
+        state.selectedRole = role;
+        renderMicroservices(role);
+      });
+    });
+
+    // ===== SCREEN 8: LLOS ANIMATION =====
+    function triggerLlosAnimation() {
+      const chunks = document.querySelectorAll('.llos-chunk');
+      const tag = document.querySelector('.llos-tag');
+      
+      chunks.forEach(chunk => {
+        const clone = chunk.cloneNode(true);
+        chunk.parentNode.replaceChild(clone, chunk);
+      });
+
+      if (tag) {
+        const tagClone = tag.cloneNode(true);
+        tagClone.classList.add('animate');
+        tag.parentNode.replaceChild(tagClone, tag);
+      }
+    }
+
+    // ===== CONTRAST EXAMPLES ROTATION =====
+    const exampleDots = document.querySelectorAll('.example-dot');
+    
+    function rotateContrastExample() {
+      state.contrastExampleIndex = (state.contrastExampleIndex + 1) % contrastExamples.length;
+      const example = contrastExamples[state.contrastExampleIndex];
+      
+      document.getElementById('cpTitle').textContent = example.cp.title;
+      document.querySelector('.compare-side.left .compare-label').textContent = example.cp.left;
+      document.querySelector('.compare-side.right .compare-label').textContent = example.cp.right;
+      document.querySelectorAll('.compare-side p')[0].textContent = example.cp.leftNote;
+      document.querySelectorAll('.compare-side p')[1].textContent = example.cp.rightNote;
+      
+      document.getElementById('isTitle').textContent = example.is.title;
+      document.querySelectorAll('#screen-2 .compare-side p')[2].textContent = example.is.leftNote;
+      document.querySelectorAll('#screen-2 .compare-side p')[3].textContent = example.is.rightNote;
+      
+      document.getElementById('cdTitle').textContent = example.cd.title;
+      
+      exampleDots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === state.contrastExampleIndex);
+      });
+    }
+
+    setInterval(rotateContrastExample, 6000);
+
+    // ===== INITIALIZE =====
+    renderServices();
+    renderMicroservices();
+    updateProgress();
+  </script>
+</body>
+</html>
