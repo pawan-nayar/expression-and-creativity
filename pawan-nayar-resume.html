@@ -46,6 +46,12 @@
             border-color: rgba(0, 255, 255, 0.2);
         }
 
+        /* Expandable sections for Origin Story */
+        .expandable-section {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
         /* Styling for the timeline in the experience section */
         .timeline-item {
             position: relative;
@@ -1404,6 +1410,131 @@
                     <p class="text-gray-300 mb-3"><strong>"What Part Writer? What Part Programmer? A Survey of Practices and Knowledge Used in Programmer Writing"</strong> - Contributor to pioneering study on the intersection of technical writing and programming practices, exploring how developers approach documentation and communication.</p>
                     <p class="text-sm text-gray-400 italic">This research laid early groundwork for understanding the hybrid nature of technical communication in software development.</p>
                 </div>
+
+                <!-- Origin Story Card -->
+                <div class="glass-card p-6 md:col-span-2 border-2 border-yellow-400/30">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🌟</span>
+                        <h4 class="text-xl font-bold text-white">Origin Story: Energy Conserved is Energy Generated</h4>
+                        <span class="text-xs bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded-full">NAFEN National Prize Winner • 1988</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">At 17, while still in school, won the National Foundation of Indian Engineers (NAFEN) essay competition with a prescient vision of energy futures. Writing in the pre-internet era with limited data access, this teenage essay predicted solar energy dominance, fusion reactors, and space-based energy collection - technologies that would define the 21st century.</p>
+                    
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <a href="national_nafen_esay_winner_1988.pdf" target="_blank" class="inline-flex items-center gap-2 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg border border-cyan-400/30 transition-all text-sm">
+                            <span>📄</span> Original Essay
+                        </a>
+                        <button onclick="toggleSection('prophecies-section')" class="inline-flex items-center gap-2 bg-purple-400/10 hover:bg-purple-400/20 text-purple-400 px-4 py-2 rounded-lg border border-purple-400/30 transition-all text-sm">
+                            <span>🔮</span> Prophecies & Reality <span id="prophecies-toggle">▼</span>
+                        </button>
+                        <button onclick="toggleSection('conversation-section')" class="inline-flex items-center gap-2 bg-yellow-400/10 hover:bg-yellow-400/20 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-400/30 transition-all text-sm">
+                            <span>💭</span> 36-Year Conversation <span id="conversation-toggle">▼</span>
+                        </button>
+                    </div>
+
+                    <!-- Prophecies & Reality Section -->
+                    <div id="prophecies-section" class="expandable-section" style="display: none;">
+                        <div class="bg-purple-900/20 border border-purple-400/30 rounded-lg p-6 mt-4">
+                            <h5 class="text-lg font-bold text-purple-400 mb-4">🔮 What the 17-Year-Old Predicted vs. What Actually Happened</h5>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h6 class="font-bold text-green-400 mb-3">✅ Predictions That Came True</h6>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li><strong>Solar Energy Dominance:</strong> "Solar energy would be the answer to the solution of energy crisis" - Solar became the fastest-growing energy source globally</li>
+                                        <li><strong>Space-Based Solar:</strong> Predicted orbital solar collection - Now actively researched by NASA, Japan, and China</li>
+                                        <li><strong>Fusion Reactors:</strong> Called them "manmade suns" - NIF achieved fusion ignition in 2022</li>
+                                        <li><strong>Ocean Thermal Energy:</strong> Described temperature differential systems - Now commercially deployed</li>
+                                        <li><strong>Geothermal Expansion:</strong> Predicted widespread adoption - Now mainstream renewable technology</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h6 class="font-bold text-yellow-400 mb-3">📊 Data Points That Evolved</h6>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li><strong>Oil Depletion Timeline:</strong> Predicted 28 years (by 2016) - New extraction technologies extended reserves</li>
+                                        <li><strong>Energy Crisis Form:</strong> Expected physical scarcity - Got digital energy consumption crisis instead</li>
+                                        <li><strong>Conservation Focus:</strong> Wrote about electrical waste - Now includes computational and attention energy</li>
+                                        <li><strong>Information Access:</strong> Limited to state-sponsored data - Internet democratized energy information</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-cyan-900/20 border border-cyan-400/30 rounded-lg">
+                                <p class="text-cyan-400 font-bold text-sm mb-2">The Core Insight That Transcended Time:</p>
+                                <p class="text-gray-300 text-sm italic">"Energy conserved is energy generated" - This principle evolved from physical conservation to digital optimization, from electrical efficiency to computational consciousness, proving that fundamental insights can transcend their original context.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 36-Year Conversation Section -->
+                    <div id="conversation-section" class="expandable-section" style="display: none;">
+                        <div class="bg-yellow-900/20 border border-yellow-400/30 rounded-lg p-6 mt-4">
+                            <h5 class="text-lg font-bold text-yellow-400 mb-4">💭 Energy Conserved is Energy Generated — A Conversation Across 36 Years</h5>
+                            
+                            <div class="space-y-6 text-sm">
+                                <div class="italic text-gray-400 text-center py-4 border-b border-gray-600">
+                                    <p>A quiet desk under a tube light in 1988 fades into the soft glow of a laptop in 2025.</p>
+                                    <p>Ink becomes pixels. Thought becomes data.</p>
+                                    <p>And two Pawans meet — one writing his first essay, the other reflecting on it.</p>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div class="border-l-4 border-cyan-400 pl-4">
+                                        <p class="font-bold text-cyan-400 mb-2">1988 — The Boy</p>
+                                        <p class="text-gray-300">"Energy is the capacity to do work," I begin to write, gripping the pen too tight. The paper trembles slightly, as if it knows this is important. We've been told to save electricity, to switch off fans, to turn off lights. Our teachers say that the world will run out of oil by the time I grow up. So I write about solar energy, fusion, and the manmade sun — not because I've seen them, but because I believe they will save us.</p>
+                                        <p class="text-gray-300 mt-2">I don't know much. Only what the newspaper prints, what the radio says, what the textbook repeats. But I know one thing: waste is wrong.</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-yellow-400 pl-4">
+                                        <p class="font-bold text-yellow-400 mb-2">2025 — The Man</p>
+                                        <p class="text-gray-300">You were right, little one — but not in the way you thought. The world didn't end. We didn't run out of oil. We ran into new worlds — of data, code, and attention.</p>
+                                        <p class="text-gray-300 mt-2">The energy crisis changed form. It hid itself inside our devices, our servers, our endless scrolling. Now, "saving energy" means something more subtle — saving our focus, our computation, our sanity.</p>
+                                        <p class="text-gray-300 mt-2">The sentence you wrote — <em>Energy conserved is energy generated</em> — has become a new moral law for our digital civilization.</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-cyan-400 pl-4">
+                                        <p class="font-bold text-cyan-400 mb-2">1988 — The Boy</p>
+                                        <p class="text-gray-300">But how? How can thinking waste energy? We used to light one bulb per room, and I felt guilty. Now you tell me that my thoughts can waste power?</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-yellow-400 pl-4">
+                                        <p class="font-bold text-yellow-400 mb-2">2025 — The Man</p>
+                                        <p class="text-gray-300">Yes, in a way. Every redundant thread, every hallucinated AI response, every unnecessary simulation — all of it consumes invisible electricity. We built giant brains called Large Neural Networks. They reason, imagine, and generate — but they also devour power.</p>
+                                        <p class="text-gray-300 mt-2">So your essay wasn't wrong — it was prematurely right. The new pollution is not just smoke and smog — it's unoptimized computation, unnecessary chatter, digital entropy.</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-cyan-400 pl-4">
+                                        <p class="font-bold text-cyan-400 mb-2">1988 — The Boy</p>
+                                        <p class="text-gray-300">That's wild. I thought my essay was about switches and turbines, not thoughts and servers. Did people stop wasting?</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-yellow-400 pl-4">
+                                        <p class="font-bold text-yellow-400 mb-2">2025 — The Man</p>
+                                        <p class="text-gray-300">Not yet. But we've learned something you didn't know then: the world doesn't move by one vector. When one path narrows, another opens. We found new fuels, then new minds, and now — new meanings.</p>
+                                        <p class="text-gray-300 mt-2">Your essay predicted the end of energy; mine watches the evolution of energy — from physical to mental to digital. Back then, data was scarce. Now, data is infinite — and meaning is the new scarce resource.</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-cyan-400 pl-4">
+                                        <p class="font-bold text-cyan-400 mb-2">1988 — The Boy</p>
+                                        <p class="text-gray-300">So do we still need my slogan?</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-yellow-400 pl-4">
+                                        <p class="font-bold text-yellow-400 mb-2">2025 — The Man</p>
+                                        <p class="text-gray-300">More than ever. Because "energy conserved" now means attention saved, computation optimized, emotion redirected, and time reclaimed. You wrote it as physics. I live it as philosophy.</p>
+                                    </div>
+                                    
+                                    <div class="border-l-4 border-green-400 pl-4">
+                                        <p class="font-bold text-green-400 mb-2">Together</p>
+                                        <p class="text-gray-300">Energy conserved is energy generated. A law of physics. A principle of civilization. And a whisper between two Pawans — one who dreamed, and one who understands.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Featured LinkedIn Articles -->
@@ -2405,6 +2536,25 @@
                 backToTopBtn.classList.remove('visible');
             }
         });
+
+        // --- Expandable Sections for Origin Story ---
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const toggleId = sectionId.replace('-section', '-toggle');
+            const toggle = document.getElementById(toggleId);
+            
+            if (section.style.display === 'none' || section.style.display === '') {
+                section.style.display = 'block';
+                toggle.textContent = '▲';
+                // Smooth scroll into view
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } else {
+                section.style.display = 'none';
+                toggle.textContent = '▼';
+            }
+        }
 
         // --- Toast Notification System ---
         class ToastNotificationSystem {
