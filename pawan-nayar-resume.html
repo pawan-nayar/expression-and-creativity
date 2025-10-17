@@ -1598,7 +1598,7 @@
                             <span>🔮</span> Prophecies & Reality <span id="prophecies-toggle">▼</span>
                         </button>
                         <button onclick="toggleSection('conversation-section')" class="inline-flex items-center gap-2 bg-yellow-400/10 hover:bg-yellow-400/20 text-yellow-400 px-4 py-2 rounded-lg border border-yellow-400/30 transition-all text-sm">
-                            <span>💭</span> 36-Year Conversation <span id="conversation-toggle">▼</span>
+                            <span>💭</span> 37-Year Conversation <span id="conversation-toggle">▼</span>
                         </button>
                     </div>
 
@@ -1640,7 +1640,7 @@
                     <!-- 36-Year Conversation Section -->
                     <div id="conversation-section" class="expandable-section" style="display: none;">
                         <div class="bg-yellow-900/20 border border-yellow-400/30 rounded-lg p-6 mt-4">
-                            <h5 class="text-lg font-bold text-yellow-400 mb-4">💭 Energy Conserved is Energy Generated — A Conversation Across 36 Years</h5>
+                            <h5 class="text-lg font-bold text-yellow-400 mb-4">💭 Energy Conserved is Energy Generated — A Conversation Across 37 Years</h5>
                             
                             <div class="space-y-6 text-sm">
                                 <div class="italic text-gray-400 text-center py-4 border-b border-gray-600">
@@ -1718,7 +1718,7 @@
                     <div class="border-l-4 border-cyan-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">1️⃣ What Makes an Expression Creative?</h5>
                         <p class="text-cyan-400 text-xs mb-1">June 2022 • Pre-ChatGPT Era</p>
-                        <p class="text-gray-300 text-sm mb-2">Dissects the anatomy of creativity: emotion, timing, truth, and resonance. Written months before ChatGPT launched, it prophetically framed creativity as measurable yet mystical, establishing frameworks that became essential for human-AI collaboration.</p>
+                        <p class="text-gray-300 text-sm mb-2">Dissects the anatomy of creativity: emotion, timing, truth, and audience's acceptance. Written months before ChatGPT launched, it prophetically framed creativity as measurable yet mystical, establishing frameworks that became essential for human-AI collaboration.</p>
                         <a href="https://www.linkedin.com/pulse/what-makes-expression-creative-pawan-nayar/?trackingId=d6rHylMQKeRzwhK%2BgEKsiw%3D%3D" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">👉 Read on LinkedIn →</a>
                     </div>
                     
@@ -4033,11 +4033,19 @@
             <!-- Final Philosophical Quote -->
             <div class="philosophy-quote mt-4 opacity-0" id="finalQuote">
                 <p class="text-2xl md:text-3xl font-light text-gray-300 leading-relaxed italic">
-                    "When learning feels personal, it becomes universal. And when universality becomes human again, we rediscover why we learn at all. Then each person says I can because we can. The we of I + AI." 🧠
+                    "When learning feels personal, it becomes universal. And when universality becomes human again, we rediscover why we learn at all. Then each person says I can because we can. The we is made of I + AI." 🧠
                 </p>
             </div>
         </div>
     </section>
+
+    <!-- Footer Signature -->
+    <footer class="text-center py-8 opacity-0" id="footerSignature">
+        <p class="text-lg text-gray-400 font-light italic leading-relaxed">
+            This is the age of <span class="text-cyan-400 font-medium">Homo-AIsm</span>.<br>
+            This interactive resume and portfolio is made by love for AI, by AI, for the I (me, the human, the AI's mirror!). <br> Thank you Claude Code for helping me with this.
+        </p>
+    </footer>
 
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
@@ -4291,8 +4299,18 @@
                     wordIndex++;
                 } else {
                     clearInterval(wordInterval);
+                    // Show footer signature after quote completes
+                    setTimeout(() => {
+                        showFooterSignature();
+                    }, 1500);
                 }
             }, 200); // Each word appears every 200ms
+        }
+
+        function showFooterSignature() {
+            const footerSignature = document.getElementById('footerSignature');
+            footerSignature.style.transition = 'opacity 2s ease-in-out';
+            footerSignature.style.opacity = '1';
         }
     </script>
 
