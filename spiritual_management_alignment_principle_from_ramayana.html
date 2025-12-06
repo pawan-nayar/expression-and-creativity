@@ -16,6 +16,13 @@
   <meta name="twitter:description" content="When brute force fails, a different kind of strength is required. Leadership lessons from the breaking of Siva's bow." />
   <meta name="twitter:image" content="https://www.beyonddictionary.com/assets/mithila-principle-card.png" />
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
     :root {
       --text: #212529; --bg: #fff; --muted: #f8f9fa; --border: #e9ecef;
       --accent: #fd7e14; --accent-2: #e87312; --header-bg: #212529; --header-fg: #f8f9fa;
@@ -24,32 +31,203 @@
       --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.1);
       --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.15);
     }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--muted); color: var(--text); line-height: 1.6; min-height: 100vh; padding: 1rem; font-size: 15px; }
-    .container { max-width: 950px; margin: 0 auto; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #fffdf8 0%, #fff7ef 180px, var(--muted) 100%);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(14px, 3vw, 32px);
+      font-size: 15px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    img, svg {
+      max-width: 100%;
+      height: auto;
+    }
+    button, input, select {
+      font: inherit;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+    }
     .breadcrumbs { margin-bottom: 1rem; font-size: 0.9rem; color: #6c757d; }
     .breadcrumbs a { color: var(--accent); text-decoration: none; }
     .breadcrumbs a:hover { text-decoration: underline; }
     .breadcrumbs span { color: var(--text); font-weight: 500; }
-    header { text-align: center; margin-bottom: 1.5rem; padding: 1.5rem 0 1rem 0; background: var(--bg); border-radius: 8px; box-shadow: var(--shadow-subtle); }
-    .main-title { font-size: 2.4rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; letter-spacing: -0.5px; }
-    .subtitle { font-size: 1.2rem; color: #4a5568; font-weight: 500; margin-bottom: 0.8rem; }
-    .byline-container { height: 1.5rem; overflow: hidden; position: relative; }
-    .byline { font-size: 1rem; color: #4a5568; font-style: italic; position: absolute; width: 100%; text-align: center; opacity: 0; transition: opacity 0.8s ease-in-out; }
+    .card-block {
+      background: var(--bg);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      border-radius: 18px;
+      padding: clamp(1.1rem, 3vw, 2rem);
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+      margin-bottom: clamp(1.25rem, 3vw, 2rem);
+      max-width: 100%;
+    }
+    .hero-card {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.98));
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      width: 100%;
+      overflow: hidden;
+    }
+    .main-title {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      align-items: center;
+    }
+    .title-emoji {
+      width: clamp(48px, 12vw, 64px);
+      height: clamp(48px, 12vw, 64px);
+    }
+    .subtitle { font-size: clamp(1rem, 3.8vw, 1.2rem); color: #4a5568; font-weight: 500; margin-bottom: 0.5rem; }
+    .hero-tagline { margin: 0 0 1rem 0; font-style: italic; color: #7c3aed; font-weight: 500; padding: 0 0.5rem; }
+    .byline-container { min-height: 3rem; position: relative; display: flex; align-items: center; justify-content: center; }
+    .byline { font-size: 0.95rem; color: #4a5568; font-style: italic; position: absolute; width: 100%; text-align: center; opacity: 0; transition: opacity 0.8s ease-in-out; padding: 0 0.25rem; line-height: 1.4; }
     .byline.active { opacity: 1; }
-    .main-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: var(--shadow-card); }
-    .story-intro { background: var(--muted); border-left: 4px solid var(--accent); padding: 1.5rem; margin-bottom: 2rem; border-radius: 8px; font-size: 1rem; line-height: 1.7; color: var(--text); }
-    .story-highlight { font-style: normal; color: var(--accent-2); font-weight: 700; }
-    .story-toggle { color: var(--header-bg); text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; margin-top: 1rem; }
+    .main-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      box-shadow: var(--shadow-card);
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .story-intro {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text);
+      border-left: 5px solid #d1d5db;
+      width: 100%;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    .story-summary {
+      margin: 0 0 0.8rem 0;
+      color: #475569;
+      font-style: italic;
+    }
+    .story-full p:first-child { margin-top: 0; }
+    .story-intro[data-state="collapsed"] .story-full { display: none; }
+    .story-intro[data-state="collapsed"] .story-summary { opacity: 1; }
+    .story-highlight { font-style: normal; color: var(--text); font-weight: 700; background: linear-gradient(to top, rgba(253, 126, 20, 0.15) 40%, transparent 40%); }
+    .story-toggle {
+      border: none;
+      background: transparent;
+      color: var(--accent-2);
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 1rem;
+      padding: 0.2rem 0;
+      font-size: 0.95rem;
+    }
+    .story-toggle::after {
+      content: '↕️';
+      font-size: 1rem;
+    }
     .section { margin-bottom: 3rem; }
-    .section-title { font-size: 1.5rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
-    .principle-overview { background: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; margin: 2.5rem 0; text-align: center; }
-    .principle-title { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
-    .principle-quote { font-size: 1.2rem; color: var(--header-bg); margin-bottom: 1rem; font-style: italic; font-weight: 500; max-width: 600px; margin-left: auto; margin-right: auto;}
-    .character-evolution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-    .evolution-stage { background: var(--bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s; }
-    .evolution-stage:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); }
-    .evolution-number { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; margin-bottom: 0.5rem;}
-    .evolution-text { font-size: 1rem; color: var(--text); }
+    .section-title {
+      font-size: clamp(1.3rem, 4.2vw, 1.6rem);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-emoji {
+      font-size: 1.4rem;
+    }
+    .paths-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    @media (min-width: 580px) {
+      .paths-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+    }
+    .path-card {
+      padding: 1.25rem 1.5rem;
+      border-radius: 12px;
+      border-left: 4px solid;
+    }
+    .path-arrogance {
+      background: var(--bad-soft);
+      border-left-color: var(--bad);
+    }
+    .path-alignment {
+      background: var(--ok-soft);
+      border-left-color: var(--ok);
+    }
+    .path-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+    }
+    .path-arrogance .path-title { color: var(--bad); }
+    .path-alignment .path-title { color: var(--ok); }
+    .path-item {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .path-label {
+      font-weight: 600;
+      color: #475569;
+    }
+    .principle-overview { background: var(--muted); border: 1px solid var(--border); border-radius: 12px; padding: clamp(1.5rem, 4vw, 2.5rem); margin: 2.5rem 0; text-align: center; }
+    .principle-title { font-size: clamp(1.8rem, 5vw, 2.2rem); font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
+    .principle-quote { font-size: clamp(1.05rem, 3.6vw, 1.25rem); color: var(--header-bg); margin-bottom: 1rem; font-style: italic; font-weight: 500; max-width: 620px; margin-left: auto; margin-right: auto;}
+    .character-evolution-grid { display: grid; grid-template-columns: 1fr; gap: 0.65rem; }
+    .evolution-stage {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid #94a3b8;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    .evolution-stage:hover { transform: translateX(3px); box-shadow: var(--shadow-subtle); }
+    .evolution-number { font-size: 1.8rem; font-weight: 700; color: var(--accent); margin: 0; line-height: 1;}
+    .evolution-text { font-size: clamp(0.98rem, 3.5vw, 1.05rem); color: var(--text); margin: 0; }
     .conflict-box { background: var(--bad-soft); border-left: 4px solid var(--bad); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; }
     .conflict-box strong { color: var(--bad); }
     .matrix-container .accordion-header { background: var(--muted); border: 1px solid var(--border); padding: 1rem; cursor: pointer; font-weight: 600; font-size: 1.2rem; margin-top: 1rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
@@ -65,55 +243,313 @@
     .faq-item.open .faq-question::after { content: '−'; }
     .faq-answer { display: none; margin-top: 1rem; color: #4a5568; padding-left: 0.5rem; }
     .faq-item.open .faq-answer { display: block; }
-    .lesson-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .lesson-card-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 540px) {
+      .lesson-card-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    }
     .lesson-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: var(--shadow-subtle); position: relative; overflow: hidden; }
     .lesson-card::before { content: attr(data-emoji); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; color: var(--text); opacity: 0.1; z-index: 0; }
-    .lesson-card h4 { color: var(--accent-2); font-size: 1.2rem; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+    .lesson-card h4 { color: var(--text); font-size: 1.2rem; margin-bottom: 0.5rem; position: relative; z-index: 1; font-weight: 600; }
     .lesson-card p { position: relative; z-index: 1; }
-    .nav-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s ease; }
-    .nav-btn:hover { background: var(--accent-2); }
-    .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
-    .wizard-container, .quiz-container { background: var(--muted); border-radius: 8px; padding: 2rem; margin-top: 2rem; }
+    .nav-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: clamp(0.9rem, 3.2vw, 0.98rem);
+      font-weight: 600;
+      transition: background 0.3s ease, opacity 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      min-height: 40px;
+    }
+    .nav-btn .btn-icon { font-size: 1.1rem; }
+    .nav-btn .btn-label { white-space: nowrap; }
+    .nav-btn:active { transform: translateY(1px); }
+    .nav-btn:hover:not(:disabled) { background: var(--accent-2); }
+    .nav-btn:disabled { background: #d1d5db; cursor: not-allowed; opacity: 0.6; }
+    .nav-btn.ghost {
+      background: #f4f5f7;
+      color: #475569;
+      border: 1px solid #d8dde6;
+    }
+    .nav-btn.ghost:hover:not(:disabled) { background: #e4e7eb; }
+    .nav-inline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-top: 1.25rem;
+      flex-wrap: nowrap;
+    }
+    .nav-inline .nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      padding: 0;
+      font-size: 1.25rem;
+      gap: 0;
+    }
+    .nav-inline .nav-btn .btn-label {
+      display: none;
+    }
+    .nav-inline .nav-status {
+      flex: 0 1 auto;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #475569;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .wizard-container, .quiz-container { background: var(--muted); border-radius: 12px; padding: clamp(1.25rem, 3vw, 2rem); margin-top: 2rem; }
     .wizard-step, .quiz-body { display: none; }
     .wizard-step.active, .quiz-body.active { display: block; animation: fadeIn 0.5s; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .wizard-step h4, .quiz p { color: var(--header-bg); font-size: 1.2rem; margin-bottom: 1rem; }
     .wizard-options, .quiz-options { list-style: none; padding: 0; margin: 1.5rem 0; }
-    .wizard-options li, .quiz-options label { background: var(--bg); padding: 1rem; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.5rem; cursor: pointer; display: block; }
+    .wizard-options li, .quiz-options label {
+      background: var(--bg);
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.65rem;
+      cursor: pointer;
+      display: block;
+      font-size: clamp(0.95rem, 3.4vw, 1rem);
+    }
     .wizard-options li:hover, .quiz-options label:hover { background: var(--border); }
     .wizard-options input, .quiz-options input { margin-right: 1rem; }
-    .wizard-nav, .quiz-navigation { display: flex; justify-content: space-between; margin-top: 1.5rem; align-items: center; }
-    .quiz-explanation { display: none; margin-top: 10px; padding: 10px; border-left: 3px solid var(--accent-2); background: #fff7ed; border-radius: 4px; }
+    .wizard-nav, .quiz-navigation { margin-top: 1.5rem; }
+    .quiz-explanation { display: none; margin-top: 10px; padding: 10px; border-left: 3px solid #64748b; background: #f8fafc; border-radius: 6px; }
     /* --- Flip Card Carousel Styles --- */
-    .carousel-container { perspective: 1000px; position: relative; padding: 0 60px; }
-    .flip-card { width: 100%; max-width: 600px; height: 350px; background-color: transparent; display: none; margin: 0 auto; }
+    .carousel-container { perspective: 1000px; position: relative; padding: clamp(0px, 6vw, 60px); }
+    .flip-card { width: 100%; max-width: 600px; height: clamp(260px, 65vw, 360px); background-color: transparent; display: none; margin: 0 auto; }
     .flip-card.active { display: block; }
     .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; border: 1px solid var(--border); border-radius: 12px; }
     .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
     .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; padding: 20px; border-radius: 12px; }
     .flip-card-front { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text); }
     .flip-card-back { background: var(--header-bg); color: var(--header-fg); transform: rotateY(180deg); text-align: left; }
-    .flip-card-front h4 { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2rem; color: var(--accent-2); }
+    .flip-card-front h4 { border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2rem; color: var(--text); }
     .flip-card-front p { font-size: 0.95rem; margin-bottom: 10px; }
-    .flip-card-front strong { color: var(--accent-2); }
+    .flip-card-front strong { color: var(--text); font-weight: 600; }
     .flip-card-back-content { display: flex; flex-direction: column; gap: 1rem; text-align: left; width: 100%;}
-    .flip-card-back-content h5 { font-size: 1.1rem; color: #fff; border-bottom: 1px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
+    .flip-card-back-content h5 { font-size: 1.1rem; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
     .flip-card-back p { margin: 0; }
-    .flip-card-back strong { color: var(--accent); }
-    .carousel-nav { position: absolute; top: 50%; transform: translateY(-50%); background-color: var(--accent); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 24px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
-    .carousel-nav:hover { background-color: var(--accent-2); }
+    .flip-card-back strong { color: #f8fafc; }
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #475569;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .carousel-nav:hover { background-color: #334155; }
     #carousel-prev { left: 0; }
     #carousel-next { right: 0; }
     .carousel-footer { text-align: center; margin-top: 15px; }
     #carousel-counter { font-weight: 600; color: #6c757d; margin-bottom: 10px; }
     #carousel-flip-btn { background: #6c757d; color: white; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: background-color 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
     #carousel-flip-btn:hover { background: #495057; }
-    .glossary-cloud{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;justify-content:center}
-    .glossary-chip{position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#fff7ed;border:1px solid #ffd8a8;color:#d9480f;font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(253,126,20,.12)}
-    .glossary-chip:hover, .glossary-chip:focus{background:#ffecde;}
-    .chip-tip{position:fixed;z-index:101;min-width:240px;max-width:min(92vw,420px);background:var(--accent);color:#fff;padding:12px 14px;border-radius:12px;box-shadow:0 12px 28px rgba(253,126,20,.35);opacity:0;visibility:hidden;transition:.15s;line-height:1.45}
+    .glossary-cloud{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:24px;
+      justify-content:flex-start;
+    }
+    .glossary-chip{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:8px;
+      padding:1.25rem 1rem;
+      border-radius:12px;
+      background:#fff;
+      border:1px solid var(--border);
+      color:var(--text);
+      font-weight:500;
+      cursor:pointer;
+      box-shadow:var(--shadow-subtle);
+      transition:transform 0.2s, background 0.2s, box-shadow 0.2s;
+      flex:1 1 calc(50% - 14px);
+      min-width:150px;
+      max-width:48%;
+    }
+    .glossary-chip:active{transform:scale(0.98);}
+    .glossary-chip:hover, .glossary-chip:focus-within{background:#f8fafc; box-shadow:var(--shadow-card); transform: translateY(-2px);}
+    .glossary-chip::after{display:none;}
+    .glossary-chip .chip-icon{
+      font-size:2rem;
+      line-height:1;
+      margin-bottom:0.25rem;
+    }
+    .glossary-chip .chip-label{
+      font-size:clamp(0.95rem,3.4vw,1.02rem);
+      color:var(--text);
+      font-weight:600;
+      line-height:1.3;
+    }
+    .chip-def{
+      font-size:clamp(0.85rem,3vw,0.9rem);
+      color:#64748b;
+      line-height:1.5;
+      margin-top:0.25rem;
+    }
+    .chip-tip{position:fixed;z-index:101;min-width:220px;max-width:min(92vw,420px);background:#1e293b;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:0 12px 28px rgba(15,23,42,.25);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s;line-height:1.45}
     .chip-tip.show{opacity:1;visibility:visible}
-    .chip-tip .arrow{position:absolute;width:12px;height:12px;background:var(--accent);transform:rotate(45deg)}
+    .chip-tip .arrow{position:absolute;width:12px;height:12px;background:#1e293b;transform:rotate(45deg)}
+    .chip-tip.tip-top .arrow{bottom:-6px;top:auto}
+    .chip-tip.tip-bottom .arrow{top:-6px;bottom:auto}
+
+    @media (min-width: 900px) {
+      .glossary-chip {
+        flex: 0 1 calc(33.33% - 16px);
+        max-width: 32%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: clamp(10px, 4vw, 20px);
+      }
+      .container {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      header {
+        margin-bottom: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-card {
+        padding: 0.5rem;
+      }
+      .section.card-block,
+      .principle-overview.card-block {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        border-radius: 0;
+        margin-bottom: 1.75rem;
+      }
+      .story-intro.card-block {
+        background: transparent;
+        box-shadow: none;
+        padding: 0.75rem 0.5rem 0.75rem 1rem;
+        border-radius: 0;
+        margin-bottom: 1.75rem;
+        border: none;
+        border-left: 5px solid #d1d5db;
+      }
+      .section.card-block .section-title {
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+      }
+      .section.card-block .section-title::after {
+        content: '';
+      }
+      .section.card-block > *:not(.section-title) {
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+      }
+      .carousel-nav {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+      }
+      .wizard-container, .quiz-container {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      header {
+        padding: 1rem;
+      }
+      .breadcrumbs {
+        font-size: 0.8rem;
+      }
+      .principle-quote {
+        padding: 0 0.5rem;
+      }
+      .flip-card {
+        height: clamp(240px, 75vw, 320px);
+      }
+      .carousel-container {
+        padding: 0 32px;
+      }
+      .carousel-nav {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        border-radius: 8px;
+      }
+      .lesson-card-grid {
+        grid-template-columns: 1fr;
+      }
+      .glossary-chip {
+        max-width: 100%;
+      }
+      .nav-inline {
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+      }
+      .nav-inline .nav-status {
+        font-size: 0.85rem;
+      }
+      .nav-inline .nav-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .conflict-box, .principle-overview {
+        padding: 1rem;
+      }
+      .story-intro {
+        padding: 0.75rem 0.5rem 0.75rem 1rem;
+      }
+      .character-evolution-grid {
+        gap: 0.75rem;
+      }
+      .evolution-stage {
+        padding: 1rem;
+      }
+      .glossary-chip {
+        flex-basis: 100%;
+        max-width: 100%;
+        justify-content: center;
+      }
+      .nav-inline .nav-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -122,9 +558,19 @@
       <a href="#">Management</a> &gt; <a href="#">Spiritual</a> &gt; <span>Lessons from Ramayana</span>
     </nav>
     
-    <header>
-      <h1 class="main-title">The Alignment Principle</h1>
+    <header class="hero-card card-block">
+      <h1 class="main-title">
+        <svg class="title-emoji" aria-hidden="true" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+          <circle cx="32" cy="32" r="22" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M32 18 L32 32 L42 32" stroke="#475569" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="32" r="3" fill="#475569"/>
+          <path d="M32 12 L34 16 L30 16 Z" fill="#475569"/>
+        </svg>
+        The Alignment Principle
+      </h1>
       <div class="subtitle">A Mithila Story of Humility and Destiny</div>
+      <p class="hero-tagline">Are you strong enough, or are you the right fit?</p>
       <div class="byline-container">
         <div class="byline active">When brute force fails, alignment prevails.</div>
         <div class="byline">The leadership lesson of Siva's great bow.</div>
@@ -134,44 +580,46 @@
     </header>
 
     <main class="main-card">
-      <div class="story-intro">
-        <div id="story-summary">
-            In the kingdom of Mithila, a legendary challenge was set for the marriage of Princess Sita...
-            <a href="javascript:void(0);" id="story-toggle-btn" class="story-toggle">See the full story</a>
+      <div class="story-intro card-block" data-state="expanded">
+        <p id="story-summary" class="story-summary">
+          In the kingdom of Mithila, a legendary challenge was set for the marriage of Princess Sita...
+        </p>
+        <div id="story-full" class="story-full">
+          <p>King Janaka of Mithila announced a great svayaṃvara for his daughter, Sita. The challenge was not of wealth or power, but of profound strength and character: to lift, bend, and string Pinaka, the celestial bow of Lord Siva, a weapon so heavy it required a legion of men to move.</p>
+          <p><span class="story-highlight">One by one, the most arrogant and powerful kings of the era tried and failed.</span> They used all their brute strength, but could not even budge the bow. Their pride turned to humiliation. Then, a young and humble Prince Rama of Ayodhya was invited to try. He approached the bow not with arrogance, but with reverence. <span class="story-highlight">He lifted it as if it were a flower, bent it to string, and in doing so, broke the divine bow with a sound that echoed like thunder.</span> Sita, recognizing this union of humility and true strength, placed the ceremonial garland around his neck. The impossible challenge had been met, not by the strongest, but by the one who was truly worthy.</p>
         </div>
-        <div id="story-full" style="display: none;">
-          <p>King Janaka of Mithila announced a great svayaṃvara for his daughter, Sita. The challenge was not of wealth or power, but of profound strength and character: to lift, bend, and string Pinaka, the celestial bow of Lord Siva, a weapon so heavy it required a legion of men to move.</p><p><span class="story-highlight">One by one, the most arrogant and powerful kings of the era tried and failed.</span> They used all their brute strength, but could not even budge the bow. Their pride turned to humiliation. Then, a young and humble Prince Rama of Ayodhya was invited to try. He approached the bow not with arrogance, but with reverence. <span class="story-highlight">He lifted it as if it were a flower, bent it to string, and in doing so, broke the divine bow with a sound that echoed like thunder.</span> Sita, recognizing this union of humility and true strength, placed the ceremonial garland around his neck. The impossible challenge had been met, not by the strongest, but by the one who was truly worthy.</p>
-        </div>
+        <button type="button" id="story-toggle-btn" class="story-toggle" aria-expanded="true">
+          Hide story
+        </button>
       </div>
 
-      <div class="principle-overview">
+      <div class="principle-overview card-block">
         <div class="principle-title">The Alignment Principle</div>
         <div class="principle-quote">"The greatest challenges yield not to the loudest force, but to the quietest alignment."</div>
         <p style="color: #4a5568; max-width: 600px; margin: 0 auto; line-height: 1.7;">This principle asserts that some problems are "unliftable" by conventional means. Brute force, massive resources, or ego-driven efforts will fail. Success requires a different kind of strength: the humility to understand the problem deeply, the right cultural and strategic fit for the challenge, and the clarity of purpose that aligns all efforts effortlessly.</p>
       </div>
       
-      <section id="interactive-svg">
-          <h2 class="section-title">Two Paths, Two Outcomes</h2>
+      <section id="interactive-svg" class="section card-block">
+          <h2 class="section-title"><span class="section-emoji" aria-hidden="true">⚖️</span>Two Paths, Two Outcomes</h2>
           <p>The story presents a clear choice in how to approach any great challenge. This diagram illustrates the two mindsets and their inevitable results.</p>
-          <div class="chart-container" style="padding: 1rem;">
-            <svg viewBox="0 0 400 120" style="width:100%; height:auto; font-family: 'Segoe UI', sans-serif; font-size: 10px;">
-                <rect x="20" y="20" width="160" height="80" rx="8" fill="var(--bad-soft)" />
-                <text x="100" y="15" text-anchor="middle" font-weight="bold" fill="var(--bad)">The Path of Arrogance</text>
-                <text x="30" y="40" fill="var(--text)">INPUT: Ego & Brute Force</text>
-                <text x="30" y="60" fill="var(--text)">FOCUS: On Self-Glory</text>
-                <text x="30" y="80" fill="var(--text)">RESULT: Humiliation & Failure</text>
-                
-                <rect x="220" y="20" width="160" height="80" rx="8" fill="var(--ok-soft)" />
-                <text x="300" y="15" text-anchor="middle" font-weight="bold" fill="var(--ok)">The Path of Alignment</text>
-                <text x="230" y="40" fill="var(--text)">INPUT: Humility & Focus</text>
-                <text x="230" y="60" fill="var(--text)">FOCUS: On the Mission</text>
-                <text x="230" y="80" fill="var(--text)">RESULT: Mastery & Success</text>
-            </svg>
+          <div class="paths-grid">
+            <div class="path-card path-arrogance">
+              <div class="path-title">The Path of Arrogance</div>
+              <div class="path-item"><span class="path-label">INPUT:</span> Ego & Brute Force</div>
+              <div class="path-item"><span class="path-label">FOCUS:</span> On Self-Glory</div>
+              <div class="path-item"><span class="path-label">RESULT:</span> Humiliation & Failure</div>
+            </div>
+            <div class="path-card path-alignment">
+              <div class="path-title">The Path of Alignment</div>
+              <div class="path-item"><span class="path-label">INPUT:</span> Humility & Focus</div>
+              <div class="path-item"><span class="path-label">FOCUS:</span> On the Mission</div>
+              <div class="path-item"><span class="path-label">RESULT:</span> Mastery & Success</div>
+            </div>
           </div>
       </section>
 
-      <section id="character-evolution">
-        <h2 class="section-title">The Inner Path to True Strength: 10 Stages of Character</h2>
+      <section id="character-evolution" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🪷</span>The Inner Path to True Strength: 10 Stages of Character</h2>
         <p>The story of the bow is not about a single moment of action, but a journey of inner development. It reveals that to conquer an external "impossible" challenge, one must first complete an internal transformation. The bow is a mirror; it reflects the character of the one who approaches it.</p>
         <div class="character-evolution-grid">
             <div class="evolution-stage"><span class="evolution-number">1</span><div class="evolution-text"><strong>Curiosity:</strong> Approaching the challenge without arrogance, asking: What is this really about?</div></div>
@@ -187,14 +635,14 @@
         </div>
       </section>
 
-      <section id="real-world-examples">
-        <h2 class="section-title">The Principle in Recent History</h2>
+      <section id="real-world-examples" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🌍</span>The Principle in Recent History</h2>
         <p>The story of the bow is not a myth; it's a recurring pattern. Below are 10 modern instances where alignment triumphed over brute force. Use the arrows to navigate, click to flip, and explore each lesson.</p>
         <div class="interactive-box">
             <div class="carousel-container">
-                <button id="carousel-prev" class="carousel-nav">‹</button>
+                <button id="carousel-prev" class="carousel-nav" aria-label="Previous example">⬅️</button>
                 <div id="carousel-deck"><!-- Cards will be dynamically generated by JavaScript --></div>
-                <button id="carousel-next" class="carousel-nav">›</button>
+                <button id="carousel-next" class="carousel-nav" aria-label="Next example">➡️</button>
             </div>
             <div class="carousel-footer">
                 <div id="carousel-counter">Example 1 of 10</div>
@@ -205,8 +653,8 @@
         </div>
       </section>
 
-      <section id="bigger-conflict">
-        <h2 class="section-title">The Core Conflict: Why Arrogance Fails</h2>
+      <section id="bigger-conflict" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🔥</span>The Core Conflict: Why Arrogance Fails</h2>
         <p>The assembly in Mithila was a theater for the oldest conflict in leadership: the clash between brute force and aligned wisdom. The bow was the ultimate test, designed to break one and yield to the other.</p>
         <div class="conflict-box">
             <p>The real opponent was never the bow itself; it was the arrogance within the challengers.
@@ -218,8 +666,8 @@
         </div>
       </section>
       
-      <section id="matrix-lessons">
-        <h2 class="section-title">The Alignment Principle in Work & Leadership</h2>
+      <section id="matrix-lessons" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🏢</span>The Alignment Principle in Work & Leadership</h2>
         <p>While the principle applies broadly, its most critical lessons are for the modern workplace. Here are the six core lessons for leaders, managers, and teams.</p>
         <div class="lesson-card-grid">
             <div class="lesson-card" data-emoji="⚙️"><h4>⚙️ Not Every Problem is Manpower-Scalable</h4><p>The princes tried to solve the problem with more force. In business, this is the fallacy of throwing more people or money at a problem. Legacy challenges or toxic cultures need humility and deep understanding, not just a bigger headcount.</p></div>
@@ -231,33 +679,33 @@
         </div>
       </section>
 
-      <section id="wizard">
-        <h2 class="section-title">What's Your Problem-Solver Archetype?</h2>
+      <section id="wizard" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🧙</span>What's Your Problem-Solver Archetype?</h2>
         <div class="wizard-container">
             <!-- Wizard will be generated by JavaScript -->
         </div>
       </section>
 
-      <section id="quiz">
-        <h2 class="section-title">Test Your Understanding</h2>
+      <section id="quiz" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🧠</span>Test Your Understanding</h2>
         <div class="quiz-container">
             <!-- Quiz will be generated by JavaScript -->
         </div>
       </section>
 
-      <section id="matrix-expansion">
-          <h2 class="section-title">Beyond the Boardroom: The Principle in Every Dimension of Life</h2>
+      <section id="matrix-expansion" class="section card-block">
+          <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🌐</span>Beyond the Boardroom: The Principle in Every Dimension of Life</h2>
           <p>The wisdom of the bow extends into all aspects of our lives. Below are the lessons for personal growth, relationships, learning, and more.</p>
           <div class="matrix-container" id="matrix-accordion"></div>
       </section>
       
-      <section id="glossary">
-          <h2 class="section-title">The Leader's Lexicon</h2>
+      <section id="glossary" class="section card-block">
+          <h2 class="section-title"><span class="section-emoji" aria-hidden="true">🗂️</span>The Leader's Lexicon</h2>
           <div class="glossary-cloud" id="glossaryCloud"></div>
       </section>
 
-      <section id="faq">
-        <h2 class="section-title">Frequently Asked Questions</h2>
+      <section id="faq" class="section card-block">
+        <h2 class="section-title"><span class="section-emoji" aria-hidden="true">❓</span>Frequently Asked Questions</h2>
         <div id="faq-container"></div>
       </section>
     </main>
@@ -327,15 +775,13 @@
       
       // Story toggle
       const storyToggleBtn = document.getElementById('story-toggle-btn');
-      if (storyToggleBtn) {
-        storyToggleBtn.addEventListener('click', function toggleStory() {
-          const summary = document.getElementById('story-summary');
-          const full = document.getElementById('story-full');
-          const isHidden = full.style.display === 'none';
-          summary.style.display = isHidden ? 'none' : 'block';
-          full.style.display = isHidden ? 'block' : 'none';
-          this.textContent = isHidden ? 'Hide story' : 'See the full story';
-          if(isHidden) full.appendChild(this); else summary.appendChild(this);
+      const storyIntro = document.querySelector('.story-intro');
+      if (storyToggleBtn && storyIntro) {
+        storyToggleBtn.addEventListener('click', () => {
+          const isCollapsed = storyIntro.getAttribute('data-state') === 'collapsed';
+          storyIntro.setAttribute('data-state', isCollapsed ? 'expanded' : 'collapsed');
+          storyToggleBtn.textContent = isCollapsed ? 'Hide story' : 'See the full story';
+          storyToggleBtn.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
         });
       }
       
@@ -482,7 +928,7 @@
                 } else {
                     result = { title: "The Wise Observer", desc: "You win by out-thinking, not out-muscling. Your patience and analytical mind allow you to see patterns others miss, but you must guard against analysis paralysis." };
                 }
-                wizardContainer.innerHTML = `<div class="wizard-step active" style="text-align:center;"><h4>Your Archetype: ${result.title}</h4><p>${result.desc}</p><div class="wizard-nav"><button class="nav-btn" id="wizard-restart">Start Over</button></div></div>`;
+                wizardContainer.innerHTML = `<div class="wizard-step active" style="text-align:center;"><h4>Your Archetype: ${result.title}</h4><p>${result.desc}</p><div class="wizard-nav"><button class="nav-btn" id="wizard-restart"><span class="btn-icon" aria-hidden="true">🔁</span><span class="btn-label">Start Over</span></button></div></div>`;
                 wizardContainer.querySelector('#wizard-restart').addEventListener('click', () => { currentStep = 1; answers = {}; renderWizardStep(); });
                 return;
             }
@@ -492,9 +938,16 @@
                 <div class="wizard-step active">
                     <h4>Step ${currentStep}/${wizardSteps.length}: ${stepData.q}</h4>
                     <ul class="wizard-options">${optionsHtml}</ul>
-                    <div class="wizard-nav">
-                        ${currentStep > 1 ? `<button class="nav-btn" id="wizard-back">Back</button>` : '<div></div>'}
-                        <button class="nav-btn" id="wizard-next" disabled>Next</button>
+                    <div class="wizard-nav nav-inline">
+                        <button class="nav-btn ghost" id="wizard-back" ${currentStep === 1 ? 'disabled' : ''}>
+                          <span class="btn-icon" aria-hidden="true">◀️</span>
+                          <span class="btn-label">Back</span>
+                        </button>
+                        <span class="nav-status">Step ${currentStep}/${wizardSteps.length}</span>
+                        <button class="nav-btn" id="wizard-next" disabled>
+                          <span class="btn-label">Next</span>
+                          <span class="btn-icon" aria-hidden="true">▶️</span>
+                        </button>
                     </div>
                 </div>`;
 
@@ -529,10 +982,16 @@
               const q = quizData[currentQ];
               const optionsHtml = q.options.map((opt, i) => `<label><input type="radio" name="q${currentQ}" value="${i}"><span>${opt}</span></label>`).join('');
               quizContainer.innerHTML = `
-                  <div class="quiz-navigation">
-                      <button class="nav-btn" id="quiz-prev" ${currentQ === 0 ? 'disabled' : ''}>Back</button>
-                      <span>Question ${currentQ + 1} of ${quizData.length}</span>
-                      <button class="nav-btn" id="quiz-next" ${currentQ === quizData.length - 1 ? 'disabled' : ''}>Next</button>
+                  <div class="quiz-navigation nav-inline">
+                      <button class="nav-btn ghost" id="quiz-prev" ${currentQ === 0 ? 'disabled' : ''}>
+                        <span class="btn-icon" aria-hidden="true">◀️</span>
+                        <span class="btn-label">Prev</span>
+                      </button>
+                      <span class="nav-status">Q ${currentQ + 1}/${quizData.length}</span>
+                      <button class="nav-btn" id="quiz-next" ${currentQ === quizData.length - 1 ? 'disabled' : ''}>
+                        <span class="btn-label">Next</span>
+                        <span class="btn-icon" aria-hidden="true">▶️</span>
+                      </button>
                   </div>
                   <div class="quiz-body active">
                       <p>${q.q}</p>
@@ -565,13 +1024,19 @@
       // Glossary Cloud Setup
       const cloud = document.getElementById('glossaryCloud');
       if (cloud) {
-          cloud.innerHTML = glossaryTerms.map(kw => `<button class="glossary-chip" type="button"><span class="icon">${kw.emoji || '🔸'}</span><span>${kw.term}</span></button>`).join('');
+          cloud.innerHTML = glossaryTerms.map(kw => `
+            <div class="glossary-chip">
+              <span class="chip-icon">${kw.emoji || '🔸'}</span>
+              <div class="chip-label">${kw.term}</div>
+              <div class="chip-def">${kw.def}</div>
+            </div>`).join('');
           const tip = document.createElement('div');
           tip.className = 'chip-tip';
           tip.innerHTML = '<div class="arrow" aria-hidden="true"></div><div class="tip-content"></div>';
           document.body.appendChild(tip);
           const tipContent = tip.querySelector('.tip-content');
           const tipArrow = tip.querySelector('.arrow');
+          const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
           let openBtn = null;
           function clamp(n, min, max){ return Math.max(min, Math.min(n, max)); }
           function positionTipFor(btn){
@@ -579,20 +1044,48 @@
             tip.style.maxWidth = Math.min(vw - pad*2, 420) + 'px';
             const tipRect = tip.getBoundingClientRect();
             const preferTop = rect.top > (window.innerHeight - rect.bottom);
-            const top = preferTop ? rect.top - tipRect.height - 12 : rect.bottom + 12;
+            tip.classList.toggle('tip-top', preferTop);
+            tip.classList.toggle('tip-bottom', !preferTop);
+            const top = preferTop ? rect.top - tipRect.height - 14 : rect.bottom + 14;
             const left = clamp(rect.left + rect.width/2 - tipRect.width/2, pad, vw - tipRect.width - pad);
-            tip.style.top = Math.max(8, top) + 'px'; tip.style.left = left + 'px';
-            tipArrow.style.top = preferTop ? (tipRect.height - 6) + 'px' : '-6px';
+            tip.style.top = Math.max(8, top) + 'px';
+            tip.style.left = left + 'px';
             tipArrow.style.left = clamp(rect.left + rect.width/2 - left - 6, 10, tipRect.width - 22) + 'px';
           }
-          function openTip(btn, text){ tipContent.innerHTML = text; tip.classList.add('show'); positionTipFor(btn); openBtn = btn; }
-          function closeTip(){ tip.classList.remove('show'); openBtn = null; }
+          function openTip(btn, text){
+            tipContent.innerHTML = text;
+            tip.classList.add('show');
+            positionTipFor(btn);
+            openBtn = btn;
+          }
+          function closeTip(){
+            tip.classList.remove('show');
+            openBtn = null;
+          }
           cloud.querySelectorAll('.glossary-chip').forEach((btn,i)=>{
             const def = glossaryTerms[i].def;
-            btn.addEventListener('mouseover', () => { openTip(btn, def); });
+            if (!coarsePointer) {
+              btn.addEventListener('mouseover', () => { openTip(btn, def); });
+              btn.addEventListener('mouseout', closeTip);
+            }
             btn.addEventListener('focus', () => { openTip(btn, def); });
-            btn.addEventListener('mouseout', closeTip);
             btn.addEventListener('blur', closeTip);
+            btn.addEventListener('click', (e) => {
+              if (!coarsePointer) return;
+              e.preventDefault();
+              e.stopPropagation();
+              if (openBtn === btn) {
+                closeTip();
+              } else {
+                openTip(btn, def);
+              }
+            });
+          });
+          document.addEventListener('click', (e) => {
+            if (!openBtn) return;
+            if (!openBtn.contains(e.target) && !tip.contains(e.target)) {
+              closeTip();
+            }
           });
           window.addEventListener('resize',()=>{ if(openBtn) positionTipFor(openBtn); });
           window.addEventListener('scroll',()=>{ if(openBtn) positionTipFor(openBtn); }, {passive:true});

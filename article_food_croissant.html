@@ -25,105 +25,437 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        /* ================= Base / Theme (CBSE Pattern) ================= */
         :root {
             --bg-color: #FDFCF8;
             --text-color: #3D352E;
+            --text-muted: #6b7280;
             --accent-color: #C19A6B;
             --accent-dark: #8E6A47;
+            --border: #e5e7eb;
+            --ok: #10b981;
+            --ok-soft: #d1fae5;
+            --bad: #f87171;
+            --bad-soft: #fee2e2;
         }
+        
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
         }
+
+        /* ================= Typography (Clamp-based) ================= */
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
             text-wrap: balance;
+            line-height: 1.2;
         }
+        h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
+        h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); margin-bottom: 1rem; }
+        h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); margin-bottom: 0.75rem; }
+        h4 { font-size: clamp(1rem, 2.5vw, 1.25rem); margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; word-wrap: break-word; line-height: 1.75; }
+        
+        /* Better readability for content */
+        blockquote {
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        ul, ol {
+            line-height: 1.8;
+        }
+
+        /* ================= Container ================= */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 48px;
+        }
+        
+        /* Desktop: generous side margins */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 900px;
+                padding: 40px 60px;
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 920px;
+                padding: 48px 80px;
+            }
+        }
+
+        /* ================= Hero ================= */
         .hero {
-            height: 75vh; /* Reduced height for desktop */
-            min-height: 500px;
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=2070&auto=format&fit=crop');
+            width: 100%;
+            height: clamp(55vh, 65vh, 75vh);
+            min-height: 380px;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
-            background-position: center 70%; /* Focus on the croissant */
+            background-position: center 65%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0;
+            margin: 0;
         }
+        .hero-content {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 24px 32px;
+            border-radius: 16px;
+            margin: 0 20px 15% 20px;
+            max-width: min(90%, 600px);
+        }
+        .hero h1 { 
+            text-shadow: 0 3px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.4);
+            font-size: clamp(2.8rem, 10vw, 5.5rem);
+            margin-bottom: 0.25rem;
+        }
+        .hero p { 
+            font-size: clamp(1.1rem, 4vw, 1.6rem);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin: 0;
+        }
+
+        /* ================= Section Title ================= */
         .section-title {
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 0.5rem;
             display: inline-block;
         }
+
+        /* ================= Cards ================= */
         .card {
             background-color: white;
             border-radius: 1rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 1.5rem;
         }
-        .interactive-container {
-            background: white;
-            border: 1px solid #e5e7eb;
+        .info-card {
+            background-color: white;
             border-radius: 1rem;
             padding: 1.5rem;
-            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+        .info-card h4 { color: var(--accent-dark); margin-bottom: 0.5rem; }
+        
+        /* Desktop: larger card padding */
+        @media (min-width: 768px) {
+            .card { padding: 2rem; }
+            .info-card { padding: 1.75rem; }
+        }
+
+        /* ================= Interactive Container ================= */
+        .interactive-container {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+        
+        @media (min-width: 768px) {
+            .interactive-container { padding: 2rem; }
+        }
+
+        /* ================= Quiz & Poll Options ================= */
         .quiz-option, .poll-option {
-            display: block; width: 100%; text-align: left; background-color: white;
-            border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background-color: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
         }
         .quiz-option:hover:not(.answered):not(.selected) { background-color: #f9fafb; border-color: var(--accent-dark); }
-        .correct { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; }
-        .incorrect { background-color: #fee2e2 !important; border-color: #f87171 !important; color: #991b1b; }
+        .correct { background-color: var(--ok-soft) !important; border-color: var(--ok) !important; color: #065f46; }
+        .incorrect { background-color: var(--bad-soft) !important; border-color: var(--bad) !important; color: #991b1b; }
         .quiz-feedback { margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; font-weight: 600; display: none; }
         .quiz-feedback.visible { display: block; }
-        .draggable { cursor: grab; user-select: none; }
+
+        /* ================= Drag & Drop ================= */
+        .draggable { 
+            cursor: grab; 
+            user-select: none; 
+            touch-action: manipulation;
+            position: relative;
+        }
         .draggable:active { cursor: grabbing; }
         .dragging { opacity: 0.5; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .matching-container { display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; }
-        .matching-column { flex: 1; min-width: 220px; }
-        .matching-column h5 { text-align: center; color: #6b7280; font-weight: 500; margin-bottom: 0.5rem; }
+        
+        /* Touch-friendly: Tap to select, tap position to move */
+        .draggable.tap-selected {
+            background: #fef3c7 !important;
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 3px rgba(193, 154, 107, 0.3);
+        }
+        .draggable .drag-handle {
+            display: inline-block;
+            margin-right: 8px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        /* Sequence number badges */
+        .sequence-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        /* ================= Matching Quiz ================= */
+        .matching-container { 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .matching-column h5 { text-align: center; color: var(--text-muted); font-weight: 500; margin-bottom: 0.5rem; }
         .match-option.selected { background-color: #fef3c7; border-color: var(--accent-color); }
         .match-results-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 1rem; }
-        .match-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.375rem; }
-        .info-card { background-color: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%; }
-        .info-card h4 { color: var(--accent-dark); }
+        .match-result-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 0.5rem; border-radius: 0.375rem; gap: 0.5rem; }
+
+        /* ================= Fill-in-the-Blank Inputs ================= */
         .ftb-input {
-            border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.25rem 0.5rem;
-            text-align: center; margin: 0 0.25rem; width: 120px;
-            transition: all 0.2s; background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.35rem 0.5rem;
+            text-align: center;
+            margin: 0.25rem;
+            width: min(120px, 40vw);
+            max-width: 100%;
+            transition: all 0.2s;
+            background-color: #f9fafb;
+            font-size: 0.95rem;
         }
         .ftb-input:focus { border-color: var(--accent-dark); outline: none; box-shadow: 0 0 0 2px rgba(193, 154, 107, 0.2); }
+
+        /* ================= Buttons ================= */
         .quiz-btn {
-            background-color: var(--accent-dark); color: white; font-weight: bold;
-            padding: 0.5rem 1rem; border-radius: 0.375rem; transition: background-color 0.2s;
-            border: none; cursor: pointer;
+            background-color: var(--accent-dark);
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            min-height: 44px; /* Touch-friendly */
         }
         .quiz-btn:hover:not(:disabled) { background-color: #3D352E; }
         .quiz-btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
         .hint-btn {
-            font-size: 0.8rem; color: #6b7280; background: #f3f4f6;
-            padding: 0.25rem 0.5rem; border-radius: 0.25rem; cursor: pointer; border: 1px solid #d1d5db;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: #f3f4f6;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            border: 1px solid #d1d5db;
+            min-height: 36px;
         }
+
+        /* ================= Polls ================= */
         .poll-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background-color: var(--accent-color); opacity: 0.3; transition: width 0.8s ease-in-out; z-index: 1; }
         .poll-option { position: relative; overflow: hidden; }
         .poll-option span { position: relative; z-index: 2; }
-        .seo-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
-        .seo-tag { background-color: #f3f4f6; color: #4b5563; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; }
+
+        /* ================= SEO Tags ================= */
+        .seo-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+        .seo-tag { background-color: #f3f4f6; color: #4b5563; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+
+        /* ================= Footer ================= */
+        footer .container {
+            max-width: 800px;
+        }
+        footer h4 {
+            font-size: 1.25rem;
+        }
+        @media (max-width: 600px) {
+            footer .container { padding: 24px 16px; }
+            footer h4 { font-size: 1.1rem; }
+        }
+
+        /* ================= Interactive Hints (Step 4) ================= */
+        .tap-hint {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: var(--accent-dark);
+            background: rgba(193, 154, 107, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .tap-hint::before { content: '👆 '; }
+        
+        /* Mobile instruction text */
+        .mobile-instruction {
+            display: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+        }
+        @media (max-width: 768px) {
+            .mobile-instruction { display: block; }
+            .desktop-instruction { display: none; }
+        }
+        
+        /* Better touch targets */
+        @media (pointer: coarse) {
+            .quiz-option, .poll-option {
+                min-height: 48px;
+                display: flex;
+                align-items: center;
+            }
+            .quiz-btn {
+                min-height: 48px;
+                padding: 0.875rem 1.5rem;
+            }
+        }
+
+        /* ================= Responsive: 768px (Tablet) ================= */
+        @media (max-width: 768px) {
+            .container { padding: 24px 20px; }
+            
+            /* Hero adjustments */
+            .hero { 
+                min-height: 320px;
+            }
+            .hero-content {
+                padding: 18px 24px;
+                margin: 0 16px 12% 16px;
+                max-width: 95%;
+            }
+            
+            /* Cards */
+            .card { padding: 1.25rem; }
+            .info-card { padding: 1.25rem; }
+            .interactive-container { padding: 1.25rem; }
+            
+            /* Grids collapse to single column */
+            .matching-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            /* Section spacing reduction */
+            main.space-y-24 > * { margin-top: 3rem !important; }
+            main.py-16 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+        }
+
+        /* ================= Responsive: 600px (Mobile) ================= */
+        @media (max-width: 600px) {
+            h2 { font-size: clamp(1.35rem, 5vw, 1.75rem); }
+            
+            .hero { 
+                height: auto; 
+                min-height: 50vh;
+                justify-content: center;
+            }
+            .hero h1 { font-size: clamp(2.2rem, 12vw, 3rem); }
+            .hero p { font-size: clamp(1rem, 4vw, 1.2rem); }
+            .hero-content {
+                padding: 18px 22px;
+                border-radius: 12px;
+                margin: 0 12px 10% 12px;
+                max-width: calc(100% - 24px);
+            }
+            
+            .interactive-container { padding: 1rem; margin-top: 1rem; }
+            .card { padding: 1rem; }
+            .info-card { padding: 1rem; }
+            
+            /* Reduce section margins */
+            main.space-y-24 > * { margin-top: 2rem !important; }
+            
+            /* Button wrap for sequence quiz */
+            .text-center.space-x-4 {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .text-center.space-x-4 > * { margin: 0 !important; width: 100%; }
+        }
+
+        /* ================= Responsive: 480px (Small Mobile) ================= */
+        @media (max-width: 480px) {
+            .container { padding: 16px; }
+            
+            .hero {
+                min-height: 45vh;
+            }
+            .hero h1 { font-size: clamp(2rem, 11vw, 2.5rem); }
+            .hero-content {
+                padding: 16px 18px;
+                border-radius: 10px;
+                margin: 0 10px 8% 10px;
+                max-width: calc(100% - 20px);
+            }
+            
+            .interactive-container { padding: 0.875rem; border-radius: 0.75rem; }
+            .quiz-option, .poll-option { padding: 0.75rem; font-size: 0.9rem; }
+            
+            .seo-tag { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+            .seo-tags { gap: 0.35rem; }
+            
+            /* Stack match results better */
+            .match-result-row { font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="hero flex flex-col items-center justify-center text-white text-center p-4">
+    <header class="hero text-white text-center">
         <!-- Hidden img tag for SEO and accessibility -->
         <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200&auto=format&fit=crop" alt="A close-up of a perfectly golden, flaky croissant." class="hidden">
-        <h1 class="text-6xl md:text-8xl font-bold">Croissant</h1>
-        <p class="text-xl md:text-2xl mt-4 italic" style="font-family: 'Playfair Display';">An ode to golden layers of joy 🥐</p>
+        <div class="hero-content">
+            <h1 class="font-bold">Croissant</h1>
+            <p class="italic" style="font-family: 'Playfair Display';">An ode to golden layers of joy 🥐</p>
+        </div>
     </header>
 
-    <main class="container mx-auto px-4 md:px-8 py-16 md:py-24 space-y-24">
+    <main class="container space-y-24 py-16">
         <section id="identity">
-            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12">Identity & Origins</h2>
-            <div class="card p-6 md:p-8">
+            <h2 class="section-title font-bold mb-8">Identity & Origins</h2>
+            <div class="card">
                 <h3 class="text-2xl font-semibold mb-4">Recipe Summary</h3>
                 <blockquote class="border-l-4 border-accent-color pl-4 italic text-gray-700">A buttery, flaky viennoiserie pastry of Austrian origin, named for its crescent shape. It is made from a layered yeast-leavened dough (pâte feuilletée) that is laminated with butter and baked to golden perfection.</blockquote>
                 <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -134,7 +466,7 @@
         </section>
 
         <section id="sensory">
-             <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">A Feast for the Senses</h2>
+             <h2 class="section-title font-bold mb-12 mx-auto text-center">A Feast for the Senses</h2>
              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="info-card"><h4 class="text-xl mb-2">Texture & Mouthfeel</h4><p>✨ The experience is a journey of contrasts. It begins with a delicate, shatteringly crisp exterior that crackles audibly. This gives way to an impossibly soft, airy, and tenderly chewy honeycomb interior that seems to melt on the tongue.</p></div>
                 <div class="info-card"><h4 class="text-xl mb-2">Taste Profile</h4><p>😋 The flavor is a profound and complex symphony. It is profoundly buttery and rich, with a subtle sweetness from the caramelized crust that perfectly balances a mild, yeasty complexity developed during the slow fermentation process.</p></div>
@@ -143,8 +475,8 @@
              </div>
         </section>
 
-        <section id="creation" class="bg-white rounded-2xl p-6 md:p-12 shadow-lg">
-            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12">The Art of Creation</h2>
+        <section id="creation" class="card">
+            <h2 class="section-title font-bold mb-12">The Art of Creation</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                 <div><h3 class="text-2xl font-semibold mb-4">The Lamination Method</h3><p class="text-gray-600 mb-6">The heart of the croissant is <strong class="font-semibold text-accent-dark">lamination</strong>. This meticulous technique involves enclosing a slab of cold, high-fat butter within a lean dough, then executing a series of precise folds, or 'turns'. Each turn multiplies the layers. When baked, the water in the butter turns to steam, explosively pushing the dough layers apart. This creates the hundreds of whisper-thin, flaky sheets that define the pastry.</p><h4 class="text-xl mb-2 font-semibold">Common Mistakes</h4><p class="text-gray-600">Using low-fat butter (too much water), not chilling the dough sufficiently between folds (butter melts), or under-proofing (dense texture).</p></div>
                 <div><h3 class="text-2xl font-semibold mb-4">The Baker's Toolkit</h3><div class="space-y-4"><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Main Ingredients</h4><p class="text-sm text-gray-600">Flour, high-fat (min. 82%) European-style butter, yeast, sugar, salt, milk.</p></div><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Pro Tip</h4><p class="text-sm text-gray-600">To revive a day-old croissant, bake at 180°C (350°F) for 3-5 mins. Never microwave!</p></div><div class="p-4 bg-gray-50 rounded-lg"><h4 class="font-semibold">Best Substitute</h4><p class="text-sm text-gray-600">Puff pastry offers flakiness but lacks the croissant's yeasty depth and chew.</p></div></div></div>
@@ -152,7 +484,7 @@
         </section>
 
         <section id="interactive-zone">
-            <h2 class="section-title text-4xl md:text-5xl font-bold mb-6 text-center">Test Your Croissant Knowledge</h2>
+            <h2 class="section-title font-bold mb-6 text-center">Test Your Croissant Knowledge</h2>
             
             <div class="interactive-container">
                 <h3 class="text-2xl font-semibold mb-4">Multiple Choice</h3>
@@ -174,13 +506,14 @@
 
             <div class="interactive-container">
                 <h3 class="text-2xl font-semibold mb-4">Sequence the Steps</h3>
-                <p class="text-center text-gray-600 mb-4">Drag and drop into the correct order.</p>
+                <p class="desktop-instruction text-center text-gray-600 mb-4">Drag and drop into the correct order.</p>
+                <p class="mobile-instruction">Tap an item to select it, then tap another to swap positions.</p>
                 <div id="sequence-list" class="space-y-2 max-w-md mx-auto">
-                    <div class="quiz-option draggable" draggable="true" data-order="3">Bake at high heat</div>
-                    <div class="quiz-option draggable" draggable="true" data-order="1">Laminate with butter</div>
-                    <div class="quiz-option draggable" draggable="true" data-order="5">Let proof until doubled</div>
-                    <div class="quiz-option draggable" draggable="true" data-order="2">Roll out dough</div>
-                    <div class="quiz-option draggable" draggable="true" data-order="4">Cut & shape into crescents</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="3"><span class="drag-handle">☰</span>Bake at high heat</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="1"><span class="drag-handle">☰</span>Laminate with butter</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="5"><span class="drag-handle">☰</span>Let proof until doubled</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="2"><span class="drag-handle">☰</span>Roll out dough</div>
+                    <div class="quiz-option draggable" draggable="true" data-order="4"><span class="drag-handle">☰</span>Cut & shape into crescents</div>
                 </div>
                 <div class="text-center mt-6 space-x-4">
                     <button id="check-sequence-btn" class="quiz-btn">Check Sequence</button>
@@ -190,7 +523,9 @@
 
             <div class="interactive-container">
                 <h3 class="text-2xl font-semibold mb-4">Match the Pairs</h3>
-                <p class="text-center text-gray-600 mb-4">Tap a property, then tap its matching descriptor.</p>
+                <div class="text-center mb-4">
+                    <span class="tap-hint">Tap to match pairs</span>
+                </div>
                 <div class="matching-container">
                     <div id="match-col-a" class="matching-column"><h5>Property</h5>
                         <button class="quiz-option match-option" data-match-id="texture">Texture</button>
@@ -212,7 +547,7 @@
         </section>
         
         <section id="experience">
-            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">The Croissant Experience</h2>
+            <h2 class="section-title font-bold mb-12 mx-auto text-center">The Croissant Experience</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="info-card"><h4 class="text-xl mb-2">Serving Suggestions</h4><p>Perfect on its own, with jam and butter, or as a base for ham & cheese or almond croissants.</p></div>
                 <div class="info-card"><h4 class="text-xl mb-2">Best Time & Temp</h4><p>Ideally eaten warm in the morning for breakfast or brunch. Room temperature is also excellent.</p></div>
@@ -221,8 +556,8 @@
             </div>
         </section>
 
-        <section id="nutrition-diet" class="card p-6 md:p-8">
-            <h2 class="section-title text-3xl md:text-4xl font-bold mb-6">Nutrition & Diet</h2>
+        <section id="nutrition-diet" class="card">
+            <h2 class="section-title font-bold mb-6">Nutrition & Diet</h2>
             <div class="grid md:grid-cols-3 gap-6">
                 <div><h4 class="font-semibold text-accent-dark">Calorie Count</h4><p>~230-270 kcal per medium unit.</p></div>
                 <div><h4 class="font-semibold text-accent-dark">Nutritional Highlights</h4><p>Primarily a source of energy from carbohydrates and fats. A mindful indulgence rather than a health food.</p></div>
@@ -231,7 +566,7 @@
         </section>
 
         <section id="polls">
-            <h2 class="section-title text-4xl md:text-5xl font-bold mb-12 mx-auto text-center">How Do You Croissant?</h2>
+            <h2 class="section-title font-bold mb-12 mx-auto text-center">How Do You Croissant?</h2>
             <div class="max-w-2xl mx-auto space-y-10">
                 <div class="poll-container"><p class="font-semibold text-lg text-gray-800 mb-4">What's your go-to style?</p><div class="space-y-3"><button data-feedback="Ah, a purist! You appreciate the classic buttery perfection. 👍" class="poll-option"><span>🧈 Plain & Perfect</span><div class="poll-bar-fill"></div></button><button data-feedback="A touch of sweetness! A match made in heaven. 😋" class="poll-option"><span>🍫 Chocolate Filled</span><div class="poll-bar-fill"></div></button><button data-feedback="A bold and delicious choice! A fantastic savory meal. 🧀" class="poll-option"><span>🧀 Savory & Stuffed</span><div class="poll-bar-fill"></div></button></div><p class="poll-feedback text-center mt-4 font-semibold text-accent-dark hidden"></p></div>
                 <div class="poll-container"><p class="font-semibold text-lg text-gray-800 mb-4">What drink do you love with a croissant?</p><div class="space-y-3"><button data-feedback="The classic pairing! The bitterness of coffee cuts through the richness perfectly." class="poll-option"><span>☕ Coffee</span><div class="poll-bar-fill"></div></button><button data-feedback="An indulgent choice for an indulgent pastry. We approve!" class="poll-option"><span>🍫 Hot Chocolate</span><div class="poll-bar-fill"></div></button><button data-feedback="A simple, refreshing combination that lets the croissant shine." class="poll-option"><span>🥛 Cold Milk</span><div class="poll-bar-fill"></div></button></div><p class="poll-feedback text-center mt-4 font-semibold text-accent-dark hidden"></p></div>
@@ -241,7 +576,7 @@
     </main>
     
     <footer class="bg-white pt-12 pb-8">
-        <div class="container mx-auto px-4 text-center">
+        <div class="container text-center">
              <h4 class="text-xl mb-4">Mood & Metadata</h4>
              <div class="text-gray-600 max-w-4xl mx-auto text-sm space-y-2">
                 <p><strong class="text-accent-dark">Slogan:</strong> Golden layers of joy.</p>
@@ -340,6 +675,7 @@
         // --- Sequence Quiz Logic ---
         const sequenceList = document.getElementById('sequence-list');
         if(sequenceList) {
+            // Drag and drop for desktop
             sequenceList.addEventListener('dragover', e => {
                 e.preventDefault();
                 const afterElement = getDragAfterElement(sequenceList, e.clientY);
@@ -349,27 +685,70 @@
                 }
             });
 
+            // Tap-to-swap for mobile
+            let selectedForSwap = null;
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            if (isTouchDevice) {
+                sequenceList.querySelectorAll('.draggable').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (item.classList.contains('correct') || item.classList.contains('incorrect')) return;
+                        
+                        if (!selectedForSwap) {
+                            // First tap: select this item
+                            selectedForSwap = item;
+                            item.classList.add('tap-selected');
+                        } else if (selectedForSwap === item) {
+                            // Tap same item: deselect
+                            item.classList.remove('tap-selected');
+                            selectedForSwap = null;
+                        } else {
+                            // Second tap on different item: swap positions
+                            const parent = sequenceList;
+                            const items = Array.from(parent.children);
+                            const idx1 = items.indexOf(selectedForSwap);
+                            const idx2 = items.indexOf(item);
+                            
+                            if (idx1 < idx2) {
+                                parent.insertBefore(item, selectedForSwap);
+                                parent.insertBefore(selectedForSwap, items[idx2 + 1] || null);
+                            } else {
+                                parent.insertBefore(selectedForSwap, item);
+                                parent.insertBefore(item, items[idx1 + 1] || null);
+                            }
+                            
+                            selectedForSwap.classList.remove('tap-selected');
+                            selectedForSwap = null;
+                        }
+                    });
+                });
+            }
+
             document.getElementById('check-sequence-btn').addEventListener('click', e => {
                 let allCorrect = true;
                 sequenceList.querySelectorAll('.draggable').forEach((item, index) => {
-                    item.classList.remove('correct', 'incorrect');
+                    item.classList.remove('correct', 'incorrect', 'tap-selected');
                     const isCorrect = parseInt(item.dataset.order) === index + 1;
                     item.classList.add(isCorrect ? 'correct' : 'incorrect');
-                    item.innerHTML = `<span class="mr-2 text-lg">${isCorrect ? '✅' : '❌'}</span> ${item.textContent}`;
+                    // Get text without the drag handle
+                    const textContent = item.textContent.replace('☰', '').trim();
+                    item.innerHTML = `<span class="sequence-number">${index + 1}</span><span class="mr-2">${isCorrect ? '✅' : '❌'}</span>${textContent}`;
                     item.draggable = false;
                     if (!isCorrect) allCorrect = false;
                 });
                 if (!allCorrect) document.getElementById('show-sequence-answer-btn').classList.remove('hidden');
                 e.target.disabled = true;
+                selectedForSwap = null;
             });
             
             document.getElementById('show-sequence-answer-btn').addEventListener('click', e => {
                  const correctOrder = Array.from(sequenceList.querySelectorAll('.draggable')).sort((a,b) => a.dataset.order - b.dataset.order);
-                 correctOrder.forEach(item => {
-                    item.classList.remove('incorrect');
+                 correctOrder.forEach((item, index) => {
+                    item.classList.remove('incorrect', 'tap-selected');
                     item.classList.add('correct');
-                    item.innerHTML = `<span class="mr-2 text-lg">✅</span> ${item.textContent.replace(/❌|✅/g, '').trim()}`;
-                    sequenceList.appendChild(item)
+                    const textContent = item.textContent.replace(/❌|✅|☰|\d/g, '').trim();
+                    item.innerHTML = `<span class="sequence-number">${index + 1}</span><span class="mr-2">✅</span>${textContent}`;
+                    sequenceList.appendChild(item);
                  });
                  e.target.disabled = true;
             });

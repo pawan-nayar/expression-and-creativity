@@ -10,7 +10,7 @@
     <style>
         /* --- Basic Reset & Setup --- */
         :root {
-            --canvas-size: 76vh;
+            --canvas-size: 85vw;
             --border-color: #ddd;
             --text-color: #333;
             --bg-color: #f9f9f9;
@@ -26,7 +26,7 @@
         }
 
         html, body {
-            height: 100%;
+            min-height: 100vh;
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -34,6 +34,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            overflow-x: hidden;
         }
 
         /* --- Page Structure --- */
@@ -44,23 +45,34 @@
             justify-content: center;
             width: 100%;
             flex-grow: 1;
-            padding: 20px;
+            padding: 15px 10px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            padding: 0 10px;
         }
 
         header h1 {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-size: clamp(1.4rem, 5vw, 2.5rem);
             color: var(--header-color);
+            line-height: 1.2;
+            margin-bottom: 8px;
         }
 
         header p {
-            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-size: clamp(0.85rem, 3.5vw, 1.1rem);
             color: #666;
             margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        header .cta-text {
+            font-size: clamp(0.95rem, 3.8vw, 1.2rem);
+            color: var(--header-color);
+            font-weight: 600;
+            margin-top: 12px;
         }
 
         main {
@@ -68,44 +80,255 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            max-width: 100%;
         }
 
         /* --- Canvas Area --- */
         canvas {
             width: var(--canvas-size);
             height: var(--canvas-size);
-            max-width: 800px;
-            max-height: 800px;
-            border: 1px dashed var(--border-color);
+            max-width: min(90vw, 600px);
+            max-height: min(90vw, 600px);
+            border: 2px dashed var(--border-color);
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: crosshair;
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* --- Tooltip --- */
         #tooltip {
-            position: fixed; /* Use fixed to stay within viewport */
+            position: fixed;
             background-color: var(--tooltip-bg);
             color: var(--tooltip-text);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            pointer-events: none; /* Prevent tooltip from capturing mouse events */
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: clamp(0.85rem, 3.5vw, 1rem);
+            font-weight: 600;
+            pointer-events: none;
             opacity: 0;
-            transform: translate(-50%, -120%); /* Position above the cell */
-            transition: opacity 0.3s ease;
+            transform: translate(-50%, -120%);
+            transition: opacity 0.2s ease;
             z-index: 100;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            max-width: 90vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* --- Footer --- */
         footer {
             width: 100%;
             text-align: center;
-            padding: 15px;
-            font-size: 0.8rem;
+            padding: 15px 10px;
+            font-size: clamp(0.7rem, 2.8vw, 0.85rem);
             color: #888;
+            line-height: 1.4;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            :root {
+                --canvas-size: 90vw;
+            }
+            
+            .container {
+                padding: 10px 5px;
+            }
+
+            header {
+                margin-bottom: 12px;
+            }
+
+            canvas {
+                border-width: 1.5px;
+                border-radius: 10px;
+            }
+
+            #tooltip {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+                border-radius: 6px;
+            }
+        }
+
+        /* Small tablets */
+        @media (min-width: 481px) and (max-width: 768px) {
+            :root {
+                --canvas-size: 70vw;
+            }
+            
+            canvas {
+                max-width: min(70vw, 500px);
+                max-height: min(70vw, 500px);
+            }
+        }
+
+        /* Tablets and larger */
+        @media (min-width: 769px) {
+            :root {
+                --canvas-size: 60vh;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            header {
+                margin-bottom: 25px;
+            }
+
+            canvas {
+                max-width: 700px;
+                max-height: 700px;
+                border-width: 2px;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1024px) {
+            :root {
+                --canvas-size: 70vh;
+            }
+
+            canvas {
+                max-width: 800px;
+                max-height: 800px;
+            }
+
+            #tooltip {
+                padding: 10px 18px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Landscape mobile orientation */
+        @media (max-width: 768px) and (orientation: landscape) {
+            :root {
+                --canvas-size: 75vh;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                margin-bottom: 10px;
+            }
+
+            header h1 {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+            }
+
+            header p {
+                font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+            }
+        }
+
+        /* === ENHANCED MOBILE OPTIMIZATIONS === */
+        
+        /* Safe area insets for notched devices (iPhone X+, etc.) */
+        @supports (padding: env(safe-area-inset-bottom)) {
+            .container {
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+            }
+            
+            footer {
+                padding-bottom: max(15px, env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* Device-specific instruction text */
+        .instruction-hover,
+        .instruction-tap {
+            display: none;
+        }
+        
+        /* Show hover instruction on devices with mouse */
+        @media (hover: hover) and (pointer: fine) {
+            .instruction-hover { display: inline; }
+        }
+        
+        /* Show tap instruction on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .instruction-tap { display: inline; }
+        }
+        
+        /* Fallback for devices that don't support hover query */
+        @media (max-width: 768px) {
+            .instruction-hover { display: none !important; }
+            .instruction-tap { display: inline !important; }
+        }
+        
+        /* Smooth canvas interaction on mobile */
+        @media (max-width: 768px) {
+            canvas {
+                /* Better touch scrolling prevention */
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+            
+            /* Tooltip adjustments for small screens */
+            #tooltip {
+                transform: translate(-50%, -130%);
+                max-width: 85vw;
+                text-align: center;
+            }
+        }
+        
+        /* Very small screens (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            :root {
+                --canvas-size: 95vw;
+            }
+            
+            header h1 {
+                font-size: 1.3rem;
+            }
+            
+            header p {
+                font-size: 0.8rem;
+            }
+            
+            canvas {
+                max-width: 95vw;
+                max-height: 95vw;
+                border-radius: 8px;
+            }
+            
+            footer {
+                font-size: 0.7rem;
+                padding: 10px 5px;
+            }
+            
+            #tooltip {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000;
+                --tooltip-bg: #000;
+            }
+            
+            canvas {
+                border-style: solid;
+            }
+        }
+        
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            #tooltip {
+                transition: none;
+            }
         }
 
     </style>
@@ -115,7 +338,11 @@
     <div class="container">
         <header>
             <h1>🧵 Fashion Word Explorer</h1>
-            <p>Explore the language of fashion. Hover over the silhouette.</p>
+            <p>Explore the language of fashion—every gesture reveals a fresh word.</p>
+            <p class="cta-text">
+                <span class="instruction-hover">Hover anywhere on the silhouette, then click to surface your next style word.</span>
+                <span class="instruction-tap">Tap anywhere on the silhouette and glide to surface your next style word.</span>
+            </p>
         </header>
     
         <main>
@@ -182,17 +409,29 @@
             }
             
             /**
-             * Handles the mousemove event on the canvas to show/hide tooltips.
-             * @param {MouseEvent} e - The mouse event.
+             * Handles pointer interactions (mouse or touch) on the canvas to show/hide tooltips.
+             * @param {MouseEvent|TouchEvent} e - The pointer event.
              */
-            function handleMouseMove(e) {
+            function handlePointerMove(e) {
                 if (!imageDataCache) return;
 
-                // Get mouse coordinates relative to the canvas
-                const x = e.clientX - canvasRect.left;
-                const y = e.clientY - canvasRect.top;
+                // Handle both mouse and touch events
+                let clientX, clientY;
+                if (e.type.startsWith('touch')) {
+                    if (e.touches.length === 0) return;
+                    e.preventDefault(); // Prevent scrolling while touching canvas
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
 
-                // Ensure the mouse is within the canvas bounds
+                // Get coordinates relative to the canvas
+                const x = clientX - canvasRect.left;
+                const y = clientY - canvasRect.top;
+
+                // Ensure the pointer is within the canvas bounds
                 if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) {
                     tooltip.style.opacity = '0';
                     return;
@@ -211,7 +450,7 @@
                 
                 // --- If pixel is visible, show and position the tooltip ---
 
-                // Calculate which grid cell the mouse is in
+                // Calculate which grid cell the pointer is in
                 const cellWidth = canvas.width / GRID_SIZE;
                 const cellHeight = canvas.height / GRID_SIZE;
                 const cellX = Math.floor(x / cellWidth);
@@ -232,17 +471,36 @@
             }
             
             /**
-             * Hides the tooltip when the mouse leaves the canvas.
+             * Hides the tooltip when the pointer leaves the canvas.
              */
-            function handleMouseLeave() {
+            function handlePointerLeave() {
                 tooltip.style.opacity = '0';
+            }
+
+            /**
+             * Updates canvas rect on window resize or orientation change
+             */
+            function updateCanvasRect() {
+                setupCanvas();
             }
 
 
             // --- Event Listeners ---
-            window.addEventListener('resize', setupCanvas);
-            canvas.addEventListener('mousemove', handleMouseMove);
-            canvas.addEventListener('mouseleave', handleMouseLeave);
+            // Resize and orientation change
+            window.addEventListener('resize', updateCanvasRect);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(updateCanvasRect, 100);
+            });
+
+            // Mouse events
+            canvas.addEventListener('mousemove', handlePointerMove);
+            canvas.addEventListener('mouseleave', handlePointerLeave);
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', handlePointerMove, { passive: false });
+            canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
+            canvas.addEventListener('touchend', handlePointerLeave);
+            canvas.addEventListener('touchcancel', handlePointerLeave);
 
             // --- Initial Setup ---
             setupCanvas();

@@ -35,7 +35,7 @@
             line-height: 1.7;
             scroll-behavior: smooth;
         }
-        .container { max-width: 850px; margin: auto; padding: 24px; background: #fff; }
+        .container { max-width: 1080px; margin: auto; padding: 24px; background: #fff; }
         a { color: var(--accent); text-decoration: none; }
         a:hover { text-decoration: underline; }
 
@@ -43,9 +43,9 @@
         .site-header, .site-footer { background: var(--header-bg); color: var(--header-fg); padding: 14px 24px; }
         .site-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { font-weight: 700; font-size: 1.2rem; color: #fff; text-decoration: none; }
-        .site-header nav { display: flex; gap: 14px; }
-        .site-header nav a { color: #ced4da; text-decoration: none; }
-        .site-header nav a:hover { color: #fff; }
+        .site-nav { display: flex; gap: 14px; }
+        .site-nav a { color: #ced4da; text-decoration: none; }
+        .site-nav a:hover { color: #fff; }
         .site-footer { text-align: center; margin-top: 50px; padding: 40px; }
         .breadcrumbs { margin-bottom: 24px; font-size: 0.9rem; color: #6c757d; }
         .breadcrumbs a { color: var(--accent); }
@@ -119,9 +119,10 @@
         .glossary-cloud { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; justify-content: center; }
         .glossary-chip { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: #fdf2e9; border: 1px solid var(--accent); color: var(--accent); font-weight: 600; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
         .glossary-chip:hover, .glossary-chip:focus { background: #fbe5d3; }
-        .chip-tip { position: fixed; z-index: 1001; min-width: 240px; max-width: min(92vw, 420px); background: var(--header-bg); color: #fff; padding: 12px 14px; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0, .2); opacity: 0; visibility: hidden; transition: .15s; line-height: 1.45; }
+        .chip-tip { position: fixed; z-index: 1001; min-width: 240px; max-width: min(92vw, 420px); background: var(--header-bg); color: #fff; padding: 12px 14px; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0, .2); opacity: 0; visibility: hidden; transition: .15s; line-height: 1.45; overflow: visible; }
         .chip-tip.show { opacity: 1; visibility: visible; }
-        .chip-tip .arrow { position: absolute; width: 12px; height: 12px; background: var(--header-bg); transform: rotate(45deg); }
+        .chip-tip .arrow { position: absolute; width: 12px; height: 12px; background: var(--header-bg); transform: rotate(45deg); left: 50%; margin-left: -6px; top: -6px; }
+        .chip-tip .tip-content { position: relative; z-index: 1; }
 
         /* --- Card Styles (Simplified) --- */
         .highlight-card, .critique-card { background: var(--muted); border-left: 4px solid var(--accent); padding: 20px; border-radius: 4px; margin: 24px 0; }
@@ -129,18 +130,58 @@
         .critique-card h5::before { content: '🔬 '; }
         .highlight-card h5::before { content: '🌏 '; }
 
-        /* --- Flip Card Styles --- */
-        .flip-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; margin: 32px 0; }
-        .flip-card { background-color: transparent; width: 100%; height: 180px; perspective: 1000px; cursor: pointer; }
+        /* --- Flip Card Carousel Styles --- */
+        .flip-card-carousel-wrapper {
+            position: relative;
+            margin: 32px 0;
+        }
+        .flip-card-grid { 
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px 5px 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--muted);
+        }
+        .flip-card-grid::-webkit-scrollbar { height: 8px; }
+        .flip-card-grid::-webkit-scrollbar-track { background: var(--muted); border-radius: 4px; }
+        .flip-card-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+        .flip-card { 
+            background-color: transparent; 
+            min-width: 260px;
+            width: 260px;
+            height: 170px; 
+            perspective: 1000px; 
+            cursor: pointer;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
         .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .flip-card-front { background: var(--muted); border-left: 4px solid var(--accent); }
         .flip-card-back { background: var(--header-bg); color: var(--header-fg); transform: rotateY(180deg); }
-        .original-script { font-size: 1.8rem; margin-bottom: 10px; }
-        .lang-name { font-weight: bold; font-style: italic; color: var(--accent); }
-        .translation { font-size: 1.1rem; font-style: italic; margin-bottom: 8px; }
-        .transliteration { font-weight: 500; }
+        .original-script { font-size: 1.6rem; margin-bottom: 10px; line-height: 1.3; }
+        .lang-name { font-weight: bold; font-style: italic; color: var(--accent); font-size: 0.9rem; }
+        .translation { font-size: 1rem; font-style: italic; margin-bottom: 8px; }
+        .transliteration { font-weight: 500; font-size: 0.9rem; }
+        .carousel-hint { 
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .carousel-hint::before { content: '👆 '; }
+        .lead-text {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-style: italic;
+        }
 
         /* Progress tracker */
         .progress-tracker { display: flex; align-items: center; gap: 6px; margin: 24px 0; padding: 12px; background: var(--muted); border-radius: 8px; flex-wrap: wrap; }
@@ -150,10 +191,280 @@
         .progress-line { flex: 1; height: 2px; background: var(--border); min-width: 20px; transition: background-color 0.3s; }
         .progress-line.completed { background: var(--ok); }
 
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--header-fg);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            margin-left: auto;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .hamburger:hover { background: rgba(255,255,255,0.1); }
+
+        /* ================= Tablet Breakpoint (1024px) ================= */
+        @media (max-width: 1024px) {
+            .container { padding: 20px; }
+            .quotes-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .flip-card { min-width: 240px; width: 240px; height: 160px; }
+            .img-frame img { max-width: 50%; }
+        }
+
+        /* ================= Mobile Breakpoint (768px) ================= */
         @media (max-width: 768px) {
-            .site-header { flex-direction: column; gap: 12px; }
-            h1 { font-size: 2rem; }
-            .byline { font-size: 1.2rem; }
+            /* Header & Navigation */
+            .site-header { 
+                flex-wrap: wrap; 
+                padding: 12px 16px; 
+                gap: 8px; 
+            }
+            .hamburger { display: block; }
+            .site-nav {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+                margin-top: 8px;
+                order: 3;
+            }
+            .site-nav.open { display: flex; }
+            .site-nav a {
+                width: 100%;
+                padding: 12px 0;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            
+            /* Typography */
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; margin: 40px 0 16px; }
+            h3 { font-size: 1.2rem; }
+            .byline { font-size: 1.1rem; }
+            
+            /* Layout */
+            .container { padding: 16px; }
+            .intro { padding: 18px; font-size: 1rem; }
+            .article-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .img-frame { padding: 15px; }
+            .img-frame img { max-width: 70%; }
+            
+            /* Progress Tracker */
+            .progress-tracker {
+                padding: 10px;
+                gap: 4px;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+            }
+            .progress-step { 
+                width: 24px; 
+                height: 24px; 
+                font-size: 0.7rem;
+                flex-shrink: 0;
+            }
+            .progress-line { 
+                min-width: 15px; 
+                flex-shrink: 0;
+            }
+            .progress-tracker span {
+                display: none;
+            }
+            
+            /* Cards & Grids */
+            .quotes-grid { grid-template-columns: 1fr; gap: 16px; }
+            .quote-card { padding: 18px; }
+            .quote-text { font-size: 1rem; }
+            
+            /* Flip Card Carousel - Mobile */
+            .flip-card-grid { gap: 14px; padding: 8px 2px 16px; }
+            .flip-card { min-width: 220px; width: 220px; height: 150px; }
+            .original-script { font-size: 1.3rem; }
+            .flip-card-front, .flip-card-back { padding: 14px; }
+            .translation { font-size: 0.9rem; }
+            .transliteration { font-size: 0.8rem; }
+            .carousel-hint { font-size: 0.8rem; }
+            
+            .highlight-card, .critique-card { padding: 16px; }
+            
+            /* Quiz & Interactive */
+            .quiz-container { padding: 16px; }
+            .quiz-navigation { padding-bottom: 14px; margin-bottom: 14px; gap: 10px; }
+            .quiz-navigation .btn { padding: 8px 16px; }
+            .quiz-option label { padding: 12px; gap: 10px; }
+            
+            /* Accordion */
+            .accordion-header { padding: 14px 16px; font-size: 1rem; }
+            .accordion-content { padding: 0 16px; }
+            .accordion-content.open { padding: 16px; }
+            
+            /* Polls */
+            .poll-option { padding: 12px 14px; font-size: 0.95rem; }
+            
+            /* Footer */
+            .site-footer { padding: 30px 16px; margin-top: 40px; }
+        }
+
+        /* ================= Small Mobile Breakpoint (600px) ================= */
+        @media (max-width: 600px) {
+            .container { padding: 14px; }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.25rem; margin: 32px 0 14px; padding-bottom: 8px; }
+            h3 { font-size: 1.1rem; margin-top: 24px; }
+            h4 { font-size: 1rem; }
+            .byline { font-size: 1rem; }
+            p { font-size: 0.95rem; }
+            ul { margin-left: 18px; }
+            li { margin-bottom: 10px; font-size: 0.95rem; }
+            
+            .intro { padding: 14px; font-size: 0.95rem; line-height: 1.7; }
+            .breadcrumbs { font-size: 0.8rem; margin-bottom: 16px; }
+            .article-meta { font-size: 0.85rem; }
+            .author-emoji { font-size: 26px; }
+            
+            /* Image Frame */
+            .img-frame { padding: 12px; margin: 18px 0; }
+            .img-frame img { max-width: 85%; }
+            .img-frame figcaption { font-size: 0.8rem; margin-top: 8px; }
+            
+            /* Tables - Horizontal Scroll */
+            .table-wrap { margin: 18px 0; }
+            .table-scroll { -webkit-overflow-scrolling: touch; }
+            table.data-table th, table.data-table td { 
+                padding: 10px 12px; 
+                font-size: 0.85rem;
+            }
+            table.data-table th:first-child, 
+            table.data-table td:first-child { 
+                min-width: 120px; 
+            }
+            
+            /* Flip Cards */
+            .flip-card { height: 140px; }
+            .original-script { font-size: 1.3rem; }
+            .lang-name { font-size: 0.9rem; }
+            .translation { font-size: 0.95rem; }
+            .transliteration { font-size: 0.85rem; }
+            
+            /* Quiz */
+            .quiz-container { padding: 14px; }
+            .quiz-navigation { 
+                gap: 8px;
+                padding-bottom: 12px;
+                margin-bottom: 12px;
+            }
+            .quiz-navigation .btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+                min-width: 40px;
+            }
+            .quiz-navigation .question-counter {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+            .quiz-option label { 
+                padding: 10px; 
+                font-size: 0.9rem; 
+                gap: 8px;
+            }
+            .quiz-option .explanation { 
+                padding: 12px; 
+                font-size: 0.9rem; 
+            }
+            
+            /* Polls */
+            .poll-option { padding: 10px 12px; font-size: 0.9rem; }
+            .poll-container h4 { font-size: 1rem; }
+            
+            /* Quote Cards */
+            .quote-card { padding: 16px; }
+            .quote-text { font-size: 0.95rem; line-height: 1.5; }
+            .quote-author { font-size: 0.85rem; }
+            
+            /* Buttons */
+            .btn { padding: 10px 16px; font-size: 0.9rem; }
+            
+            /* Accordion */
+            .accordion-header { 
+                padding: 12px 14px; 
+                font-size: 0.95rem; 
+            }
+            .accordion-header .accordion-title { padding-right: 0.5rem; }
+            .accordion-content.open { padding: 14px; }
+            .accordion-content p { font-size: 0.9rem; }
+            
+            /* Glossary */
+            .glossary-cloud { gap: 8px; }
+            .glossary-chip { 
+                padding: 8px 12px; 
+                font-size: 0.85rem; 
+            }
+            .chip-tip { 
+                font-size: 0.85rem; 
+                padding: 10px 12px;
+            }
+        }
+
+        /* ================= Extra Small Mobile (480px) ================= */
+        @media (max-width: 480px) {
+            .container { padding: 12px; }
+            h1 { font-size: 1.35rem; line-height: 1.3; }
+            h2 { font-size: 1.15rem; }
+            .byline { font-size: 0.9rem; }
+            
+            .site-header { padding: 10px 12px; }
+            .logo { font-size: 1rem; }
+            .hamburger { padding: 6px 10px; font-size: 1.3rem; }
+            
+            .img-frame img { max-width: 95%; }
+            
+            /* Flip Cards */
+            .flip-card { min-width: 200px; width: 200px; height: 130px; }
+            .original-script { font-size: 1.1rem; }
+            .flip-card-front, .flip-card-back { padding: 10px; }
+            .lang-name { font-size: 0.8rem; }
+            .translation { font-size: 0.85rem; }
+            .carousel-hint { display: none; }
+            
+            /* Cards */
+            .highlight-card, .critique-card { padding: 14px; }
+            .highlight-card h5, .critique-card h5 { font-size: 0.95rem; }
+            
+            /* Quiz - compact single row */
+            .quiz-navigation { gap: 6px; padding-bottom: 10px; margin-bottom: 10px; }
+            .quiz-navigation .btn { padding: 6px 12px; font-size: 0.8rem; min-width: 36px; }
+            .quiz-navigation .question-counter { font-size: 0.8rem; }
+            
+            /* Progress tracker - scrollable */
+            .progress-tracker {
+                padding: 8px;
+                margin: 16px 0;
+            }
+            .progress-step { width: 22px; height: 22px; }
+        }
+
+        /* ================= Touch Device Optimizations ================= */
+        @media (hover: none) and (pointer: coarse) {
+            .btn, .poll-option, .accordion-header, .glossary-chip, .flip-card, .quiz-option label {
+                -webkit-tap-highlight-color: transparent;
+            }
+            .btn:active { transform: scale(0.98); }
+            .poll-option:active { background: var(--border); }
+            .accordion-header:active { background: #ddd; }
+            .quiz-option label:active { border-color: var(--accent); }
+        }
+
+        /* ================= Print Styles ================= */
+        @media print {
+            .site-header, .site-footer, .hamburger, 
+            .quiz-container, .poll-container, .progress-tracker,
+            .btn, .accordion-header i { display: none; }
+            .container { max-width: 100%; padding: 0; }
+            .accordion-content { max-height: none !important; padding: 10px 0 !important; }
+            .flip-card-inner { transform: none !important; }
+            .flip-card-back { display: none; }
         }
     </style>
 </head>
@@ -161,7 +472,8 @@
 
     <header class="site-header">
         <a href="#" class="logo">Beyond Dictionary</a>
-        <nav><a href="#">Learning</a><a href="#">Games</a><a href="#">FAQ</a></nav>
+        <button class="hamburger" id="hamburger-btn" aria-expanded="false" aria-label="Toggle navigation">☰</button>
+        <nav id="primary-nav" class="site-nav"><a href="#">Learning</a><a href="#">Games</a><a href="#">FAQ</a></nav>
     </header>
 
     <div class="container">
@@ -290,7 +602,8 @@
             <p>In art and architecture, we see visual syncretism. At sites like the <strong>Ellora Caves</strong>, Hindu, Buddhist, and Jain temples were carved side-by-side in the same cliff—a stone testament to religious coexistence. Mughal art often blended Persian and Indian motifs, symbolizing harmony. The lotus, a recurring motif used by many traditions, was adopted for the 2023 G20 logo to represent unity emerging from diversity.</p>
 
             <h3>Voices of Unity: A South Asian Spiritual Journey</h3>
-            <p>The spirit of 'one family' echoes across the languages of South Asia. Click on the cards below to see the translation and discover the shared heritage of this beautiful idea.</p>
+            <p class="lead-text">The spirit of 'one family' echoes across the languages of South Asia. Swipe through the cards to discover the shared heritage of this beautiful idea. Tap any card to reveal its translation.</p>
+            <div class="flip-card-carousel-wrapper">
             <div class="flip-card-grid">
                 <!-- Card 1: Sanskrit -->
                 <div class="flip-card" tabindex="0">
@@ -397,9 +710,11 @@
                     </div>
                 </div>
             </div>
+            <p class="carousel-hint">Swipe to explore more languages →</p>
+            </div>
 
             <h3>Bhakti Geet: Songs of Universal Devotion</h3>
-            <p>This section provides a selection of devotional songs (bhakti geet) with their original text, transliteration, and meaning, offering insight into their cultural and spiritual significance as expressions of a universal family.</p>
+            <p class="lead-text">Explore devotional songs that celebrate unity across faiths. These bhajans carry messages of universal love and have inspired millions across generations.</p>
             <div class="table-wrap">
                 <div class="table-scroll">
                     <table class="data-table">
@@ -548,7 +863,9 @@
         
         <section id="part9_advanced">
             <h2>Advanced & Supplementary Content</h2>
+            <p class="lead-text">Dive deeper into the philosophy with curated quotes, comprehensive FAQs, and a glossary of key terms used throughout this guide.</p>
             <h3>A Treasury of Quotes on Global Unity</h3>
+            <p class="lead-text">Timeless words from sages, philosophers, and leaders who championed the ideal of a united humanity.</p>
             <div class="quotes-grid">
                 <div class="quote-card"><p class="quote-text">“One is a relative, another stranger – this is the thinking of the narrow-minded; for the magnanimous, the entire world is one family.”</p><p class="quote-author">― Maha Upanishad</p></div>
                 <div class="quote-card"><p class="quote-text">“Yaadhum oore, yaavarum kelir” – “Every city is our city; everyone is our kin.”</p><p class="quote-author">― Kaniyan Pungundranar</p></div>
@@ -559,10 +876,11 @@
             </div>
 
             <h3>Frequently Asked Questions</h3>
+            <p class="lead-text">Find answers to common questions about Vasudhaiva Kutumbakam, from its origins and meaning to its modern applications. Organized by complexity level for easy navigation.</p>
             <div id="faq-accordion-container"></div>
 
             <h3>Glossary of Key Terms</h3>
-            <p>Click on the terms below to explore their meanings.</p>
+            <p class="lead-text">Explore key Sanskrit and philosophical terms that form the foundation of this ancient wisdom. Hover or tap on any term to see its definition.</p>
             <div class="glossary-cloud" id="glossaryCloud"></div>
         </section>
         
@@ -589,31 +907,31 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Data for Quizzes, FAQs, and Glossary
             const quizQuestions = [
-                { q: "What is the literal English translation of 'Vasudhaiva Kutumbakam'?", correct: 1, options: [{text:"All are equal"}, {text:"The world is one family"}, {text:"Unity in diversity"}, {text:"Truth alone triumphs"}] },
-                { q: "Which ancient Indian text contains the first explicit mention of 'Vasudhaiva Kutumbakam'?", correct: 2, options: [{text:"Rigveda"}, {text:"Bhagavad Gita"}, {text:"Maha Upanishad"}, {text:"Hitopadeśa"}] },
-                { q: "The Tamil phrase 'Yaadhum oore, yaavarum kelir' expresses a similar sentiment. What does it mean?", correct: 0, options: [{text:"Every city is our city; everyone is our kin"}, {text:"Truth is one, sages call it by many names"}, {text:"All life is bound by mutual support"}, {text:"Let us move together"}] },
-                { q: "Which Mauryan emperor famously declared 'All men are my children' in his edicts?", correct: 3, options: [{text:"Chandragupta Maurya"}, {text:"Bindusara"}, {text:"Samudragupta"}, {text:"Ashoka"}] },
-                { q: "In the Bhagavad Gita, the concept of seeing all beings with an equal eye is known as:", correct: 1, options: [{text:"Ahimsa"}, {text:"Sama-darshana"}, {text:"Karunā"}, {text:"Maitrī"}] },
-                { q: "The Indonesian national motto, 'Bhinneka Tunggal Ika' (Unity in Diversity), was inspired by concepts from which culture?", correct: 2, options: [{text:"Chinese"}, {text:"Persian"}, {text:"Indian"}, {text:"Arabic"}] },
-                { q: "The Sikh practice of serving free meals to all, regardless of faith or caste, is called:", correct: 0, options: [{text:"Langar"}, {text:"Seva"}, {text:"Kirtan"}, {text:"Sangat"}] },
-                { q: "Which Mughal emperor promoted the policy of 'Sulh-i-Kul' (universal peace)?", correct: 3, options: [{text:"Babur"}, {text:"Shah Jahan"}, {text:"Aurangzeb"}, {text:"Akbar"}] },
-                { q: "Rabindranath Tagore's university, Visva-Bharati, has a motto that translates to:", correct: 1, options: [{text:"The guest is God"}, {text:"Where the world makes a home in a single nest"}, {text:"Let noble thoughts come from all sides"}, {text:"The welfare of all"}] },
-                { q: "Who famously opened his address at the 1893 World's Parliament of Religions with 'Sisters and Brothers of America'?", correct: 0, options: [{text:"Swami Vivekananda"}, {text:"Mahatma Gandhi"}, {text:"Jawaharlal Nehru"}, {text:"Raja Rammohan Roy"}] },
-                { q: "In post-independence India, the principle of Vasudhaiva Kutumbakam heavily influenced which foreign policy doctrine?", correct: 2, options: [{text:"The Look East Policy"}, {text:"The Gujral Doctrine"}, {text:"The Non-Aligned Movement (NAM)"}, {text:"The Nuclear Doctrine"}] },
-                { q: "What was the official theme of India’s G20 Presidency in 2023?", correct: 3, options: [{text:"Recover Together, Recover Stronger"}, {text:"Realizing Opportunities of the 21st Century for All"}, {text:"Shaping an Interconnected World"}, {text:"One Earth, One Family, One Future"}] },
-                { q: "The critique regarding the Hitopadeśa points out that the famous verse is spoken by which character?", correct: 1, options: [{text:"A wise sage"}, {text:"A cunning jackal"}, {text:"A noble king"}, {text:"A loyal deer"}] },
-                { q: "What was the name of India's COVID-19 vaccine export initiative?", correct: 2, options: [{text:"Operation Sanjeevani"}, {text:"Vaccine Seva"}, {text:"Vaccine Maitri"}, {text:"Arogya Setu"}] },
-                { q: "The Jain aphorism 'Parasparopagraho Jīvānām' reflects a similar ethos. What does it mean?", correct: 0, options: [{text:"All life is bound together by mutual support"}, {text:"Non-violence is the highest virtue"}, {text:"The soul is divine"}, {text:"Many-sidedness of reality"}] },
-                { q: "The Bhagavata Purana described the 'Vasudhaiva Kutumbakam' adage from the Maha Upanishad as the...", correct: 3, options: [{text:"most practical advice"}, {text:"most difficult path"}, {text:"oldest Vedic principle"}, {text:"loftiest Vedantic thought"}] },
-                { q: "The architectural layout of which UNESCO World Heritage site, featuring Hindu, Buddhist, and Jain temples carved side-by-side, symbolizes religious coexistence?", correct: 1, options: [{text:"Ajanta Caves"}, {text:"Ellora Caves"}, {text:"Hampi"}, {text:"Khajuraho"}] },
-                { q: "Prince Dara Shikoh's translation of the Upanishads sought common ground between Vedanta and which mystical tradition?", correct: 2, options: [{text:"Kabbalah"}, {text:"Gnosticism"}, {text:"Islamic Sufism"}, {text:"Christian Mysticism"}] },
-                { q: "Mahatma Gandhi's principle of 'Sarvodaya' translates to:", correct: 0, options: [{text:"Welfare of all"}, {text:"Self-reliance"}, {text:"Truth-force"}, {text:"Non-possession"}] },
-                { q: "Who ensured the Universal Declaration of Human Rights used the phrase 'All human beings' instead of 'All men'?", correct: 3, options: [{text:"Eleanor Roosevelt"}, {text:"Vijaya Lakshmi Pandit"}, {text:"Sarojini Naidu"}, {text:"Hansa Mehta"}] },
-                { q: "The modern Baha'i House of Worship in Delhi, open to all faiths, is famously known as the:", correct: 1, options: [{text:"Akshardham Temple"}, {text:"Lotus Temple"}, {text:"Birla Mandir"}, {text:"ISKCON Temple"}] },
-                { q: "The term 'udāra-charitānām' from the original Sanskrit verse refers to whom?", correct: 2, options: [{text:"Powerful rulers"}, {text:"Wealthy merchants"}, {text:"The magnanimous or noble-minded"}, {text:"Religious priests"}] },
-                { q: "The ancient Rigvedic verse 'Ekam sat vipra bahudha vadanti' aligns with the spirit of inclusivity. What does it mean?", correct: 0, options: [{text:"Truth is one, the wise call it by many names"}, {text:"May good thoughts come from all directions"}, {text:"The guest is equivalent to God"}, {text:"Let's walk together, speak together"}] },
-                { q: "Which Indian social reformer of the 19th century founded the Brahmo Samaj to promote a universal worship of one God?", correct: 3, options: [{text:"Dayananda Saraswati"}, {text:"Ishwar Chandra Vidyasagar"}, {text:"Keshab Chandra Sen"}, {text:"Raja Rammohan Roy"}] },
-                { q: "Reinterpreting the concept for modern challenges, activists now often speak of an 'Earth family', expanding the circle of kinship to include:", correct: 1, options: [{text:"Only endangered animals"}, {text:"All species and Mother Earth"}, {text:"Future human generations"}, {text:"Artificial Intelligence"}] }
+                { q: "What is the literal English translation of 'Vasudhaiva Kutumbakam'?", correct: 1, options: [{text:"All are equal"}, {text:"The world is one family"}, {text:"Unity in diversity"}, {text:"Truth alone triumphs"}], explanation: "The phrase comes from Sanskrit: 'Vasudha' means Earth, 'eva' means indeed, and 'Kutumbakam' means family. Together they form the profound message that the entire Earth is one interconnected family." },
+                { q: "Which ancient Indian text contains the first explicit mention of 'Vasudhaiva Kutumbakam'?", correct: 2, options: [{text:"Rigveda"}, {text:"Bhagavad Gita"}, {text:"Maha Upanishad"}, {text:"Hitopadeśa"}], explanation: "The Maha Upanishad (Chapter 6, Verse 72) contains this phrase, describing it as the worldview of the spiritually enlightened who transcend narrow divisions of 'mine' versus 'yours'." },
+                { q: "The Tamil phrase 'Yaadhum oore, yaavarum kelir' expresses a similar sentiment. What does it mean?", correct: 0, options: [{text:"Every city is our city; everyone is our kin"}, {text:"Truth is one, sages call it by many names"}, {text:"All life is bound by mutual support"}, {text:"Let us move together"}], explanation: "Written by Sangam-era poet Kaniyan Pungundranar (c. 6th century BCE), this Tamil verse predates and parallels the Sanskrit ideal, showing universal kinship was celebrated across Indian linguistic traditions." },
+                { q: "Which Mauryan emperor famously declared 'All men are my children' in his edicts?", correct: 3, options: [{text:"Chandragupta Maurya"}, {text:"Bindusara"}, {text:"Samudragupta"}, {text:"Ashoka"}], explanation: "After the bloody Kalinga war (261 BCE), Emperor Ashoka transformed his governance philosophy. His rock edicts declared paternal care for all subjects, effectively making state policy from the 'world family' ideal." },
+                { q: "In the Bhagavad Gita, the concept of seeing all beings with an equal eye is known as:", correct: 1, options: [{text:"Ahimsa"}, {text:"Sama-darshana"}, {text:"Karunā"}, {text:"Maitrī"}], explanation: "Sama-darshana (equal vision) is when the wise see the same divine essence in a learned priest, a cow, an elephant, or an outcaste—the philosophical foundation for treating all beings as family." },
+                { q: "The Indonesian national motto, 'Bhinneka Tunggal Ika' (Unity in Diversity), was inspired by concepts from which culture?", correct: 2, options: [{text:"Chinese"}, {text:"Persian"}, {text:"Indian"}, {text:"Arabic"}], explanation: "This phrase comes from the 14th-century Javanese poem Sutasoma, written during the Hindu-Buddhist Majapahit Empire. It reflects Indian philosophical influence that reached Southeast Asia through centuries of cultural exchange." },
+                { q: "The Sikh practice of serving free meals to all, regardless of faith or caste, is called:", correct: 0, options: [{text:"Langar"}, {text:"Seva"}, {text:"Kirtan"}, {text:"Sangat"}], explanation: "Langar was instituted by Guru Nanak to break caste barriers. Everyone—rich or poor, Hindu or Muslim—sits together and eats the same food, making it a living daily practice of 'world as one family'." },
+                { q: "Which Mughal emperor promoted the policy of 'Sulh-i-Kul' (universal peace)?", correct: 3, options: [{text:"Babur"}, {text:"Shah Jahan"}, {text:"Aurangzeb"}, {text:"Akbar"}], explanation: "Emperor Akbar (r. 1556–1605) created the Ibādat Khāna for interfaith dialogues and promoted Sulh-i-Kul (peace with all). He abolished the jizya tax and treated subjects of all faiths as one family." },
+                { q: "Rabindranath Tagore's university, Visva-Bharati, has a motto that translates to:", correct: 1, options: [{text:"The guest is God"}, {text:"Where the world makes a home in a single nest"}, {text:"Let noble thoughts come from all sides"}, {text:"The welfare of all"}], explanation: "Founded in 1921 at Shantiniketan, Visva-Bharati's motto 'Yatra vishvam bhavatyekanidam' envisions the university as a nest where the entire world finds a home—education as global unity." },
+                { q: "Who famously opened his address at the 1893 World's Parliament of Religions with 'Sisters and Brothers of America'?", correct: 0, options: [{text:"Swami Vivekananda"}, {text:"Mahatma Gandhi"}, {text:"Jawaharlal Nehru"}, {text:"Raja Rammohan Roy"}], explanation: "Swami Vivekananda's opening words in Chicago electrified the audience with their warmth and inclusivity. This simple familial greeting introduced India's tradition of universal acceptance to the Western world." },
+                { q: "In post-independence India, the principle of Vasudhaiva Kutumbakam heavily influenced which foreign policy doctrine?", correct: 2, options: [{text:"The Look East Policy"}, {text:"The Gujral Doctrine"}, {text:"The Non-Aligned Movement (NAM)"}, {text:"The Nuclear Doctrine"}], explanation: "Prime Minister Nehru co-founded NAM in 1961 to unite newly independent nations outside Cold War power blocs. The movement embodied the ideal of a global family of nations based on mutual respect, not military alliances." },
+                { q: "What was the official theme of India's G20 Presidency in 2023?", correct: 3, options: [{text:"Recover Together, Recover Stronger"}, {text:"Realizing Opportunities of the 21st Century for All"}, {text:"Shaping an Interconnected World"}, {text:"One Earth, One Family, One Future"}], explanation: "India's G20 theme directly translated Vasudhaiva Kutumbakam for global diplomacy. The lotus logo symbolized unity emerging from diversity, bringing this ancient ideal to the center of 21st-century international relations." },
+                { q: "The critique regarding the Hitopadeśa points out that the famous verse is spoken by which character?", correct: 1, options: [{text:"A wise sage"}, {text:"A cunning jackal"}, {text:"A noble king"}, {text:"A loyal deer"}], explanation: "In the Hitopadeśa fables, a jackal uses this lofty verse to trick a deer into false security. Scholars note this as an early warning: beware of those who misuse noble ideals for selfish manipulation." },
+                { q: "What was the name of India's COVID-19 vaccine export initiative?", correct: 2, options: [{text:"Operation Sanjeevani"}, {text:"Vaccine Seva"}, {text:"Vaccine Maitri"}, {text:"Arogya Setu"}], explanation: "Vaccine Maitri ('Vaccine Friendship') shipped millions of doses to 100+ countries in 2021. The government explicitly cited Vasudhaiva Kutumbakam as inspiration—treating global health as a familial duty, not just diplomacy." },
+                { q: "The Jain aphorism 'Parasparopagraho Jīvānām' reflects a similar ethos. What does it mean?", correct: 0, options: [{text:"All life is bound together by mutual support"}, {text:"Non-violence is the highest virtue"}, {text:"The soul is divine"}, {text:"Many-sidedness of reality"}], explanation: "This Jain principle teaches that all living beings are interconnected and mutually dependent. It extends the 'family' concept beyond humans to include all life forms—a remarkably ecological worldview from ancient times." },
+                { q: "The Bhagavata Purana described the 'Vasudhaiva Kutumbakam' adage from the Maha Upanishad as the...", correct: 3, options: [{text:"most practical advice"}, {text:"most difficult path"}, {text:"oldest Vedic principle"}, {text:"loftiest Vedantic thought"}], explanation: "The Bhagavata Purana praised this phrase as the pinnacle of Vedantic philosophy—the highest spiritual realization where one transcends all divisions and sees the entire world as Self, as family." },
+                { q: "The architectural layout of which UNESCO World Heritage site, featuring Hindu, Buddhist, and Jain temples carved side-by-side, symbolizes religious coexistence?", correct: 1, options: [{text:"Ajanta Caves"}, {text:"Ellora Caves"}, {text:"Hampi"}, {text:"Khajuraho"}], explanation: "The Ellora Caves (6th-11th century CE) contain 34 caves: 17 Hindu, 12 Buddhist, and 5 Jain temples carved in the same cliff. This remarkable layout is a stone testament to India's tradition of religious harmony." },
+                { q: "Prince Dara Shikoh's translation of the Upanishads sought common ground between Vedanta and which mystical tradition?", correct: 2, options: [{text:"Kabbalah"}, {text:"Gnosticism"}, {text:"Islamic Sufism"}, {text:"Christian Mysticism"}], explanation: "Mughal Prince Dara Shikoh (1615-1659) translated 50 Upanishads into Persian as 'Sirr-i-Akbar' (The Great Secret), seeking to prove that Sufi and Vedantic mysticism pointed to the same ultimate truth." },
+                { q: "Mahatma Gandhi's principle of 'Sarvodaya' translates to:", correct: 0, options: [{text:"Welfare of all"}, {text:"Self-reliance"}, {text:"Truth-force"}, {text:"Non-possession"}], explanation: "Gandhi adapted this term from Ruskin's 'Unto This Last'. Sarvodaya envisions a society where no one is left behind—political and economic systems should serve every member of the human family equally." },
+                { q: "Who ensured the Universal Declaration of Human Rights used the phrase 'All human beings' instead of 'All men'?", correct: 3, options: [{text:"Eleanor Roosevelt"}, {text:"Vijaya Lakshmi Pandit"}, {text:"Sarojini Naidu"}, {text:"Hansa Mehta"}], explanation: "Indian delegate Hansa Mehta successfully argued for inclusive language in 1948. Her insistence changed Article 1 from 'All men' to 'All human beings are born free and equal'—making the declaration truly universal." },
+                { q: "The modern Baha'i House of Worship in Delhi, open to all faiths, is famously known as the:", correct: 1, options: [{text:"Akshardham Temple"}, {text:"Lotus Temple"}, {text:"Birla Mandir"}, {text:"ISKCON Temple"}], explanation: "Completed in 1986, the Lotus Temple welcomes people of all faiths for silent prayer and meditation. Its nine sides symbolize unity, and it receives more visitors than the Taj Mahal—a modern embodiment of universal family." },
+                { q: "The term 'udāra-charitānām' from the original Sanskrit verse refers to whom?", correct: 2, options: [{text:"Powerful rulers"}, {text:"Wealthy merchants"}, {text:"The magnanimous or noble-minded"}, {text:"Religious priests"}], explanation: "The full verse contrasts 'laghu-chetasām' (narrow-minded) who see 'mine vs. yours' with 'udāra-charitānām' (the magnanimous) who see the whole world as family. It's a quality of spiritual nobility, not birth or wealth." },
+                { q: "The ancient Rigvedic verse 'Ekam sat vipra bahudha vadanti' aligns with the spirit of inclusivity. What does it mean?", correct: 0, options: [{text:"Truth is one, the wise call it by many names"}, {text:"May good thoughts come from all directions"}, {text:"The guest is equivalent to God"}, {text:"Let's walk together, speak together"}], explanation: "This Rigveda verse (1.164.46) from over 3,000 years ago declares that ultimate reality is one, though sages describe it differently. It's the philosophical foundation for India's acceptance of diverse spiritual paths." },
+                { q: "Which Indian social reformer of the 19th century founded the Brahmo Samaj to promote a universal worship of one God?", correct: 3, options: [{text:"Dayananda Saraswati"}, {text:"Ishwar Chandra Vidyasagar"}, {text:"Keshab Chandra Sen"}, {text:"Raja Rammohan Roy"}], explanation: "Raja Rammohan Roy founded Brahmo Samaj in 1828, advocating monotheism and opposing caste divisions. He believed all religions pointed to one truth, and his movement laid groundwork for modern Indian universalism." },
+                { q: "Reinterpreting the concept for modern challenges, activists now often speak of an 'Earth family', expanding the circle of kinship to include:", correct: 1, options: [{text:"Only endangered animals"}, {text:"All species and Mother Earth"}, {text:"Future human generations"}, {text:"Artificial Intelligence"}], explanation: "Contemporary environmentalists expand Vasudhaiva Kutumbakam to include all species and the planet itself. This 'Earth family' interpretation addresses climate change by treating nature as kin deserving care and protection." }
             ];
 
             const faqs = {
@@ -692,6 +1010,7 @@
                 }
             }
             
+            initializeComponent(setupHamburgerMenu);
             initializeComponent(setupAccordions);
             initializeComponent(setupQuiz, 'quiz1', quizQuestions.slice(0, 13));
             initializeComponent(setupQuiz, 'quiz2', quizQuestions.slice(13));
@@ -701,6 +1020,38 @@
             initializeComponent(setupProgressTracker);
             initializeComponent(setupFlipCards);
         });
+
+        // Hamburger Menu Setup
+        function setupHamburgerMenu() {
+            const hamburger = document.getElementById('hamburger-btn');
+            const nav = document.getElementById('primary-nav');
+            if (!hamburger || !nav) return;
+            
+            hamburger.addEventListener('click', function() {
+                const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                hamburger.setAttribute('aria-expanded', String(!isExpanded));
+                nav.classList.toggle('open');
+                hamburger.textContent = isExpanded ? '☰' : '✕';
+            });
+            
+            // Close menu when clicking on a link
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    hamburger.textContent = '☰';
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!hamburger.contains(e.target) && !nav.contains(e.target)) {
+                    nav.classList.remove('open');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    hamburger.textContent = '☰';
+                }
+            });
+        }
 
         // Setup functions
         function setupAccordions() {
@@ -771,10 +1122,10 @@
 
                     if (selectedOptionIndex === qData.correct) {
                         selectedOptionDiv.classList.add('correct');
-                        explanationDiv.innerHTML = `✅ Correct! The answer is <strong>${qData.options[qData.correct].text}</strong>.`;
+                        explanationDiv.innerHTML = `✅ <strong>Correct!</strong> ${qData.explanation || ''}`;
                     } else {
                         selectedOptionDiv.classList.add('wrong');
-                        explanationDiv.innerHTML = `❌ Incorrect. The correct answer is <strong>${qData.options[qData.correct].text}</strong>.`;
+                        explanationDiv.innerHTML = `❌ <strong>Incorrect.</strong> The answer is <strong>${qData.options[qData.correct].text}</strong>. ${qData.explanation || ''}`;
                     }
                     explanationDiv.style.display = 'block';
                 });
@@ -820,11 +1171,21 @@
 
             function positionTipFor(btn) {
                 const rect = btn.getBoundingClientRect();
-                 const tipRect = tip.getBoundingClientRect();
-                const top = rect.top > (window.innerHeight / 2) ? (rect.top - tipRect.height - 12) : (rect.bottom + 12);
-                const left = Math.max(8, rect.left + rect.width / 2 - tipRect.width / 2);
+                const tipRect = tip.getBoundingClientRect();
+                const arrow = tip.querySelector('.arrow');
+                const isAbove = rect.top > (window.innerHeight / 2);
+                const top = isAbove ? (rect.top - tipRect.height - 12) : (rect.bottom + 12);
+                const left = Math.max(8, Math.min(window.innerWidth - tipRect.width - 8, rect.left + rect.width / 2 - tipRect.width / 2));
                 tip.style.top = `${top}px`;
                 tip.style.left = `${left}px`;
+                // Position arrow based on tooltip position
+                if (isAbove) {
+                    arrow.style.top = 'auto';
+                    arrow.style.bottom = '-6px';
+                } else {
+                    arrow.style.bottom = 'auto';
+                    arrow.style.top = '-6px';
+                }
             }
 
             cloud.querySelectorAll('.glossary-chip').forEach(btn => {

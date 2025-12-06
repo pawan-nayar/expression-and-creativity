@@ -4,196 +4,1038 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EQ Test: Tone Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
+    /* ================= CBSE Theme Variables ================= */
+    :root {
+      --text: #212529;
+      --text-muted: #6c757d;
+      --bg: #fff;
+      --bg-warm: #fffbf5;
+      --muted: #f8f9fa;
+      --border: #e9ecef;
+      --accent: #fd7e14;
+      --accent-2: #e87312;
+      --ok: #16a34a;
+      --ok-soft: #dcfce7;
+      --bad: #dc2626;
+      --bad-soft: #fee2e2;
     }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh; /* Dynamic viewport height for mobile */
+    }
+    
+    /* Mobile-first: Full screen app layout */
     .game-container {
       background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: none; /* Hidden initially, shown after intro */
+      flex-direction: column;
+      padding: 16px 16px 0 16px;
+    }
+    
+    /* Header section - compact */
+    .header-section {
       text-align: center;
+      flex-shrink: 0;
     }
     h1 {
-      font-size: 1.5em;
-      margin: 10px 0;
-      color: #1f2937;
+      font-size: 1.15em;
+      margin: 0 0 2px;
+      color: var(--text);
+      line-height: 1.2;
+      font-weight: 700;
     }
     .instruction {
-      font-size: 0.9em;
-      color: #4b5563;
-      margin: 5px 0 10px;
+      font-size: 0.75em;
+      color: var(--text-muted);
+      margin: 0 0 6px;
+      line-height: 1.3;
     }
     .score {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #1f2937;
-      margin: 10px 0;
+      font-size: 0.85em;
+      font-weight: 600;
+      color: var(--accent-2);
+      margin: 0 0 8px;
+      padding: 6px 10px;
+      background: #fff7ed;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
-    .quote {
-      font-size: 1em;
-      font-style: italic;
-      margin: 10px 0;
-      padding: 10px;
+    .level-badge {
+      font-size: 0.75em;
+      font-weight: 700;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #22c55e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .score-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .score-item {
+      white-space: nowrap;
+    }
+    .score-divider {
+      color: var(--accent);
+      font-size: 0.7em;
+    }
+    
+    /* ============ Level Complete Screen ============ */
+    .level-complete {
+      text-align: center;
+      padding: 0;
+      animation: fadeInUp 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Result Banner */
+    .result-banner {
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .result-banner.success {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border: 2px solid #22c55e;
+    }
+    .result-banner.retry {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #f59e0b;
+    }
+    .result-banner.master {
+      background: linear-gradient(135deg, #fef9c3, #fde047);
+      border: 2px solid #eab308;
+    }
+    .result-emoji {
+      font-size: 1.8em;
+      display: block;
+      margin-bottom: 2px;
+      animation: bounce 0.5s ease;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .result-title {
+      font-size: 0.95em;
+      font-weight: 700;
+      margin: 0;
+    }
+    .result-banner.success .result-title { color: #16a34a; }
+    .result-banner.retry .result-title { color: #d97706; }
+    .result-banner.master .result-title { color: #ca8a04; }
+    
+    /* Score Circle */
+    .score-circle-container {
+      display: flex;
+      justify-content: center;
+      margin: 6px 0;
+    }
+    .score-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 3px solid var(--border);
+    }
+    .score-circle.success { border-color: #22c55e; }
+    .score-circle.retry { border-color: #f59e0b; }
+    .score-circle.master { border-color: #eab308; }
+    .score-number {
+      font-size: 1.2em;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+    }
+    .score-label {
+      font-size: 0.55em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    
+    /* Level Progress Dots */
+    .level-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin: 6px 0;
+    }
+    .level-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .level-dot.completed { background: #22c55e; }
+    .level-dot.current { background: var(--accent); }
+    .level-progress-label {
+      font-size: 0.65em;
+      color: var(--text-muted);
+      margin-left: 5px;
+    }
+    
+    /* Next Level Preview Card */
+    .next-level-card {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      text-align: center;
+    }
+    .next-level-card h4 {
+      margin: 0 0 1px;
+      font-size: 0.8em;
+      color: var(--accent-2);
+    }
+    .next-level-card p {
+      margin: 0;
+      font-size: 0.65em;
+      color: var(--text-muted);
+      line-height: 1.25;
+    }
+    
+    /* Encourage Message */
+    .encourage-msg {
+      font-size: 0.7em;
+      color: var(--text-muted);
+      margin: 6px 0 8px;
+      line-height: 1.35;
+      max-width: 240px;
+      text-align: center;
+    }
+    .encourage-msg strong {
+      color: var(--text);
+    }
+    
+    /* Level Buttons */
+    .level-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+      width: 100%;
+      max-width: 200px;
+    }
+    .level-btn {
+      padding: 10px 14px;
+      font-size: 0.85em;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .level-btn.advance {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3); }
+      50% { box-shadow: 0 3px 16px rgba(34, 197, 94, 0.45); }
+    }
+    .level-btn.advance:hover {
+      transform: translateY(-1px);
+    }
+    .level-btn.retry {
+      background: white;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-size: 0.8em;
+      padding: 8px 14px;
+    }
+    .level-btn.retry:hover {
       background: #f8fafc;
-      border-left: 3px solid #6b7280;
-      border-radius: 5px;
-      min-height: 50px;
+    }
+    .level-btn.tryagain {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+    }
+    .level-btn.tryagain:hover {
+      transform: translateY(-1px);
+    }
+    .level-btn.restart {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      box-shadow: 0 3px 10px rgba(139, 92, 246, 0.25);
+    }
+    .level-btn.restart:hover {
+      transform: translateY(-1px);
+    }
+    
+    /* Scrollable content area */
+    .content-section {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Level Complete Mode - override options grid */
+    .options.level-complete-mode {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      grid-template-columns: unset !important;
+      gap: 0 !important;
+    }
+    
+    .quote {
+      font-size: 0.9em;
+      font-style: italic;
+      margin: 0 0 10px;
+      padding: 10px 12px;
+      background: var(--muted);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      text-align: left;
+      line-height: 1.4;
+      color: var(--text);
     }
     .options {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin: 10px 0;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
     .option {
-      background: #f1f5f9;
-      padding: 10px;
-      border-radius: 8px;
+      background: var(--muted);
+      padding: 8px 10px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: all 0.15s ease;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      border: 1px solid #e5e7eb;
+      text-align: center;
+      gap: 2px;
+      border: 2px solid var(--border);
+      min-height: 75px; /* Force uniform height */
+      height: 75px; /* Force uniform height */
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
-    .option:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-      background: #e0e7ff;
+    .option:active {
+      transform: scale(0.97);
+      background: #fff7ed;
     }
     .option-emoji {
-      font-size: 1.5em;
+      font-size: 1.3em;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .option-text {
+      width: 100%;
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .option-text h3 {
       margin: 0;
-      font-size: 1em;
-      color: #1f2937;
+      font-size: 0.75em;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .option-text p {
-      margin: 3px 0 0;
-      font-size: 0.8em;
-      color: #4b5563;
+      display: block;
+      font-size: 0.55em;
+      color: var(--text-muted);
+      line-height: 1.2;
+      margin-top: 1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
     .feedback {
-      margin: 10px 0;
-      font-size: 0.9em;
-      color: #374151;
-      font-style: italic;
-      min-height: 30px;
+      margin: 8px 0 0;
+      font-size: 0.75em;
+      color: var(--text);
+      font-style: normal;
+      line-height: 1.4;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #fefce8, #fef3c7);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      text-align: left;
     }
+    .feedback:empty {
+      display: none;
+    }
+    .feedback-label {
+      font-weight: 700;
+      color: var(--accent-2);
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.85em;
+    }
+    
+    /* Fixed bottom navigation - always visible */
     .buttons {
       display: flex;
-      justify-content: space-between;
-      margin: 10px 0;
+      gap: 8px;
+      padding: 8px 0 10px;
+      background: white;
+      flex-shrink: 0;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .buttons.hidden {
+      display: none;
     }
     button {
-      padding: 8px 15px;
-      background: #4f46e5;
+      padding: 10px 14px;
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 0.9em;
-      transition: background 0.2s;
+      font-weight: 600;
+      font-size: 0.85em;
+      transition: all 0.15s ease;
+      flex: 1;
+      min-height: 40px;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 2px 6px rgba(253, 126, 20, 0.2);
     }
-    button:hover {
-      background: #4338ca;
+    button:active {
+      transform: scale(0.97);
     }
     button:disabled {
-      background: #d1d5db;
+      background: #ced4da;
       cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+      box-shadow: none;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:disabled {
+      background: #f1f5f9;
+      opacity: 0.5;
+    }
+    .btn-skip {
+      background: #fef3c7;
+      color: var(--accent-2);
+      box-shadow: none;
+      border: 1px solid #fcd34d;
+      flex: 0.7;
+    }
+    .btn-skip:hover {
+      background: #fde68a;
     }
     .footer {
-      margin-top: 15px;
+      text-align: center;
+      padding: 8px 0 12px;
       font-size: 0.7em;
-      color: #6b7280;
+      color: var(--text-muted);
+      flex-shrink: 0;
     }
-    .correct { background: #d1fae5; border-color: #10b981; }
-    .incorrect { background: #fee2e2; border-color: #ef4444; }
-    @media (min-width: 600px) {
-      .options {
-        grid-template-columns: repeat(2, 1fr);
+    
+    /* Correct/Incorrect states */
+    .correct { 
+      background: var(--ok-soft) !important; 
+      border-color: var(--ok) !important;
+    }
+    .incorrect { 
+      background: var(--bad-soft) !important; 
+      border-color: var(--bad) !important;
+    }
+    
+    /* Larger mobile (400px+) */
+    @media (min-width: 400px) {
+      .game-container { padding: 16px 16px 0 16px; }
+      h1 { font-size: 1.25em; }
+      .quote { padding: 12px 14px; font-size: 0.95em; }
+      .options { gap: 8px; }
+      .option { 
+        padding: 10px 12px; 
+        height: 80px;
+        min-height: 80px;
       }
+      .option-emoji { font-size: 1.4em; }
+      .option-text h3 { font-size: 0.8em; }
+      .option-text p { font-size: 0.6em; }
+    }
+    
+    /* Tablets (600px+) - compact layout */
+    @media (min-width: 600px) {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        min-height: 100vh;
+      }
+      .game-container {
+        min-height: 0;
+        max-width: 520px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(253, 126, 20, 0.12);
+        border: 1px solid var(--border);
+        padding: 16px 20px;
+        margin: auto;
+      }
+      .header-section { margin-bottom: 4px; }
+      h1 { display: none; } /* Hide title on desktop */
+      .instruction { display: none; } /* Hide instruction on desktop */
+      .score { padding: 8px 14px; margin-bottom: 10px; font-size: 0.9em; flex-direction: row; gap: 12px; }
+      .level-badge { font-size: 0.75em; padding: 4px 10px; }
+      .content-section { overflow: visible; }
+      .quote { font-size: 0.9em; padding: 10px 12px; margin-bottom: 10px; line-height: 1.35; }
+      .options { gap: 10px; }
+      .option {
+        flex-direction: row;
+        text-align: left;
+        padding: 10px 12px;
+        gap: 10px;
+        height: auto;
+        min-height: 0;
+      }
+      .option:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(253, 126, 20, 0.12);
+        background: #fff7ed;
+        border-color: var(--accent);
+      }
+      .option-emoji { font-size: 1.5em; }
+      .option-text h3 { 
+        font-size: 0.9em; 
+        margin-bottom: 1px;
+        white-space: normal;
+        overflow: visible;
+      }
+      .option-text p { 
+        display: block; 
+        font-size: 0.7em;
+        color: var(--text-muted);
+        line-height: 1.25;
+        -webkit-line-clamp: unset;
+        overflow: visible;
+      }
+      .feedback {
+        font-size: 0.8em;
+        padding: 10px 12px;
+        line-height: 1.45;
+        margin-top: 10px;
+      }
+      .feedback-label {
+        font-size: 0.9em;
+        margin-bottom: 4px;
+      }
+      .buttons { 
+        padding: 12px 0;
+        border-top: none;
+      }
+      button {
+        padding: 10px 16px;
+        font-size: 0.9em;
+        min-height: 42px;
+      }
+      .footer { padding: 10px 0; font-size: 0.65em; }
+      /* Level complete desktop sizing */
+      .result-banner { padding: 12px 18px; }
+      .result-emoji { font-size: 2em; }
+      .result-title { font-size: 1.05em; }
+      .score-circle { width: 70px; height: 70px; }
+      .score-number { font-size: 1.4em; }
+      .encourage-msg { font-size: 0.8em; max-width: 280px; }
+      .level-buttons { max-width: 240px; }
+      .level-btn { padding: 12px 18px; font-size: 0.9em; }
+    }
+    
+    /* Desktop (768px+) */
+    @media (min-width: 768px) {
+      body { padding: 20px; }
+      .game-container {
+        max-width: 520px;
+        padding: 24px;
+      }
+      h1 { font-size: 1.35em; }
+      .quote { font-size: 0.95em; padding: 12px 14px; }
+      .option { padding: 12px 14px; }
+      .footer { padding: 8px 0; font-size: 0.65em; }
+    }
+    
+    /* ============ Level Intro Screen ============ */
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 900;
+      padding: 20px;
+      opacity: 1;
+      visibility: visible;
+      transition: all 0.4s ease;
+    }
+    .intro-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .intro-card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px 28px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(253, 126, 20, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .intro-emoji {
+      font-size: 3.5em;
+      margin-bottom: 12px;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .intro-title {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 8px;
+    }
+    .intro-subtitle {
+      font-size: 0.9em;
+      color: var(--text-muted);
+      margin: 0 0 20px;
+      line-height: 1.4;
+    }
+    .intro-rules {
+      background: var(--muted);
+      border-radius: 12px;
+        padding: 16px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .intro-rules h4 {
+      margin: 0 0 10px;
+      font-size: 0.9em;
+      color: var(--text);
+    }
+    .intro-rules ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .intro-rules li {
+      font-size: 0.8em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .intro-rules li:last-child { margin-bottom: 0; }
+    .intro-level-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .preview-badge {
+      background: #22c55e;
+      color: white;
+      font-size: 0.8em;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    .preview-name {
+      font-size: 1em;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .intro-start-btn {
+      width: 100%;
+      padding: 16px 24px;
+      font-size: 1.1em;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(253, 126, 20, 0.35);
+      transition: all 0.2s;
+    }
+    .intro-start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(253, 126, 20, 0.45);
+    }
+    
+    /* Confetti Animation */
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      opacity: 0;
+    }
+    .confetti.active {
+      animation: confetti-fall 3s ease-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% {
+        opacity: 1;
+        transform: translateY(-20px) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(400px) rotate(720deg);
+      }
+    }
+    
+    
+    /* ============ Skip Nudge Modal ============ */
+    .nudge-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      padding: 20px;
+    }
+    .nudge-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nudge-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px) scale(0.95);
+      transition: transform 0.3s ease;
+    }
+    .nudge-overlay.show .nudge-modal {
+      transform: translateY(0) scale(1);
+    }
+    .nudge-emoji {
+      font-size: 3em;
+      margin-bottom: 12px;
+      animation: wiggle 0.5s ease;
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+    .nudge-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 10px;
+    }
+    .nudge-message {
+      font-size: 0.9em;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0 0 20px;
+    }
+    .nudge-message strong {
+      color: var(--accent-2);
+    }
+    .nudge-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nudge-btn {
+      padding: 12px 20px;
+      font-size: 0.95em;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nudge-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+    }
+    .nudge-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(253, 126, 20, 0.4);
+    }
+    .nudge-btn.secondary {
+      background: var(--muted);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .nudge-btn.secondary:hover {
+      background: #f1f5f9;
+      color: var(--text);
     }
   </style>
 </head>
 <body>
   <div class="game-container">
+    <div class="header-section">
     <h1>EQ Test: Tone Detection</h1>
     <div class="instruction">Identify the emotional tone to enhance your emotional intelligence.</div>
-    <div class="score">Score: <span id="score">0</span> | Round: <span id="round">1</span>/20</div>
+      <div class="score">
+        <span class="level-badge" id="level-badge">Level 1</span>
+        <div class="score-stats">
+          <span class="score-item">Score: <span id="score">0</span>/25</span>
+          <span class="score-divider">•</span>
+          <span class="score-item">Round: <span id="round">1</span>/25</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-section">
     <div class="quote" id="quote"></div>
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback"></div>
+    </div>
+    
     <div class="buttons">
-      <button id="prev" disabled>Back</button>
+      <button id="prev" class="btn-secondary" disabled>Back</button>
+      <button id="skip" class="btn-skip">Skip</button>
       <button id="next" disabled>Next</button>
     </div>
     <div class="footer">© Beyond Dictionary 2025. All rights reserved.</div>
   </div>
 
+  <!-- Level Intro Screen -->
+  <div id="level-intro" class="intro-overlay">
+    <div class="intro-card">
+      <div class="confetti-container" id="confetti"></div>
+      <div class="intro-emoji" id="intro-emoji">🎯</div>
+      <h2 class="intro-title" id="intro-title">EQ Test: Tone Detection</h2>
+      <p class="intro-subtitle" id="intro-subtitle">Sharpen your emotional radar by identifying tones in famous quotes</p>
+      
+      <div class="intro-rules" id="intro-rules">
+        <h4>📋 How It Works</h4>
+        <ul>
+          <li>4 Levels with 25 quotes each</li>
+          <li>Score 10+ correct to advance</li>
+          <li>No penalty for guessing—try your best!</li>
+        </ul>
+      </div>
+      
+      <div class="intro-level-preview" id="intro-preview">
+        <span class="preview-badge" id="preview-badge">🌱 Level 1</span>
+        <span class="preview-name" id="preview-name">Beginner</span>
+      </div>
+      
+      <button class="intro-start-btn" id="intro-start" onclick="startFromIntro()">
+        🚀 Start Level 1
+      </button>
+    </div>
+  </div>
+
+  <!-- Gentle Skip Nudge Modal -->
+  <div id="skip-nudge" class="nudge-overlay">
+    <div class="nudge-modal">
+      <div class="nudge-emoji">🤔</div>
+      <h3 class="nudge-title">Take a guess?</h3>
+      <p class="nudge-message">
+        You've skipped a few in a row. Even a guess helps build your intuition! 
+        <br><strong>There's no penalty for trying.</strong>
+      </p>
+      <div class="nudge-buttons">
+        <button class="nudge-btn primary" onclick="closeNudge(true)">
+          👆 I'll Try This One
+        </button>
+        <button class="nudge-btn secondary" onclick="closeNudge(false)">
+          Skip Anyway
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const dataBank = [
-      { text: "The only way to do great work is to love what you do.", source: "Steve Jobs", tone: "Inspirational", feedback: "Uplifts with passion for meaningful work." },
-      { text: "I have a dream that one day this nation will rise up.", source: "Martin Luther King Jr.", tone: "Hopeful", feedback: "Envisions unity and equality." },
-      { text: "Life is what happens when you're busy making other plans.", source: "John Lennon", tone: "Reflective", feedback: "Ponders life’s unpredictability." },
-      { text: "Many lack originality, lack originality, originality.", source: "Kanye West", tone: "Sarcastic", feedback: "Mocks unoriginality with sharp wit." },
-      { text: "Get busy living or get busy dying.", source: "Stephen King", tone: "Urgent", feedback: "Demands immediate action for life." },
-      { text: "You can't handle the truth!", source: "A Few Good Men", tone: "Confrontational", feedback: "Challenges with aggressive reality." },
-      { text: "I'm gonna make him an offer he can't refuse.", source: "The Godfather", tone: "Threatening", feedback: "Hides menace in calm words." },
-      { text: "May the Force be with you.", source: "Star Wars", tone: "Encouraging", feedback: "Warms with support and strength." },
-      { text: "Here's looking at you, kid.", source: "Casablanca", tone: "Romantic", feedback: "Expresses tender, nostalgic love." },
-      { text: "Houston, we have a problem.", source: "Apollo 13", tone: "Urgent", feedback: "Signals crisis with restrained panic." },
-      { text: "I will survive, oh, as long as I know how to love.", source: "Gloria Gaynor", tone: "Empowering", feedback: "Declares resilience through love." },
-      { text: "Yesterday, all my troubles seemed so far away.", source: "The Beatles", tone: "Nostalgic", feedback: "Longs for a happier past." },
-      { text: "I got a feeling that tonight’s gonna be a good night.", source: "Black Eyed Peas", tone: "Excited", feedback: "Radiates high-energy optimism." },
-      { text: "I'm just a soul whose intentions are good.", source: "The Animals", tone: "Pleading", feedback: "Seeks empathy with sincerity." },
-      { text: "Welcome to the jungle, we got fun and games.", source: "Guns N' Roses", tone: "Sarcastic", feedback: "Masks chaos with mocking invitation." },
-      { text: "A journey of a thousand miles begins with a single step.", source: "Lao Tzu", tone: "Encouraging", feedback: "Motivates small steps to goals." },
-      { text: "The early bird catches the worm.", source: "Proverb", tone: "Motivational", feedback: "Urges prompt action for success." },
-      { text: "Don't judge a book by its cover.", source: "Proverb", tone: "Cautionary", feedback: "Warns against superficial judgment." },
-      { text: "Every cloud has a silver lining.", source: "Proverb", tone: "Optimistic", feedback: "Finds hope in adversity." },
-      { text: "Actions speak louder than words.", source: "Proverb", tone: "Assertive", feedback: "Values deeds over promises." },
-      { text: "Ask not what your country can do for you.", source: "John F. Kennedy", tone: "Challenging", feedback: "Demands selfless duty." },
-      { text: "We shall fight on the beaches.", source: "Winston Churchill", tone: "Defiant", feedback: "Rallies unyielding resolve." },
-      { text: "The only thing we have to fear is fear itself.", source: "Franklin D. Roosevelt", tone: "Reassuring", feedback: "Calms with courageous wisdom." },
-      { text: "Let us never negotiate out of fear.", source: "John F. Kennedy", tone: "Resolute", feedback: "Stands firm with strength." },
-      { text: "This was their finest hour.", source: "Winston Churchill", tone: "Praising", feedback: "Honors bravery with pride." },
-      { text: "To be or not to be, that is the question.", source: "Shakespeare", tone: "Contemplative", feedback: "Muses on existence deeply." },
-      { text: "I'll be back.", source: "The Terminator", tone: "Threatening", feedback: "Promises return with menace." },
-      { text: "All you need is love.", source: "The Beatles", tone: "Optimistic", feedback: "Champions love as solution." },
-      { text: "Carpe diem, seize the day.", source: "Dead Poets Society", tone: "Inspirational", feedback: "Urges living in the moment." },
-      { text: "I see dead people.", source: "The Sixth Sense", tone: "Eerie", feedback: "Chills with haunting truth." },
-      { text: "Just keep swimming.", source: "Finding Nemo", tone: "Encouraging", feedback: "Cheers with persistent optimism." },
-      { text: "Born to be wild.", source: "Steppenwolf", tone: "Rebellious", feedback: "Celebrates untamed freedom." },
-      { text: "A friend in need is a friend indeed.", source: "Proverb", tone: "Affirming", feedback: "Values loyalty in hardship." },
-      { text: "We are the change we seek.", source: "Barack Obama", tone: "Empowering", feedback: "Inspires action for change." },
-      { text: "Let it be.", source: "The Beatles", tone: "Calming", feedback: "Promotes peace and acceptance." },
-      { text: "I'm king of the world!", source: "Titanic", tone: "Triumphant", feedback: "Exudes victorious joy." },
-      { text: "Better late than never.", source: "Proverb", tone: "Encouraging", feedback: "Supports effort despite delay." },
-      { text: "I am inevitable.", source: "Avengers: Endgame", tone: "Ominous", feedback: "Declares fate with dread." },
-      { text: "Sweet dreams are made of this.", source: "Eurythmics", tone: "Dreamy", feedback: "Evokes surreal hope." },
-      { text: "Freedom is not free.", source: "Proverb", tone: "Solemn", feedback: "Reminds of liberty’s cost." },
-      { text: "We choose to go to the moon.", source: "John F. Kennedy", tone: "Ambitious", feedback: "Sets bold collective goals." },
-      { text: "Hakuna matata, it means no worries.", source: "The Lion King", tone: "Carefree", feedback: "Embraces stress-free living." },
-      { text: "Stay hungry, stay foolish.", source: "Steve Jobs", tone: "Motivational", feedback: "Encourages risk and curiosity." },
-      { text: "Smells like teen spirit.", source: "Nirvana", tone: "Rebellious", feedback: "Captures youthful defiance." },
-      { text: "When in Rome, do as the Romans do.", source: "Proverb", tone: "Advisory", feedback: "Advises cultural adaptation." },
-      { text: "The future belongs to those who believe.", source: "Eleanor Roosevelt", tone: "Inspirational", feedback: "Uplifts with faith in potential." },
-      { text: "There's no place like home.", source: "The Wizard of Oz", tone: "Nostalgic", feedback: "Longs for home’s comfort." },
-      { text: "Imagine all the people living life in peace.", source: "John Lennon", tone: "Hopeful", feedback: "Dreams of global harmony." },
-      { text: "A penny saved is a penny earned.", source: "Proverb", tone: "Practical", feedback: "Advocates prudent saving." },
-      { text: "Together we stand, divided we fall.", source: "Aesop", tone: "Unifying", feedback: "Stresses strength in unity." },
+      { text: "The only way to do great work is to love what you do.", source: "Steve Jobs", tone: "Inspirational", feedback: "This quote radiates inspiration by connecting passion with excellence. Jobs reminds us that meaningful work flows from genuine love for what we do. When we recognize this tone, we understand why purpose-driven people achieve greatness." },
+      { text: "I have a dream that one day this nation will rise up.", source: "Martin Luther King Jr.", tone: "Hopeful", feedback: "King's words carry profound hope—not naive optimism, but courageous vision for a better future. This hopeful tone inspires action by painting a picture of possibility. Recognizing hope in speech helps us identify leaders who unite rather than divide." },
+      { text: "Life is what happens when you're busy making other plans.", source: "John Lennon", tone: "Reflective", feedback: "Lennon invites us to pause and reflect on life's unpredictability. This reflective tone encourages mindfulness and presence. When we detect reflection in others' words, we create space for deeper, more meaningful conversations." },
+      { text: "Many lack originality, lack originality, originality.", source: "Kanye West", tone: "Sarcastic", feedback: "The deliberate repetition drips with sarcasm—mocking the very unoriginality being criticized. Recognizing sarcasm requires reading between the lines. This skill protects us from misunderstanding and helps us appreciate wit in communication." },
+      { text: "Get busy living or get busy dying.", source: "Stephen King", tone: "Urgent", feedback: "This stark choice creates immediate urgency. There's no middle ground—act now or face consequences. Detecting urgency helps us prioritize what matters and respond appropriately when time is critical in our personal and professional lives." },
+      { text: "You can't handle the truth!", source: "A Few Good Men", tone: "Confrontational", feedback: "This aggressive challenge puts the listener on the defensive immediately. Confrontational tones signal conflict and power struggles. Recognizing this helps us stay calm, respond thoughtfully, and avoid escalating tense situations." },
+      { text: "I'm gonna make him an offer he can't refuse.", source: "The Godfather", tone: "Threatening", feedback: "The calm delivery masks a clear threat. This is menace wrapped in politeness—the most dangerous kind. Detecting threatening undertones protects us from manipulation and helps us recognize when 'offers' come with hidden consequences." },
+      { text: "May the Force be with you.", source: "Star Wars", tone: "Encouraging", feedback: "This blessing offers warmth and support without being prescriptive. Encouraging tones build confidence in others. When we use and recognize encouragement, we create environments where people feel supported to take on challenges." },
+      { text: "Here's looking at you, kid.", source: "Casablanca", tone: "Romantic", feedback: "These simple words carry deep romantic affection and bittersweet emotion. Romantic tones express vulnerability and connection. Recognizing this helps us understand the depth of feeling behind seemingly casual expressions of love." },
+      { text: "Houston, we have a problem.", source: "Apollo 13", tone: "Urgent", feedback: "The understatement intensifies the urgency—a life-threatening crisis described calmly. This controlled urgency is common in high-stakes professions. Detecting it helps us understand when someone is signaling serious trouble without panicking." },
+      { text: "I will survive, oh, as long as I know how to love.", source: "Gloria Gaynor", tone: "Empowering", feedback: "This declaration transforms pain into power. Empowering tones inspire self-belief and resilience. When we recognize empowerment in music, speeches, or conversations, we tap into messages that help us overcome our own struggles." },
+      { text: "Yesterday, all my troubles seemed so far away.", source: "The Beatles", tone: "Nostalgic", feedback: "The longing for a simpler past defines nostalgia. This tone often appears when we face difficulties and remember easier times. Recognizing nostalgia helps us understand emotional needs and connect with others who are processing change." },
+      { text: "I got a feeling that tonight's gonna be a good night.", source: "Black Eyed Peas", tone: "Excited", feedback: "Pure anticipation and joy burst from these words. Excited tones are contagious and build positive energy in groups. Detecting excitement helps us join celebrations genuinely and understand when others want us to share their enthusiasm." },
+      { text: "I'm just a soul whose intentions are good.", source: "The Animals", tone: "Pleading", feedback: "This humble appeal asks for understanding and forgiveness. Pleading tones reveal vulnerability and a desire to be seen fairly. Recognizing this helps us respond with empathy rather than judgment to those seeking our compassion." },
+      { text: "Welcome to the jungle, we got fun and games.", source: "Guns N' Roses", tone: "Sarcastic", feedback: "The 'welcome' is ironic—chaos awaits, not hospitality. Sarcasm often uses positive words to convey negative realities. Mastering this recognition helps us navigate social situations where people communicate indirectly." },
+      { text: "A journey of a thousand miles begins with a single step.", source: "Lao Tzu", tone: "Encouraging", feedback: "Ancient wisdom encourages us to start despite feeling overwhelmed. This gentle push acknowledges difficulty while promoting action. Encouraging tones motivate without pressuring, making big goals feel achievable one step at a time." },
+      { text: "The early bird catches the worm.", source: "Proverb", tone: "Motivational", feedback: "This proverb drives action through competitive advantage—be first, win more. Motivational tones push us toward effort and achievement. Recognizing motivation helps us understand when advice aims to inspire action versus simply inform." },
+      { text: "Don't judge a book by its cover.", source: "Proverb", tone: "Cautionary", feedback: "This warning protects us from superficial judgments that miss deeper truths. Cautionary tones teach through gentle warning. Detecting caution helps us pause before acting and consider perspectives we might otherwise overlook." },
+      { text: "Every cloud has a silver lining.", source: "Proverb", tone: "Optimistic", feedback: "Even in darkness, this phrase finds light. Optimistic tones reframe problems as opportunities. When we recognize optimism, we understand someone's attempt to shift perspective from despair toward hope and possibility." },
+      { text: "Actions speak louder than words.", source: "Proverb", tone: "Assertive", feedback: "This firm statement prioritizes deeds over promises. Assertive tones communicate clear positions without aggression. Recognizing assertion helps us identify genuine convictions and distinguish them from empty rhetoric." },
+      { text: "Ask not what your country can do for you.", source: "John F. Kennedy", tone: "Challenging", feedback: "Kennedy challenges us to reverse our expectations—give, don't just take. Challenging tones demand we rise to higher standards. Detecting this helps us recognize calls for sacrifice and collective responsibility." },
+      { text: "We shall fight on the beaches.", source: "Winston Churchill", tone: "Defiant", feedback: "Defiance rings through every word—surrender is not an option. Churchill's tone rallied a nation facing defeat. Recognizing defiance helps us understand unwavering commitment and the psychology of resistance under pressure." },
+      { text: "The only thing we have to fear is fear itself.", source: "Franklin D. Roosevelt", tone: "Reassuring", feedback: "In crisis, FDR calmed a nation by naming fear as the true enemy. Reassuring tones reduce anxiety and restore confidence. Detecting reassurance helps us recognize when leaders are working to stabilize emotional turmoil." },
+      { text: "Let us never negotiate out of fear.", source: "John F. Kennedy", tone: "Resolute", feedback: "This statement draws an immovable line—principles before pressure. Resolute tones signal unwavering commitment. Recognizing resolution helps us understand when someone has made a non-negotiable decision." },
+      { text: "This was their finest hour.", source: "Winston Churchill", tone: "Praising", feedback: "Churchill honors extraordinary bravery with profound respect. Praising tones celebrate achievement and inspire others. Detecting praise helps us understand what behaviors and values a leader or community most admires." },
+      { text: "To be or not to be, that is the question.", source: "Shakespeare", tone: "Contemplative", feedback: "Hamlet weighs existence itself—the deepest contemplation possible. Contemplative tones invite us into profound reflection. Recognizing this helps us engage meaningfully when others are processing life's fundamental questions." },
+      { text: "I'll be back.", source: "The Terminator", tone: "Threatening", feedback: "Three simple words carry unmistakable menace—a promise of return with consequences. Threats can be subtle yet clear. Recognizing threatening undertones helps us assess situations accurately and respond appropriately to protect ourselves." },
+      { text: "All you need is love.", source: "The Beatles", tone: "Optimistic", feedback: "This idealistic claim reduces complexity to a simple, beautiful truth. Optimistic tones offer hope through simplification. Recognizing this helps us understand when someone is offering comfort through belief in fundamental goodness." },
+      { text: "Carpe diem, seize the day.", source: "Dead Poets Society", tone: "Inspirational", feedback: "This urgent call to live fully now has inspired generations. Inspirational tones move us from complacency to action. Detecting inspiration helps us receive motivation and recognize when others are trying to awaken our potential." },
+      { text: "I see dead people.", source: "The Sixth Sense", tone: "Eerie", feedback: "The quiet confession creates instant unease—something supernatural and wrong. Eerie tones unsettle us psychologically. Recognizing this helps us understand how atmosphere is created through tone, whether in stories or real conversations." },
+      { text: "Just keep swimming.", source: "Finding Nemo", tone: "Encouraging", feedback: "Simple repetition becomes powerful encouragement—persist through difficulty. Encouraging tones sustain us when we want to quit. Detecting encouragement helps us receive support and offer it effectively to others who are struggling." },
+      { text: "Born to be wild.", source: "Steppenwolf", tone: "Rebellious", feedback: "This declaration rejects conformity and celebrates untamed freedom. Rebellious tones challenge established order. Recognizing rebellion helps us understand movements for change and the psychological need for autonomy and self-expression." },
+      { text: "A friend in need is a friend indeed.", source: "Proverb", tone: "Affirming", feedback: "True friendship reveals itself through hardship, not convenience. Affirming tones validate important truths. Detecting affirmation helps us recognize when wisdom confirms our values and strengthens our convictions." },
+      { text: "We are the change we seek.", source: "Barack Obama", tone: "Empowering", feedback: "Obama places power directly in our hands—change starts with us. Empowering tones shift responsibility from others to self. Recognizing empowerment helps us accept agency and inspire others to act rather than wait." },
+      { text: "Let it be.", source: "The Beatles", tone: "Calming", feedback: "These words offer peace through acceptance—stop fighting, find stillness. Calming tones reduce anxiety and promote serenity. Detecting calm helps us recognize when someone is offering emotional rest rather than solutions." },
+      { text: "I'm king of the world!", source: "Titanic", tone: "Triumphant", feedback: "Pure victory explodes in this shout—complete, joyful conquest. Triumphant tones celebrate achievements at their peak. Recognizing triumph helps us share in others' victories and understand moments of complete success." },
+      { text: "Better late than never.", source: "Proverb", tone: "Encouraging", feedback: "This phrase forgives delay while still urging action. Encouraging tones meet us where we are. Detecting encouragement helps us accept grace for our shortcomings while maintaining motivation to move forward." },
+      { text: "I am inevitable.", source: "Avengers: Endgame", tone: "Ominous", feedback: "Thanos declares unstoppable doom—fate has already decided. Ominous tones create dread about unavoidable futures. Recognizing this helps us understand psychological intimidation and respond with courage rather than fear." },
+      { text: "Sweet dreams are made of this.", source: "Eurythmics", tone: "Dreamy", feedback: "The hypnotic quality evokes a surreal, trance-like state. Dreamy tones blur reality and imagination. Detecting this helps us appreciate artistic expression and understand when communication aims for emotional rather than logical impact." },
+      { text: "Freedom is not free.", source: "Proverb", tone: "Solemn", feedback: "This sobering truth honors sacrifice while warning against complacency. Solemn tones demand respect and reflection. Recognizing solemnity helps us engage appropriately with serious topics and honor what others hold sacred." },
+      { text: "We choose to go to the moon.", source: "John F. Kennedy", tone: "Ambitious", feedback: "Kennedy declares an impossible goal as certain destiny. Ambitious tones inspire by setting extraordinary targets. Detecting ambition helps us understand visionary leadership and the power of declaring bold intentions publicly." },
+      { text: "Hakuna matata, it means no worries.", source: "The Lion King", tone: "Carefree", feedback: "This philosophy releases us from anxiety entirely—let troubles go. Carefree tones offer freedom from burden. Recognizing this helps us understand when someone needs to escape pressure rather than solve problems." },
+      { text: "Stay hungry, stay foolish.", source: "Steve Jobs", tone: "Motivational", feedback: "Jobs urges perpetual dissatisfaction and brave naivety. Motivational tones push us beyond comfort. Detecting motivation helps us understand when advice is designed to prevent complacency and encourage continuous growth." },
+      { text: "Smells like teen spirit.", source: "Nirvana", tone: "Rebellious", feedback: "Cobain captured generational discontent in cryptic rebellion. Rebellious tones express frustration with status quo. Recognizing rebellion helps us understand cultural movements and the emotional needs driving resistance." },
+      { text: "When in Rome, do as the Romans do.", source: "Proverb", tone: "Advisory", feedback: "This practical advice promotes cultural adaptation and respect. Advisory tones offer guidance without demanding. Detecting advice helps us receive wisdom gracefully and distinguish helpful suggestions from controlling demands." },
+      { text: "The future belongs to those who believe.", source: "Eleanor Roosevelt", tone: "Inspirational", feedback: "Roosevelt connects faith in dreams to eventual success. Inspirational tones elevate our vision of possibility. Detecting inspiration helps us receive encouragement and understand how leaders motivate through belief rather than fear." },
+      { text: "There's no place like home.", source: "The Wizard of Oz", tone: "Nostalgic", feedback: "Dorothy's realization captures universal longing for belonging. Nostalgic tones connect us to roots and safety. Recognizing nostalgia helps us understand deep emotional needs for security, familiarity, and unconditional acceptance." },
+      { text: "Imagine all the people living life in peace.", source: "John Lennon", tone: "Hopeful", feedback: "Lennon paints a vision of harmony that seems impossible yet compelling. Hopeful tones imagine better futures. Detecting hope helps us engage with idealism constructively and understand the power of shared dreams." },
+      { text: "A penny saved is a penny earned.", source: "Proverb", tone: "Practical", feedback: "Franklin's wisdom promotes financial discipline through simple logic. Practical tones prioritize utility over emotion. Recognizing practicality helps us receive straightforward advice and apply wisdom to daily decisions." },
+      { text: "Together we stand, divided we fall.", source: "Aesop", tone: "Unifying", feedback: "This ancient truth calls for solidarity over separation. Unifying tones emphasize collective strength. Detecting calls for unity helps us recognize leadership that builds bridges and understand the power of cooperation." },
+      // === 50 MORE QUOTES (51-100) ===
+      { text: "Why so serious?", source: "The Dark Knight", tone: "Menacing", feedback: "The Joker's question mocks seriousness while radiating danger. This menacing playfulness unsettles because it defies expectations. Recognizing menace disguised as humor helps us identify manipulation and psychological intimidation in real interactions." },
+      { text: "With great power comes great responsibility.", source: "Spider-Man", tone: "Advisory", feedback: "Uncle Ben's wisdom links capability to duty. This advisory tone teaches without lecturing. Recognizing such advice helps us understand mentorship and the moral weight that accompanies any position of influence." },
+      { text: "After all, tomorrow is another day.", source: "Gone with the Wind", tone: "Hopeful", feedback: "Scarlett finds hope in future possibility despite present ruin. This resilient optimism refuses defeat. Detecting this tone helps us recognize coping mechanisms that sustain people through their darkest moments." },
+      { text: "You talking to me?", source: "Taxi Driver", tone: "Confrontational", feedback: "Travis Bickle's aggressive challenge to his reflection reveals inner turmoil. Confrontational tones often mask vulnerability. Recognizing this helps us understand when aggression signals deeper emotional distress rather than genuine threat." },
+      { text: "I think, therefore I am.", source: "René Descartes", tone: "Contemplative", feedback: "Descartes reduces existence to pure thought—profound philosophical contemplation. This tone invites deep reflection on fundamental truths. Recognizing contemplation helps us engage with ideas that require careful, unhurried consideration." },
+      { text: "Float like a butterfly, sting like a bee.", source: "Muhammad Ali", tone: "Confident", feedback: "Ali's self-description combines grace with power—supreme athletic confidence. Confident tones inspire belief in one's abilities. Detecting confidence helps us distinguish genuine self-assurance from arrogance or insecurity masked as bravado." },
+      { text: "The truth will set you free.", source: "Bible", tone: "Reassuring", feedback: "This promise offers liberation through honesty, even when truth is difficult. Reassuring tones provide comfort in uncertain times. Recognizing reassurance helps us receive wisdom that calms our fears about doing what's right." },
+      { text: "Nobody puts Baby in a corner.", source: "Dirty Dancing", tone: "Protective", feedback: "Johnny defends someone he loves against dismissal. Protective tones signal fierce loyalty and defense. Recognizing protection helps us understand when someone is advocating for another's dignity and worth." },
+      { text: "Elementary, my dear Watson.", source: "Sherlock Holmes", tone: "Dismissive", feedback: "Holmes reduces complexity to simplicity with casual superiority. Dismissive tones can feel condescending yet instructive. Detecting dismissiveness helps us understand intellectual dynamics and respond without feeling diminished." },
+      { text: "It's alive! It's alive!", source: "Frankenstein", tone: "Excited", feedback: "Dr. Frankenstein's exclamation bursts with scientific triumph and horror combined. This manic excitement reveals obsessive passion. Recognizing excited tones helps us understand moments when emotion overwhelms rational thought." },
+      { text: "Be the change you wish to see in the world.", source: "Mahatma Gandhi", tone: "Empowering", feedback: "Gandhi places transformation responsibility within each person. This empowering message rejects passive waiting. Detecting empowerment helps us receive calls to personal action rather than external blame." },
+      { text: "That's one small step for man, one giant leap for mankind.", source: "Neil Armstrong", tone: "Historic", feedback: "Armstrong captures a moment that transcends individual achievement. This historic tone marks watershed events. Recognizing historic significance helps us appreciate moments that change human possibility forever." },
+      { text: "I feel the need—the need for speed.", source: "Top Gun", tone: "Excited", feedback: "Maverick's catchphrase radiates adrenaline and competitive energy. This excited bravado celebrates risk-taking. Detecting excitement helps us understand thrill-seeking personalities and the joy found in pushing limits." },
+      { text: "Keep your friends close, but your enemies closer.", source: "The Godfather Part II", tone: "Strategic", feedback: "Michael Corleone shares cunning wisdom about power and survival. Strategic tones reveal calculated thinking. Recognizing strategic advice helps us understand political minds and navigate competitive environments wisely." },
+      { text: "Roads? Where we're going, we don't need roads.", source: "Back to the Future", tone: "Excited", feedback: "Doc Brown's declaration promises adventure beyond known limits. This excited anticipation of the impossible inspires wonder. Detecting this tone helps us share in moments of breakthrough and unlimited possibility." },
+      { text: "Frankly, my dear, I don't give a damn.", source: "Gone with the Wind", tone: "Dismissive", feedback: "Rhett's departure rejects Scarlett's drama with cold finality. This dismissive tone signals emotional exhaustion. Recognizing dismissiveness helps us understand when someone has truly detached from a situation or relationship." },
+      { text: "If you build it, he will come.", source: "Field of Dreams", tone: "Mysterious", feedback: "The whispered promise defies logic yet compels action. Mysterious tones invite faith over reason. Detecting mystery helps us engage with ideas that require trust in unseen outcomes and intuitive leaps." },
+      { text: "There's always money in the banana stand.", source: "Arrested Development", tone: "Cryptic", feedback: "The repeated phrase hides literal meaning beneath apparent absurdity. Cryptic tones conceal truth in plain sight. Recognizing cryptic communication helps us look deeper when simple statements seem to carry hidden weight." },
+      { text: "Winter is coming.", source: "Game of Thrones", tone: "Ominous", feedback: "The Stark words warn of inevitable hardship approaching. This ominous declaration demands preparation for difficult times. Detecting ominous tones helps us take warnings seriously and prepare rather than ignore coming challenges." },
+      { text: "I volunteer as tribute.", source: "The Hunger Games", tone: "Sacrificial", feedback: "Katniss offers herself to save her sister—pure selfless sacrifice. This sacrificial tone reveals love stronger than self-preservation. Recognizing sacrifice helps us honor those who put others before themselves." },
+      { text: "Live long and prosper.", source: "Star Trek", tone: "Benevolent", feedback: "Spock's blessing wishes well-being without demanding anything in return. Benevolent tones express genuine goodwill. Detecting benevolence helps us receive kindness graciously and offer it authentically to others." },
+      { text: "You shall not pass!", source: "Lord of the Rings", tone: "Defiant", feedback: "Gandalf stands absolutely against overwhelming darkness. This defiant declaration draws an unmovable line. Recognizing defiance helps us understand moments when compromise is impossible and courage is required." },
+      { text: "To infinity and beyond!", source: "Toy Story", tone: "Ambitious", feedback: "Buzz Lightyear's catchphrase sets no limits on aspiration. This ambitious declaration refuses boundaries. Detecting ambition helps us understand dreamers who inspire by imagining beyond conventional possibilities." },
+      { text: "Why do we fall? So we can learn to pick ourselves up.", source: "Batman Begins", tone: "Encouraging", feedback: "Alfred reframes failure as essential learning. This encouraging wisdom transforms setbacks into growth opportunities. Recognizing encouragement helps us receive support that builds resilience rather than just offering comfort." },
+      { text: "Great minds discuss ideas; average minds discuss events; small minds discuss people.", source: "Eleanor Roosevelt", tone: "Challenging", feedback: "Roosevelt challenges us to elevate our conversations and thinking. This tone provokes self-examination. Detecting challenges helps us receive criticism that aims to improve us rather than diminish us." },
+      { text: "I have not failed. I've just found 10,000 ways that won't work.", source: "Thomas Edison", tone: "Optimistic", feedback: "Edison reframes massive failure as productive research. This optimistic persistence refuses to accept defeat. Recognizing optimism helps us understand resilience and the mindset that transforms obstacles into stepping stones." },
+      { text: "The only true wisdom is in knowing you know nothing.", source: "Socrates", tone: "Humble", feedback: "Socrates embraces ignorance as the beginning of learning. This humble acknowledgment opens doors to growth. Detecting humility helps us recognize teachable spirits and understand the paradox of wise self-doubt." },
+      { text: "It is not the strongest that survives, but the most adaptable.", source: "Charles Darwin", tone: "Instructive", feedback: "Darwin teaches that flexibility trumps power in survival. This instructive observation changes how we approach challenges. Recognizing instructive tones helps us receive lessons that reshape our fundamental strategies." },
+      { text: "Give me liberty, or give me death!", source: "Patrick Henry", tone: "Passionate", feedback: "Henry declares freedom worth dying for—absolute passionate commitment. This fervent declaration accepts no compromise. Detecting passion helps us understand what people value most and recognize genuine conviction." },
+      { text: "I came, I saw, I conquered.", source: "Julius Caesar", tone: "Triumphant", feedback: "Caesar's brevity emphasizes swift, complete victory. This triumphant declaration wastes no words on humility. Recognizing triumph helps us understand how leaders claim credit and shape narratives of success." },
+      { text: "That which does not kill us makes us stronger.", source: "Friedrich Nietzsche", tone: "Stoic", feedback: "Nietzsche finds growth through suffering—philosophical endurance. This stoic perspective reframes pain as strengthening. Detecting stoicism helps us understand resilience philosophies that transform hardship into character development." },
+      { text: "In the middle of difficulty lies opportunity.", source: "Albert Einstein", tone: "Optimistic", feedback: "Einstein sees possibility hidden within problems. This optimistic reframing reveals opportunities others miss. Recognizing optimism helps us adopt perspectives that find advantage in adversity rather than only seeing obstacles." },
+      { text: "Hell hath no fury like a woman scorned.", source: "William Congreve", tone: "Cautionary", feedback: "This warning describes the intensity of betrayed love turned to anger. Cautionary tones teach through vivid imagery. Detecting caution helps us understand warnings about the consequences of our actions on others." },
+      { text: "Tis better to have loved and lost than never to have loved at all.", source: "Alfred Lord Tennyson", tone: "Philosophical", feedback: "Tennyson argues that love's pain is worth love's joy. This philosophical perspective reframes loss as valuable experience. Recognizing philosophy helps us engage with ideas that offer meaning despite suffering." },
+      { text: "Now is the winter of our discontent.", source: "Shakespeare", tone: "Bitter", feedback: "Richard III opens with cold resentment barely contained. This bitter tone reveals deep dissatisfaction and plotting. Detecting bitterness helps us understand when someone harbors grievances that may drive future actions." },
+      { text: "Beware the Ides of March.", source: "Shakespeare", tone: "Prophetic", feedback: "The soothsayer warns Caesar of his fate. This prophetic warning carries supernatural weight. Recognizing prophetic tones helps us take seriously warnings that seem to come from intuition or destiny." },
+      { text: "Et tu, Brute?", source: "Shakespeare", tone: "Betrayed", feedback: "Caesar's final words capture ultimate betrayal by a trusted friend. This wounded tone expresses heartbreak beyond anger. Detecting betrayal helps us understand the unique pain of violated trust from those closest to us." },
+      { text: "Tomorrow, and tomorrow, and tomorrow.", source: "Shakespeare", tone: "Despairing", feedback: "Macbeth sees endless meaningless days stretching forward. This despairing repetition reveals exhausted hopelessness. Recognizing despair helps us identify when someone needs support beyond simple encouragement." },
+      { text: "All the world's a stage, and all the men and women merely players.", source: "Shakespeare", tone: "Philosophical", feedback: "Shakespeare compares life to theater with assigned roles. This philosophical metaphor invites reflection on identity and performance. Detecting philosophy helps us engage with ideas that reframe how we see existence itself." },
+      { text: "The lady doth protest too much, methinks.", source: "Shakespeare", tone: "Suspicious", feedback: "Queen Gertrude notes excessive denial suggests guilt. This suspicious observation questions sincerity. Detecting suspicion helps us understand when overstatement actually reveals hidden truth rather than conviction." },
+      { text: "Parting is such sweet sorrow.", source: "Shakespeare", tone: "Bittersweet", feedback: "Juliet captures the painful pleasure of temporary goodbye. This bittersweet acknowledgment embraces contradictory emotions. Recognizing bittersweet moments helps us understand complex feelings that combine joy and sadness simultaneously." },
+      { text: "If music be the food of love, play on.", source: "Shakespeare", tone: "Romantic", feedback: "Duke Orsino wants to drown in love's emotional excess. This romantic command seeks overwhelming feeling. Detecting romantic intensity helps us understand passionate natures that embrace rather than moderate emotion." },
+      { text: "We are such stuff as dreams are made on.", source: "Shakespeare", tone: "Contemplative", feedback: "Prospero reflects on life's dreamlike, temporary nature. This contemplative observation invites meditation on reality. Recognizing contemplation helps us pause with profound ideas rather than rushing past them." },
+      { text: "Out, damned spot! Out, I say!", source: "Shakespeare", tone: "Tormented", feedback: "Lady Macbeth cannot escape guilt's psychological stain. This tormented outburst reveals conscience destroying peace. Detecting torment helps us recognize when guilt consumes someone beyond rational control." },
+      { text: "What a piece of work is man!", source: "Shakespeare", tone: "Wondering", feedback: "Hamlet marvels at human capability while questioning purpose. This wondering admiration mixed with doubt explores human nature. Recognizing wonder helps us engage with ideas that inspire awe and curiosity simultaneously." },
+      { text: "Love all, trust a few, do wrong to none.", source: "Shakespeare", tone: "Advisory", feedback: "This counsel balances openness with wisdom and integrity. Advisory tones offer guidance for navigating life well. Detecting advice helps us receive wisdom that aims to protect while encouraging our best nature." },
+      { text: "Hell is empty and all the devils are here.", source: "Shakespeare", tone: "Alarming", feedback: "Ariel describes chaos that has unleashed evil into the world. This alarming observation warns of present danger. Detecting alarm helps us recognize urgent situations requiring immediate attention and response." },
+      { text: "This above all: to thine own self be true.", source: "Shakespeare", tone: "Wise", feedback: "Polonius counsels authenticity as life's highest principle. This wise instruction prioritizes self-knowledge and integrity. Recognizing wisdom helps us receive guidance that has stood the test of time and experience." },
+      { text: "The fault, dear Brutus, is not in our stars, but in ourselves.", source: "Shakespeare", tone: "Challenging", feedback: "Cassius rejects fate as excuse—we create our circumstances. This challenging declaration demands personal responsibility. Detecting challenges helps us receive uncomfortable truths that push us toward growth and accountability." },
+      { text: "All that glitters is not gold.", source: "Shakespeare", tone: "Cautionary", feedback: "This timeless warning reminds us that appearances deceive—beauty can mask emptiness. Cautionary tones protect us from superficial judgments. Recognizing caution helps us look beyond surface appeal to discover true value and authentic worth." },
     ];
 
     const toneDetails = {
@@ -231,15 +1073,55 @@
       Ambitious: { emoji: "🏔️", description: "Aims high, driving goal-setting." },
       Carefree: { emoji: "😎", description: "Relaxes fully, reducing stress." },
       Practical: { emoji: "🛠️", description: "Focuses utility, enhancing problem-solving." },
-      Unifying: { emoji: "🤝", description: "Brings together, strengthening community." }
+      Unifying: { emoji: "🤝", description: "Brings together, strengthening community." },
+      // New tones for expanded quiz
+      Menacing: { emoji: "😈", description: "Threatens subtly, testing awareness." },
+      Advisory: { emoji: "💡", description: "Offers guidance, sharing wisdom." },
+      Protective: { emoji: "🛡️", description: "Defends others, showing loyalty." },
+      Dismissive: { emoji: "🙄", description: "Rejects casually, signaling superiority." },
+      Confident: { emoji: "😎", description: "Shows self-belief, inspiring others." },
+      Strategic: { emoji: "♟️", description: "Plans carefully, revealing calculation." },
+      Mysterious: { emoji: "🔮", description: "Conceals meaning, inviting curiosity." },
+      Cryptic: { emoji: "🗝️", description: "Hides truth, requiring interpretation." },
+      Sacrificial: { emoji: "💝", description: "Offers self, expressing deep love." },
+      Benevolent: { emoji: "😇", description: "Wishes well, spreading kindness." },
+      Historic: { emoji: "📜", description: "Marks significance, recording legacy." },
+      Humble: { emoji: "🙏", description: "Acknowledges limits, opening learning." },
+      Instructive: { emoji: "📚", description: "Teaches clearly, sharing knowledge." },
+      Passionate: { emoji: "❤️‍🔥", description: "Burns intensely, revealing conviction." },
+      Stoic: { emoji: "🗿", description: "Endures calmly, showing strength." },
+      Philosophical: { emoji: "🧠", description: "Explores meaning, deepening thought." },
+      Bitter: { emoji: "😤", description: "Harbors resentment, revealing hurt." },
+      Prophetic: { emoji: "🔮", description: "Predicts future, warning wisely." },
+      Betrayed: { emoji: "💔", description: "Expresses wound, revealing broken trust." },
+      Despairing: { emoji: "😞", description: "Loses hope, needing support." },
+      Suspicious: { emoji: "🤨", description: "Questions motives, staying alert." },
+      Bittersweet: { emoji: "🥹", description: "Mixes joy with sadness." },
+      Tormented: { emoji: "😰", description: "Suffers internally, seeking peace." },
+      Wondering: { emoji: "🤩", description: "Marvels openly, embracing awe." },
+      Alarming: { emoji: "🚨", description: "Signals danger, demanding attention." },
+      Wise: { emoji: "🦉", description: "Shares experience, guiding gently." }
     };
 
+    // Game state
     let score = 0;
     let currentRound = 0;
-    let totalRounds = 20;
+    let currentLevel = 1;
+    const totalLevels = 4;
+    const roundsPerLevel = 25;
+    const minScoreToAdvance = 10;
     let currentQuote = null;
-    let selectedRounds = [];
+    let levelQuotes = [];
     let history = [];
+    let allQuotes = [...dataBank]; // Copy of all quotes
+    let consecutiveSkips = 0; // Track consecutive skips
+
+    const levelNames = {
+      1: { name: "Beginner", emoji: "🌱", color: "#22c55e" },
+      2: { name: "Explorer", emoji: "🧭", color: "#3b82f6" },
+      3: { name: "Analyst", emoji: "🔍", color: "#8b5cf6" },
+      4: { name: "Master", emoji: "🎓", color: "#f59e0b" }
+    };
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -249,25 +1131,236 @@
       return array;
     }
 
-    function startGame() {
-      selectedRounds = shuffle([...dataBank]).slice(0, totalRounds);
+    function updateLevelBadge() {
+      const badge = document.getElementById('level-badge');
+      const level = levelNames[currentLevel];
+      badge.innerHTML = `${level.emoji} Level ${currentLevel}: ${level.name}`;
+      badge.style.background = level.color;
+    }
+    
+    // ===== Intro Screen Functions =====
+    function showLevelIntro(isFirstTime = false) {
+      const intro = document.getElementById('level-intro');
+      const level = levelNames[currentLevel];
+      
+      // Update intro content
+      if (isFirstTime) {
+        document.getElementById('intro-emoji').textContent = '🎯';
+        document.getElementById('intro-title').textContent = 'EQ Test: Tone Detection';
+        document.getElementById('intro-subtitle').textContent = 'Sharpen your emotional radar by identifying tones in famous quotes';
+        document.getElementById('intro-rules').style.display = 'block';
+      } else {
+        document.getElementById('intro-emoji').textContent = level.emoji;
+        document.getElementById('intro-title').textContent = `Level ${currentLevel} Awaits!`;
+        document.getElementById('intro-subtitle').textContent = `Ready to test your ${level.name.toLowerCase()} skills?`;
+        document.getElementById('intro-rules').style.display = 'none';
+      }
+      
+      // Update level preview
+      document.getElementById('preview-badge').innerHTML = `${level.emoji} Level ${currentLevel}`;
+      document.getElementById('preview-badge').style.background = level.color;
+      document.getElementById('preview-name').textContent = level.name;
+      document.getElementById('intro-start').innerHTML = `🚀 Start Level ${currentLevel}`;
+      
+      intro.classList.remove('hidden');
+      document.querySelector('.game-container').style.display = 'none';
+    }
+    
+    function startFromIntro() {
+      // Trigger confetti
+      launchConfetti();
+      
+      // Hide intro after a brief moment for confetti effect
+      setTimeout(() => {
+        document.getElementById('level-intro').classList.add('hidden');
+        document.querySelector('.game-container').style.display = 'flex';
+        startLevel();
+      }, 600);
+    }
+    
+    function launchConfetti() {
+      const container = document.getElementById('confetti');
+      container.innerHTML = '';
+      
+      const colors = ['#fd7e14', '#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'];
+      const shapes = ['●', '■', '▲', '★', '♦'];
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.fontSize = (Math.random() * 12 + 8) + 'px';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.animationDuration = (Math.random() * 1 + 2) + 's';
+        container.appendChild(confetti);
+        
+        // Trigger animation
+        setTimeout(() => confetti.classList.add('active'), 10);
+      }
+    }
+
+    function startLevel() {
+      // Get quotes for this level (each level gets different 25 quotes)
+      const startIdx = (currentLevel - 1) * roundsPerLevel;
+      const endIdx = startIdx + roundsPerLevel;
+      levelQuotes = shuffle([...allQuotes]).slice(startIdx, endIdx);
+      
       currentRound = 0;
       score = 0;
       history = [];
+      consecutiveSkips = 0;
+      updateLevelBadge();
       loadRound();
     }
 
+    function showLevelComplete() {
+      const passed = score >= minScoreToAdvance;
+      const isLastLevel = currentLevel >= totalLevels;
+      const level = levelNames[currentLevel];
+      const nextLevel = levelNames[currentLevel + 1];
+      
+      // Generate level progress dots
+      let dotsHTML = '';
+      for (let i = 1; i <= totalLevels; i++) {
+        if (i < currentLevel || (i === currentLevel && passed)) {
+          dotsHTML += '<span class="level-dot completed"></span>';
+        } else if (i === currentLevel && !passed) {
+          dotsHTML += '<span class="level-dot current"></span>';
+        } else {
+          dotsHTML += '<span class="level-dot"></span>';
+        }
+      }
+      
+      let html = '';
+      
+      if (passed) {
+        if (isLastLevel) {
+          // 🏆 MASTERED ALL LEVELS
+          html = `
+            <div class="level-complete">
+              <div class="result-banner master">
+                <span class="result-emoji">🏆</span>
+                <h3 class="result-title">EQ Master Achieved!</h3>
+              </div>
+              
+              <div class="score-circle-container">
+                <div class="score-circle master">
+                  <span class="score-number">${score}</span>
+                  <span class="score-label">of ${roundsPerLevel}</span>
+                </div>
+              </div>
+              
+              <div class="level-progress">
+                ${dotsHTML}
+                <span class="level-progress-label">All Complete!</span>
+              </div>
+              
+              <p class="encourage-msg">
+                🎊 <strong>Incredible!</strong> You've conquered all 4 levels and proven exceptional emotional intelligence. Your ability to read tones will serve you in every conversation.
+              </p>
+              
+              <div class="level-buttons">
+                <button class="level-btn restart" onclick="restartGame()">🔄 Play Again & Beat Your Score</button>
+              </div>
+            </div>
+          `;
+        } else {
+          // ✅ PASSED - CAN ADVANCE
+          html = `
+            <div class="level-complete">
+              <div class="result-banner success">
+                <span class="result-emoji">🎉</span>
+                <h3 class="result-title">Level ${currentLevel} Complete!</h3>
+              </div>
+              
+              <div class="score-circle-container">
+                <div class="score-circle success">
+                  <span class="score-number">${score}</span>
+                  <span class="score-label">of ${roundsPerLevel}</span>
+                </div>
+              </div>
+              
+              <div class="level-progress">
+                ${dotsHTML}
+                <span class="level-progress-label">Level ${currentLevel} of ${totalLevels}</span>
+              </div>
+              
+              <div class="next-level-card">
+                <h4>${nextLevel.emoji} Next: ${nextLevel.name} Level</h4>
+                <p>Unlock deeper emotional intelligence skills with more challenging quotes!</p>
+              </div>
+              
+              <div class="level-buttons">
+                <button class="level-btn advance" onclick="advanceLevel()">
+                  Continue to Level ${currentLevel + 1} →
+                </button>
+                <button class="level-btn retry" onclick="startLevel()">🔄 Retry for Higher Score</button>
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        // ❌ NEED MORE PRACTICE
+        const needed = minScoreToAdvance - score;
+        html = `
+          <div class="level-complete">
+            <div class="result-banner retry">
+              <span class="result-emoji">💪</span>
+              <h3 class="result-title">Almost There!</h3>
+            </div>
+            
+            <div class="score-circle-container">
+              <div class="score-circle retry">
+                <span class="score-number">${score}</span>
+                <span class="score-label">of ${roundsPerLevel}</span>
+              </div>
+            </div>
+            
+            <div class="level-progress">
+              ${dotsHTML}
+              <span class="level-progress-label">Level ${currentLevel} of ${totalLevels}</span>
+            </div>
+            
+            <p class="encourage-msg">
+              You need <strong>${minScoreToAdvance} correct</strong> to advance. Just <strong>${needed} more</strong> and you're there!<br>
+              Every try sharpens your emotional radar. 🎯
+            </p>
+            
+            <div class="level-buttons">
+              <button class="level-btn tryagain" onclick="startLevel()">💪 Give It Another Shot</button>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Hide quiz elements, show level complete
+      document.getElementById('quote').style.display = 'none';
+      document.getElementById('options').innerHTML = html;
+      document.getElementById('options').classList.add('level-complete-mode');
+      document.getElementById('feedback').style.display = 'none';
+      document.querySelector('.buttons').classList.add('hidden');
+    }
+
+    function advanceLevel() {
+      currentLevel++;
+      showLevelIntro(false); // Show level intro screen
+    }
+
+    function restartGame() {
+      currentLevel = 1;
+      allQuotes = shuffle([...dataBank]); // Re-shuffle all quotes
+      showLevelIntro(true); // Show welcome screen
+    }
+
     function loadRound() {
-      if (currentRound >= totalRounds) {
-        document.getElementById('quote').innerText = `Game Over! Final Score: ${score}/${totalRounds}`;
-        document.getElementById('options').innerHTML = '';
-        document.getElementById('feedback').innerText = '';
-        document.getElementById('next').disabled = true;
-        document.getElementById('prev').disabled = true;
+      if (currentRound >= roundsPerLevel) {
+        showLevelComplete();
         return;
       }
 
-      currentQuote = selectedRounds[currentRound];
+      currentQuote = levelQuotes[currentRound];
       document.getElementById('quote').innerText = `"${currentQuote.text}" — ${currentQuote.source}`;
       document.getElementById('score').innerText = score;
       document.getElementById('round').innerText = currentRound + 1;
@@ -296,19 +1389,30 @@
       });
 
       document.getElementById('prev').disabled = currentRound === 0;
+      document.getElementById('next').disabled = true;
+      
+      // Show quiz elements (in case coming from level complete)
+      document.getElementById('quote').style.display = '';
+      document.getElementById('feedback').style.display = '';
+      document.getElementById('options').classList.remove('level-complete-mode');
+      document.querySelector('.buttons').classList.remove('hidden');
     }
 
     function selectOption(tone, element) {
       const options = document.querySelectorAll('.option');
       options.forEach(opt => opt.style.pointerEvents = 'none');
 
+      consecutiveSkips = 0; // Reset skip counter when user answers
+
+      const feedbackEl = document.getElementById('feedback');
+
       if (tone === currentQuote.tone) {
         score++;
         element.className = 'option correct';
-        document.getElementById('feedback').innerText = `Correct! ${currentQuote.feedback}`;
+        feedbackEl.innerHTML = `<span class="feedback-label">✅ Correct! The tone is ${currentQuote.tone}.</span>${currentQuote.feedback}`;
       } else {
         element.className = 'option incorrect';
-        document.getElementById('feedback').innerText = `Incorrect. ${currentQuote.feedback}`;
+        feedbackEl.innerHTML = `<span class="feedback-label">❌ Not quite. The tone is ${currentQuote.tone}.</span>${currentQuote.feedback}`;
         options.forEach(opt => {
           if (opt.querySelector('h3').innerText === currentQuote.tone) {
             opt.className = 'option correct';
@@ -326,15 +1430,54 @@
       loadRound();
     };
 
+    document.getElementById('skip').onclick = () => {
+      consecutiveSkips++;
+      
+      // After 3 consecutive skips, show gentle nudge
+      if (consecutiveSkips >= 3) {
+        showSkipNudge();
+        return;
+      }
+      
+      // Skip counts as no answer (doesn't affect score)
+      history.push({ quote: currentQuote, selected: null, skipped: true });
+      currentRound++;
+      loadRound();
+    };
+    
+    function showSkipNudge() {
+      const nudge = document.getElementById('skip-nudge');
+      nudge.classList.add('show');
+    }
+    
+    function closeNudge(tryAnswer) {
+      const nudge = document.getElementById('skip-nudge');
+      nudge.classList.remove('show');
+      
+      if (!tryAnswer) {
+        // User chose to continue skipping
+        consecutiveSkips = 0; // Reset to allow more skips
+        history.push({ quote: currentQuote, selected: null, skipped: true });
+        currentRound++;
+        loadRound();
+      }
+      // If tryAnswer is true, just close the modal and let user answer
+    }
+
     document.getElementById('prev').onclick = () => {
       if (currentRound > 0) {
         currentRound--;
-        score = history[currentRound].selected === selectedRounds[currentRound].tone ? score - 1 : score;
+        const prevAnswer = history[currentRound];
+        if (prevAnswer && !prevAnswer.skipped && prevAnswer.selected === levelQuotes[currentRound].tone) {
+          score--;
+        }
         loadRound();
       }
     };
 
-    startGame();
+    // Initialize game - show welcome screen first
+    allQuotes = shuffle([...dataBank]);
+    showLevelIntro(true); // true = first time, show full welcome
   </script>
 </body>
 </html>

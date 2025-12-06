@@ -7,1490 +7,31 @@
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>">
+    
+    <!-- External Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles for the page */
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #E0E0E0; /* Light gray text for better readability on dark background */
-            background-color: #0a0a1a; /* A very dark blue, almost black */
-            overflow-x: hidden;
-            max-width: 100vw;
-        }
-        
-        /* Ensure all content stays within viewport */
-        * {
-            max-width: 100%;
-        }
-        
-        img, svg, canvas {
-            max-width: 100%;
-            height: auto;
-        }
-
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* Place canvas behind all other content */
-        }
-
-        /* Glassmorphism effect for cards */
-        .glass-card {
-            background: rgba(16, 16, 32, 0.6); /* Semi-transparent dark blue */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .glass-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 255, 255, 0.1);
-            border-color: rgba(0, 255, 255, 0.2);
-        }
-
-        /* Hero layout */
-        .hero-section {
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: clamp(2.75rem, 7vw, 4.5rem);
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.25rem, 4.5vw, 2rem);
-            line-height: 1.35;
-            max-width: 42rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        .hero-intro {
-            font-size: 1.1rem;
-            line-height: 1.75;
-            margin-top: 1.25rem;
-        }
-
-        .hero-cta-group {
-            gap: 1rem;
-        }
-
-        .hero-cta-group a {
-            display: inline-flex;
-        }
-
-        .hero-cta-badge {
-            height: 2.5rem;
-            width: auto;
-            max-width: 220px;
-        }
-
-        .card-header {
-            gap: 0.5rem;
-        }
-
-        .card-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            white-space: nowrap;
-            letter-spacing: 0.02em;
-        }
-
-        .skill-tag {
-            transition: transform 0.2s ease;
-        }
-
-        .skill-tag:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Expandable sections for Origin Story */
-        .expandable-section {
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        /* Brain Animation Styles */
-        .brain-philosophy-section {
-            background: linear-gradient(180deg, rgba(10, 10, 26, 0.8) 0%, rgba(10, 10, 26, 1) 100%);
-            position: relative;
-        }
-
-        .brain-philosophy-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .stage-container {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: all 1s ease;
-            pointer-events: none;
-            width: 200px;
-        }
-
-        .stage-container.right-side {
-            align-items: flex-end;
-        }
-
-        .stage-number {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #000;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 8px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            animation: numberPulse 2s ease-in-out infinite;
-        }
-
-        .stage-emoji {
-            font-size: 24px;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
-            position: relative;
-        }
-
-        .stage-emoji::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
-            z-index: -1;
-            animation: haloGlow 3s ease-in-out infinite;
-        }
-
-        .stage-text {
-            font-size: 12px;
-            color: #E0E0E0;
-            text-align: center;
-            font-weight: 500;
-            text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
-        }
-
-        .stage-container.right-side .stage-text {
-            text-align: right;
-        }
-
-        .stage-node {
-            transition: all 0.8s ease;
-            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
-        }
-
-        .neural-path {
-            transition: all 0.8s ease;
-            filter: drop-shadow(0 0 4px rgba(0, 255, 255, 0.8));
-        }
-
-        /* Animation keyframes */
-        @keyframes brainPulse {
-            0%, 100% { 
-                stroke: rgba(0, 255, 255, 0.3);
-                filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.3));
-            }
-            50% { 
-                stroke: rgba(0, 255, 255, 0.6);
-                filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6));
-            }
-        }
-
-        @keyframes nodeGlow {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes pathFlow {
-            0% { stroke-dasharray: 0, 100; }
-            100% { stroke-dasharray: 100, 0; }
-        }
-
-        @keyframes fadeInUp {
-            0% { 
-                opacity: 0; 
-                transform: translateY(30px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-
-        .brain-animate #brainOutline {
-            animation: brainPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes numberPulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
-                transform: scale(1.1);
-            }
-        }
-
-        @keyframes haloGlow {
-            0%, 100% { 
-                background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
-            }
-            50% { 
-                background: radial-gradient(circle, rgba(0, 255, 255, 0.6) 0%, transparent 70%);
-            }
-        }
-
-        @keyframes slideInLeft {
-            0% { 
-                opacity: 0; 
-                transform: translateX(-100px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateX(0); 
-            }
-        }
-
-        @keyframes slideInRight {
-            0% { 
-                opacity: 0; 
-                transform: translateX(100px); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateX(0); 
-            }
-        }
-
-        /* Styling for the timeline in the experience section */
-        .timeline-item {
-            position: relative;
-            padding-left: 2.5rem;
-            padding-bottom: 2rem;
-            border-left: 2px solid rgba(0, 255, 255, 0.2);
-        }
-
-        .timeline-item:last-child {
-            border-left: 2px solid transparent;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            left: -0.5625rem; /* Center the marker on the line */
-            top: 0.25rem;
-            height: 1rem;
-            width: 1rem;
-            background-color: #00FFFF; /* Cyan accent color */
-            border-radius: 50%;
-            border: 3px solid #0a0a1a;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        /* Animation classes for scroll effects */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .skill-tag {
-            transition: all 0.2s ease;
-        }
-        .skill-tag:hover {
-            background-color: #00FFFF;
-            color: #0a0a1a;
-            transform: scale(1.05);
-        }
-
-        /* Accordion styles */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-in-out;
-        }
-        .accordion-header svg {
-            transition: transform 0.3s ease;
-        }
-        .accordion-header.active svg {
-            transform: rotate(180deg);
-        }
-
-        /* Expandable content styles */
-        .expandable-content .full-content {
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s ease-in-out;
-        }
-        .expandable-content .full-content.show {
-            opacity: 1;
-            max-height: 1000px;
-        }
-        .see-more-btn, .see-less-btn {
-            transition: all 0.2s ease;
-        }
-        .see-more-btn:hover, .see-less-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        /* Skill Quiz Modal Styles */
-        .skill-quiz-modal {
-            background-color: rgba(0, 0, 0, 0.9);
-            transition: opacity 0.3s ease;
-        }
-        .skill-quiz-content {
-            background-color: #161B22;
-            border: 1px solid #30363D;
-            max-width: 600px;
-            width: 95%;
-            max-height: 95vh;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
-        .skill-quiz-modal.active .skill-quiz-content {
-            transform: scale(1);
-        }
-        .mcq-option {
-            border: 1px solid #30363D;
-            transition: all 0.2s ease;
-            background-color: #0D1117;
-        }
-        .mcq-option:hover {
-            border-color: #79C0FF;
-            background-color: #1f2a38;
-        }
-        .mcq-option.selected {
-            background-color: #79C0FF;
-            border-color: #79C0FF;
-            color: #0D1117;
-        }
-        .mcq-option.correct {
-            background-color: #22543d;
-            border-color: #38a169;
-            color: #f0fff4;
-        }
-        .mcq-option.incorrect {
-            background-color: #742a2a;
-            border-color: #e53e3e;
-            color: #fed7d7;
-        }
-        .quiz-result-modal {
-            background-color: rgba(0, 0, 0, 0.7);
-            transition: opacity 0.3s ease;
-        }
-        .quiz-result-content {
-            background-color: #161B22;
-            border: 1px solid #30363D;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
-        .quiz-result-modal.active .quiz-result-content {
-            transform: scale(1);
-        }
-
-        /* Back to Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background-color: rgba(22, 27, 34, 0.9);
-            border: 1px solid #30363D;
-            color: #79C0FF;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-        }
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .back-to-top:hover {
-            background-color: rgba(121, 192, 255, 0.1);
-            border-color: #79C0FF;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(121, 192, 255, 0.2);
-        }
-
-        /* Toast Notification System */
-        .toast-container {
-            position: fixed;
-            z-index: 99999;
-            pointer-events: none;
-        }
-        .toast-container.bottom-right {
-            bottom: 2rem;
-            right: 2rem;
-        }
-        .toast-container.bottom-center {
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .toast-container.top-center {
-            top: 0;
-            left: 0;
-            right: 0;
-        }
-        .toast-container.center-modal {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .toast-container.mobile-bottom {
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-
-        .toast {
-            background: rgba(22, 27, 34, 0.95);
-            border: 1px solid #30363D;
-            border-radius: 12px;
-            padding: 16px;
-            color: #C9D1D9;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            pointer-events: auto;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            position: relative;
-            display: block;
-            min-width: 250px;
-            max-width: 400px;
-        }
-        .toast.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .toast.slide-left {
-            transform: translateX(100%);
-        }
-        .toast.slide-left.visible {
-            transform: translateX(0);
-        }
-
-        .toast-speed-skimmer {
-            width: 320px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .toast-deep-reader {
-            width: 500px;
-            height: 100px;
-            text-align: center;
-        }
-        .toast-returner {
-            width: 100%;
-            height: 60px;
-            background: linear-gradient(90deg, rgba(22, 27, 34, 0.95), rgba(30, 41, 59, 0.95));
-            border-radius: 0;
-            border-left: none;
-            border-right: none;
-        }
-        .toast-exit-intent {
-            width: 480px;
-            height: 280px;
-            background: rgba(22, 27, 34, 0.98);
-            text-align: center;
-            padding: 24px;
-        }
-        .toast-link-clicker {
-            width: 360px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .toast-mobile-reader {
-            width: 100%;
-            height: 80px;
-            border-radius: 0;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-        }
-
-        .toast-btn {
-            background: #79C0FF;
-            color: #0D1117;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .toast-btn:hover {
-            background: #58a6ff;
-            transform: translateY(-1px);
-        }
-        .toast-btn.secondary {
-            background: transparent;
-            color: #79C0FF;
-            border: 1px solid #30363D;
-        }
-        .toast-btn.secondary:hover {
-            background: rgba(121, 192, 255, 0.1);
-        }
-
-        .toast-close {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: #8B949E;
-            cursor: pointer;
-            font-size: 18px;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .toast-close:hover {
-            color: #C9D1D9;
-        }
-
-        .toast-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 9998;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: none; /* Force hidden by default */
-        }
-        .toast-backdrop.visible {
-            opacity: 1;
-            display: block;
-        }
-
-        .profile-photo {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #79C0FF, #F778BA);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .email-input {
-            background: rgba(13, 17, 23, 0.8);
-            border: 1px solid #30363D;
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: #C9D1D9;
-            font-size: 14px;
-            width: 200px;
-        }
-        .email-input:focus {
-            outline: none;
-            border-color: #79C0FF;
-            box-shadow: 0 0 0 2px rgba(121, 192, 255, 0.2);
-        }
-
-        /* ============ MOBILE RESPONSIVE STYLES ============ */
-        
-        /* Tablet and below (768px) */
-        @media (max-width: 768px) {
-            body {
-                font-size: 14px;
-            }
-            
-            /* Stage containers for brain animation */
-            .stage-container {
-                width: 150px;
-                font-size: 0.8rem;
-            }
-            
-            .stage-number {
-                width: 25px;
-                height: 25px;
-                font-size: 12px;
-            }
-            
-            .stage-label {
-                font-size: 0.75rem;
-            }
-            
-            /* Glass cards */
-            .glass-card {
-                padding: 1rem;
-            }
-            
-            .glass-card:hover {
-                transform: translateY(-3px) scale(1.01);
-            }
-            
-            /* Timeline markers */
-            .timeline-marker {
-                width: 12px;
-                height: 12px;
-            }
-            
-            /* Brain philosophy section */
-            .brain-philosophy-section {
-                padding: 2rem 1rem;
-            }
-            
-            #brainCanvas {
-                max-height: 300px;
-            }
-            
-            /* Email input */
-            .email-input {
-                width: 100%;
-                max-width: 250px;
-            }
-            
-            /* Reveal animations - reduce intensity on mobile */
-            .reveal {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-        }
-        
-        /* Mobile (640px and below) */
-        @media (max-width: 640px) {
-            body {
-                font-size: 13px;
-            }
-            
-            /* Reduce paddings for mobile */
-            section {
-                margin-bottom: 3rem !important;
-            }
-
-            .hero-section {
-                text-align: left !important;
-                padding: 0 0.75rem;
-            }
-
-            .hero-title {
-                font-size: clamp(2rem, 8vw, 2.7rem);
-            }
-
-            .hero-subtitle {
-                font-size: 1.15rem;
-                margin-left: 0;
-                margin-right: 0;
-                max-width: none;
-            }
-
-            .hero-cta-group {
-                flex-direction: column;
-                align-items: flex-start !important;
-                gap: 0.6rem;
-            }
-
-            .hero-cta-group a {
-                width: 100%;
-                max-width: 260px;
-            }
-
-            .hero-cta-badge {
-                width: 100%;
-                height: auto;
-                max-height: 2.35rem;
-            }
-
-            .hero-intro {
-                font-size: 1rem;
-                max-width: 34rem;
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: flex-start !important;
-                gap: 0.4rem;
-            }
-
-            .card-header h4 {
-                font-size: 1rem;
-                line-height: 1.3;
-            }
-
-            .card-badge {
-                align-self: flex-start;
-                font-size: 0.75rem;
-                padding: 0.25rem 0.7rem;
-            }
-            
-            /* Stage containers - smaller */
-            .stage-container {
-                width: 120px;
-                font-size: 0.7rem;
-            }
-            
-            .stage-number {
-                width: 22px;
-                height: 22px;
-                font-size: 11px;
-            }
-            
-            .stage-label {
-                font-size: 0.65rem;
-                line-height: 1.2;
-            }
-            
-            /* Glass cards - more compact */
-            .glass-card {
-                padding: 0.875rem;
-                border-radius: 0.75rem;
-            }
-            
-            .glass-card:hover {
-                transform: translateY(-2px) scale(1.005);
-            }
-            
-            /* Timeline */
-            .timeline-marker {
-                width: 10px;
-                height: 10px;
-            }
-            
-            /* Brain canvas */
-            #brainCanvas {
-                max-height: 250px;
-            }
-            
-            /* Buttons */
-            button {
-                padding: 0.5rem 1rem;
-                font-size: 0.85rem;
-            }
-
-            .skill-tag-grid {
-                justify-content: flex-start;
-                gap: 0.5rem;
-            }
-
-            .skill-tag {
-                font-size: 0.85rem;
-                padding: 0.4rem 0.8rem;
-            }
-            
-            /* Expandable sections */
-            .see-more-btn {
-                font-size: 0.85rem;
-            }
-        }
-        
-        /* Small mobile (480px and below) */
-        @media (max-width: 480px) {
-            body {
-                font-size: 12px;
-            }
-            
-            .hero-title {
-                font-size: clamp(1.8rem, 8.5vw, 2.3rem);
-            }
-
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .hero-cta-group a {
-                max-width: 220px;
-            }
-
-            .hero-cta-badge {
-                max-height: 2.2rem;
-            }
-
-            .hero-intro {
-                font-size: 0.95rem;
-                line-height: 1.65;
-            }
-            
-            /* Typography adjustments */
-            h1 {
-                font-size: 1.75rem !important;
-            }
-            
-            h2 {
-                font-size: 1.5rem !important;
-            }
-            
-            h3 {
-                font-size: 1.25rem !important;
-            }
-            
-            h4 {
-                font-size: 1.1rem !important;
-            }
-            
-            /* Stage containers - very compact */
-            .stage-container {
-                width: 100px;
-                font-size: 0.65rem;
-            }
-            
-            .stage-number {
-                width: 20px;
-                height: 20px;
-                font-size: 10px;
-            }
-            
-            .stage-label {
-                font-size: 0.6rem;
-            }
-            
-            /* Glass cards - minimum padding */
-            .glass-card {
-                padding: 0.75rem;
-            }
-
-            .card-header h4 {
-                font-size: 0.95rem;
-            }
-
-            .card-badge {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.55rem;
-            }
-            
-            /* Timeline */
-            .timeline-item {
-                padding-left: 1.5rem;
-            }
-            
-            .timeline-marker {
-                width: 8px;
-                height: 8px;
-                left: -4px;
-            }
-            
-            /* Brain canvas */
-            #brainCanvas {
-                max-height: 200px;
-            }
-            
-            /* Company logos */
-            img[alt*="Logo"] {
-                width: 40px !important;
-                height: 40px !important;
-            }
-            
-            /* Buttons - full width for better touch */
-            button {
-                padding: 0.6rem 1rem;
-                font-size: 0.8rem;
-                min-height: 44px;
-            }
-
-            .skill-tag {
-                font-size: 0.8rem;
-                padding: 0.35rem 0.65rem;
-            }
-            
-            /* Lists */
-            ul li {
-                font-size: 0.9rem;
-            }
-            
-            /* Email input */
-            .email-input {
-                width: 100%;
-                font-size: 13px;
-            }
-        }
-        
-        /* Very small devices (360px and below) */
-        @media (max-width: 360px) {
-            body {
-                font-size: 11px;
-            }
-            
-            .hero-section {
-                padding: 0 0.5rem;
-            }
-
-            .hero-title {
-                font-size: 1.9rem;
-            }
-
-            .hero-subtitle {
-                font-size: 0.95rem;
-            }
-
-            .hero-cta-group a {
-                max-width: 200px;
-            }
-
-            .hero-intro {
-                font-size: 0.9rem;
-            }
-            
-            h1 {
-                font-size: 1.5rem !important;
-                line-height: 1.2;
-            }
-            
-            h2 {
-                font-size: 1.3rem !important;
-            }
-            
-            h3 {
-                font-size: 1.1rem !important;
-            }
-            
-            /* Stage containers - hide or simplify for very small screens */
-            .stage-container {
-                width: 80px;
-                font-size: 0.6rem;
-            }
-            
-            .stage-number {
-                width: 18px;
-                height: 18px;
-                font-size: 9px;
-            }
-            
-            /* Glass cards */
-            .glass-card {
-                padding: 0.625rem;
-            }
-
-            .card-header h4 {
-                font-size: 0.9rem;
-            }
-
-            .card-badge {
-                font-size: 0.65rem;
-                padding: 0.18rem 0.5rem;
-            }
-            
-            /* Spacing */
-            section {
-                margin-bottom: 2rem !important;
-            }
-            
-            /* Timeline */
-            .timeline-item {
-                padding-left: 1rem;
-            }
-
-            .skill-tag {
-                font-size: 0.75rem;
-                padding: 0.3rem 0.55rem;
-            }
-        }
-        
-        /* Touch-friendly adjustments */
-        @media (hover: none) and (pointer: coarse) {
-            .glass-card:hover {
-                transform: none;
-            }
-            
-            .glass-card:active {
-                transform: scale(0.98);
-            }
-            
-            button:hover {
-                transform: none;
-            }
-            
-            button:active {
-                transform: scale(0.95);
-            }
-        }
-        
-        /* Landscape orientation for phones */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .brain-philosophy-section {
-                padding: 1rem;
-            }
-            
-            #brainCanvas {
-                max-height: 60vh;
-            }
-            
-            .stage-container {
-                width: 100px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .toast-deep-reader {
-                width: 90vw;
-                height: auto;
-                padding: 20px;
-            }
-            .toast-exit-intent {
-                width: 90vw;
-                height: auto;
-                padding: 20px;
-            }
-            .toast-link-clicker {
-                width: 90vw;
-                height: auto;
-                padding: 16px;
-            }
-        }
-        /* Simple Timeline Evolution Styles */
-        .evolution-timeline-container {
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        #timelineViz {
-            width: 100%;
-            height: 400px;
-            background: radial-gradient(circle at center, rgba(0, 20, 40, 0.8), rgba(0, 0, 0, 0.9));
-            border-radius: 0.5rem;
-        }
-
-        .skill-text {
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            text-anchor: middle;
-            pointer-events: none;
-            user-select: none;
-            font-size: 16.9px; /* 10% larger than 15.4px */
-        }
-
-        /* Toast notification for timeline */
-        .timeline-toast {
-            position: absolute;
-            bottom: 120px; /* Above the buttons */
-            left: 35%; /* Position over Play Evolution button (first button) */
-            transform: translateX(-50%);
-            background: rgba(0, 255, 255, 0.95);
-            color: #000;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
-        }
-        
-        .timeline-toast::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 255, 255, 0.95);
-        }
-
-        .timeline-toast.visible {
-            opacity: 1;
-        }
-
-        .timeline-toast::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 255, 255, 0.9);
-        }
-
-        .timeline-line {
-            stroke: #00FFFF;
-            stroke-width: 4;
-            fill: none;
-            opacity: 1;
-            stroke-linecap: round;
-        }
-
-        .year-circle {
-            fill: #00FFFF;
-            stroke: #FFFFFF;
-            stroke-width: 2;
-            filter: drop-shadow(0 0 10px #00FFFF);
-        }
-
-        .evolution-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 0.5rem 0;
-            flex-wrap: wrap;
-        }
-
-        .evolution-btn {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            color: #00FFFF;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-
-        .evolution-btn:hover {
-            background: rgba(0, 255, 255, 0.2);
-            border-color: rgba(0, 255, 255, 0.6);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
-        }
-
-        /* Pulsing animation for Play button */
-        .evolution-btn.pulse {
-            animation: pulse-play 2s infinite;
-        }
-
-        @keyframes pulse-play {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
-                background: rgba(0, 255, 255, 0.1);
-                border-color: rgba(0, 255, 255, 0.3);
-            }
-            70% {
-                transform: scale(1.05);
-                box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
-                background: rgba(255, 215, 0, 0.2);
-                border-color: rgba(255, 215, 0, 0.6);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
-                background: rgba(0, 255, 255, 0.1);
-                border-color: rgba(0, 255, 255, 0.3);
-            }
-        }
-
-        /* CTA text styling */
-        .timeline-cta {
-            position: absolute;
-            bottom: -50px; /* Position below the timeline area */
-            left: 50%;
-            transform: translateX(-50%);
-            color: #FFD700; /* Gold color for better visibility */
-            font-size: 16px;
-            font-weight: bold;
-            font-family: 'Inter', sans-serif;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-            text-align: center;
-            background: rgba(255, 215, 0, 0.1); /* Gold background */
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            z-index: 10;
-        }
-
-        .evolution-btn.pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
-        }
-
-        @keyframes clap {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .clap-animation {
-            animation: clap 1s ease-in-out;
-        }
-
-        .card-link-icon {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 16px;
-            height: 16px;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-
-        .card-link-icon:hover {
-            opacity: 1;
-        }
-
-        .bg-gray-800\/50 {
-            position: relative;
-        }
-
-        .evolution-btn:active {
-            transform: translateY(0);
-        }
-
-        .evolution-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .current-phase-display {
-            font-size: 1.1rem;
-            color: #00FFFF;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        .current-year-display {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 2rem;
-            color: #FFFFFF;
-            font-weight: 700;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .phase-detail {
-            transition: all 0.4s ease;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        .phase-detail.active {
-            opacity: 1;
-            max-height: 500px;
-            margin-bottom: 1rem;
-        }
-
-        .phase-details-container {
-            min-height: 0;
-        }
-
-        /* Responsive adjustments for evolution canvas */
-        @media (max-width: 768px) {
-            .hero-section {
-                text-align: left;
-                padding: 2rem 1.5rem 1.5rem;
-                border-radius: 1.25rem;
-                background: rgba(10, 10, 25, 0.35);
-                border: 1px solid rgba(0, 255, 255, 0.08);
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-            }
-
-            .hero-cta-group {
-                flex-direction: column;
-                align-items: flex-start !important;
-                gap: 0.75rem;
-            }
-
-            .hero-cta-group a {
-                width: 100%;
-                max-width: 240px;
-            }
-
-            .hero-cta-badge {
-                width: 100%;
-                height: auto;
-                max-width: none;
-            }
-
-            .hero-title {
-                font-size: clamp(2.3rem, 8vw, 3rem);
-            }
-
-            .hero-subtitle {
-                font-size: 1.15rem;
-                margin-left: 0;
-                margin-right: 0;
-            }
-
-            .hero-intro {
-                font-size: 1rem;
-                line-height: 1.7;
-            }
-
-            .evolution-canvas-container {
-                padding: 1rem;
-            }
-            
-            #evolutionCanvas {
-                height: 400px;
-            }
-            
-            .evolution-info {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .current-year-display {
-                font-size: 1.5rem;
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-bottom: 1rem;
-            }
-            
-            .current-phase-display {
-                font-size: 1rem;
-            }
-            
-            .evolution-controls {
-                gap: 0.5rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .evolution-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-                flex: 1 1 auto;
-                min-width: 120px;
-            }
-            
-            .timeline-toast {
-                left: 50%;
-                transform: translateX(-50%);
-                bottom: 100px;
-                font-size: 0.85rem;
-            }
-        }
-        
-        /* Additional mobile optimizations for evolution */
-        @media (max-width: 640px) {
-            .evolution-canvas-container {
-                padding: 0.75rem;
-            }
-            
-            #evolutionCanvas {
-                height: 350px;
-            }
-            
-            .current-year-display {
-                font-size: 1.3rem;
-            }
-            
-            .current-phase-display {
-                font-size: 0.9rem;
-            }
-            
-            .evolution-btn {
-                padding: 0.5rem 0.875rem;
-                font-size: 0.85rem;
-                min-width: 100px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            #evolutionCanvas {
-                height: 300px;
-            }
-            
-            .current-year-display {
-                font-size: 1.2rem;
-            }
-            
-            .evolution-btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
-                min-width: 90px;
-            }
-            
-            .timeline-toast {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-                bottom: 80px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            #evolutionCanvas {
-                height: 250px;
-            }
-            
-            .evolution-btn {
-                padding: 0.5rem;
-                font-size: 0.75rem;
-                min-width: 80px;
-            }
-        }
-    </style>
+    
+    <!-- Portfolio Styles (External) -->
+    <link rel="stylesheet" href="css/portfolio.css">
 </head>
 <body class="antialiased">
     <canvas id="particle-canvas"></canvas>
 
-    <div class="container mx-auto max-w-4xl px-6 py-12 sm:py-24">
+    <div class="container mx-auto max-w-4xl px-3 sm:px-6 py-8 sm:py-24">
 
         <!-- Header Section -->
         <header class="hero-section text-center mb-16 md:mb-24 reveal">
             <div class="mb-4 hero-emoji">👋</div>
-            <h1 id="name-heading" class="hero-title text-5xl md:text-7xl font-black tracking-tight text-white mb-3"></h1>
-            <h2 class="hero-subtitle text-xl md:text-2xl font-medium text-cyan-400 mb-6">Strategic Content Engineer | Architecting AI-Powered Learning & Creativity Ecosystems</h2>
-            <div class="hero-cta-group flex flex-wrap justify-center items-center gap-x-4 gap-y-3 text-gray-400 mb-6">
+            <h1 id="name-heading" class="hero-title text-2xl sm:text-4xl md:text-7xl font-black tracking-tight text-white mb-3"></h1>
+            <h2 class="hero-subtitle text-sm sm:text-lg md:text-2xl font-medium text-cyan-400 mb-6">Strategic Content Engineer | Architecting AI-Powered Learning & Creativity Ecosystems</h2>
+            <!-- Desktop: Badge images (hidden on mobile) -->
+            <div class="hero-cta-group hero-cta-desktop flex flex-wrap justify-center items-center gap-x-4 gap-y-3 text-gray-400 mb-6">
                 <a href="https://www.linkedin.com/in/pawannayar/" target="_blank" class="inline-block">
                     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" class="hero-cta-badge"/>
                 </a>
@@ -1501,21 +42,27 @@
                     <img src="https://img.shields.io/badge/Software_Content_Demos-FF6B35?style=for-the-badge&logo=github&logoColor=white" alt="Software Content Demos" class="hero-cta-badge"/>
                 </a>
             </div>
-            <p class="hero-intro text-lg leading-relaxed text-gray-300 max-w-4xl mx-auto">
+            <!-- Mobile: Clean text buttons (hidden on desktop) -->
+            <div class="hero-cta-mobile">
+                <a href="https://www.linkedin.com/in/pawannayar/" target="_blank" class="mobile-btn mobile-btn-linkedin">LinkedIn</a>
+                <a href="https://www.beyonddictionary.com/" target="_blank" class="mobile-btn mobile-btn-beyond">📚 BeyondDictionary</a>
+                <a href="https://pawan-nayar.github.io/software-content-demos/" target="_blank" class="mobile-btn mobile-btn-demos">Software Content Demos</a>
+            </div>
+            <p class="hero-intro text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 max-w-4xl mx-auto">
                 I'm a content engineer with over 30 years of experience building systems that connect words, knowledge, and creativity. From Microsoft learning projects in 1995, to Cadence and Adobe, to today's BeyondDictionary → <strong class="text-cyan-400">LLOS.AI</strong>, my work has always centered on one vision: scaling content engineering for the next billion learners and creators.
             </p>
         </header>
 
         <!-- Executive Summary Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-6">Executive Summary</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6">Executive Summary</h3>
             <div class="glass-card p-6">
-                <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                     For three decades, I've lived at the intersection of language, learning, and technology building systems that teach, feel, and evolve. From designing Microsoft's earliest CBTs to leading Adobe's content transformation and now creating BeyondDictionary (LLOS.AI), I've spent a lifetime engineering meaning at scale.
                 </p>
                 <div class="expandable-content">
                     <div class="preview-text">
-                        <p class="text-lg leading-relaxed text-gray-300">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300">
                             My work is founded on the belief that learning shouldn't be delivered, it should be lived. Every product, article, or prototype I've built reflects one core conviction: <strong class="text-cyan-400">when learning becomes personal, it turns universal.</strong>
                         </p>
                         <button class="see-more-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
@@ -1523,7 +70,7 @@
                         </button>
                     </div>
                     <div class="full-content hidden">
-                        <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                             My work is founded on the belief that learning shouldn't be delivered, it should be lived. Every product, article, or prototype I've built from BODMAS trainers for children, semantic engines for professionals, and markdown-GitHub-Claude systems for coders, to API content for developers, content micro-services for linguists, universal prompt systems for designers, and classroom experiences spanning pre-nursery to PhDs reflects one core conviction: <strong class="text-cyan-400">when learning becomes personal, it turns universal.</strong>
                         </p>
                         <button class="see-less-btn text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
@@ -1536,11 +83,11 @@
 
         <!-- Vision Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-6">Vision</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-6">Vision</h3>
             <div class="glass-card p-6">
                 <div class="expandable-content">
                     <div class="preview-text">
-                        <p class="text-lg leading-relaxed text-gray-300">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300">
                             To build the <strong class="text-cyan-400">Lifelong Learning Operating System</strong>, a global framework where content, cognition, and creativity converge. A world where next billions of learners, creators, and systems can evolve continuously through personalized intelligence, emotional design, and universal accessibility.
                         </p>
                         <button class="see-more-btn mt-4 text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
@@ -1548,10 +95,10 @@
                         </button>
                     </div>
                     <div class="full-content hidden">
-                        <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                             To build the <strong class="text-cyan-400">Lifelong Learning Operating System</strong>, a global framework where content, cognition, and creativity converge. A world where next billions of learners, creators, and systems can evolve continuously through personalized intelligence, emotional design, and universal accessibility.
                         </p>
-                        <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                             While AI models understand words through proximity, humans grasp meaning through needs and perspective. My aim is to infuse learning with context and continuity by making every subject engaging and fun, appealing to the child within every adult and the adult within every child, the VP within every engineer and the engineer within every VP.
                         </p>
                         <button class="see-less-btn text-cyan-400 hover:text-cyan-300 transition-colors font-medium flex items-center">
@@ -1564,35 +111,35 @@
 
         <!-- CMET Framework Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Philosophy: The CMET Framework</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Philosophy: The CMET Framework</h3>
             <div class="glass-card p-6 mb-6">
-                <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                     At the heart of everything I build lies the CMET Framework. It's a relational grammar of my work; a living mesh where Content, Marketing, Experience, and Technology are not departments but dimensions of just one paradigm: user success. Each connection between them forms a current, carrying knowledge, emotion, and accessibility to millions. To me, this isn't strategy; it's physics, the human physics of how ideas travel and transform.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Content + Marketing (CM)</h4>
+                    <h4 class="text-base sm:text-lg md:text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Content + Marketing (CM)</h4>
                     <p class="text-gray-300">Content gives marketing narrative depth and credibility, making campaigns and connections more authentic and hyper-personalized.</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Content + Experience (CE)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Content + Experience (CE)</h4>
                     <p class="text-gray-300">Content gives experience a soul; a story thread, transforming moments into meaning and memory. The experience must be individualized to final need of recipient user profiles.</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Content + Technology (CT)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Content + Technology (CT)</h4>
                     <p class="text-gray-300">Content structures how technology delivers knowledge, focusing on user success, not just usage success.</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Marketing + Experience (ME)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Marketing + Experience (ME)</h4>
                     <p class="text-gray-300">Marketing turns experiences into shareable journeys, bringing together audiences (individuals, teams, enterprises, governments) like never before.</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Marketing + Technology (MT)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Marketing + Technology (MT)</h4>
                     <p class="text-gray-300">Marketing seeds tech innovation for speed, scale, and outreach; while driving new channels, analytics, and personalization at lower cost.</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-2">Experience + Technology (ET)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-2">Experience + Technology (ET)</h4>
                     <p class="text-gray-300">Experience guides technology to feel intuitive, transforming it from an engineer's product mindset into every user's celebration.</p>
                 </div>
             </div>
@@ -1600,7 +147,7 @@
 
         <!-- Career Highlights Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Career Highlights</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Career Highlights</h3>
             <div class="glass-card p-6">
                 <ul class="space-y-4">
                     <li class="flex items-start">
@@ -1629,7 +176,7 @@
 
         <!-- Experience Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Experience</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Experience</h3>
             <div class="relative">
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
@@ -1638,7 +185,7 @@
                         <div class="flex items-center space-x-3 mb-3">
                             <img src="https://media.licdn.com/dms/image/v2/C4D0BAQFHzBT2D4p7JQ/company-logo_200_200/company-logo_200_200/0/1649668567899/cretorial_logo?e=2147483647&v=beta&t=GXZAGsrYxAXhKCQVgc26fv3cI1rXDNWFJbBGgyhxCws" alt="Cretorial Logo" class="w-12 h-12 rounded bg-white p-1 opacity-90">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Founder & Chief Thought Officer</h4>
+                                <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Founder & Chief Thought Officer</h4>
                                 <p class="text-md font-medium text-gray-400">Cretorial Media Services Pvt. Ltd.</p>
                             </div>
                         </div>
@@ -1678,7 +225,7 @@
                         <div class="flex items-center space-x-3 mb-3">
                             <img src="https://www.adobe.com/federal/assets/svgs/adobe-wordmark-white-resize.svg" alt="Adobe Logo" class="w-8 h-8 opacity-90 filter brightness-110">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Director, Content & Community</h4>
+                                <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Director, Content & Community</h4>
                                 <p class="text-md font-medium text-gray-400">Adobe Systems</p>
                             </div>
                         </div>
@@ -1717,7 +264,7 @@
                         <div class="flex items-center space-x-3 mb-3">
                             <img src="https://www.cadence.com/content/dam/cadence-www/global/en_US/images/site-images/icons/navigation-icons/cadence-logo-black.png" alt="Cadence Logo" class="w-16 h-8 bg-white rounded p-1 opacity-90 object-contain">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Technical Publications Manager</h4>
+                                <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Technical Publications Manager</h4>
                                 <p class="text-md font-medium text-gray-400">Cadence Design Systems</p>
                             </div>
                         </div>
@@ -1736,7 +283,7 @@
                             <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" class="w-8 h-8 opacity-90 filter brightness-110">
                             <img src="https://www.niit.com/india/wp-content/uploads/2024/12/niit-logo.svg" alt="NIIT Logo" class="w-8 h-8 bg-white rounded p-1 opacity-90">
                             <div>
-                                <h4 class="text-xl font-bold text-white">Senior Consultant, Instructional Design</h4>
+                                <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Senior Consultant, Instructional Design</h4>
                                 <p class="text-md font-medium text-gray-400">NIIT [Microsoft projects]</p>
                             </div>
                         </div>
@@ -1752,9 +299,9 @@
 
         <!-- Software Content Demos Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🧭 Software Content Demos: The Operating System for Learning Content</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">🧭 Software Content Demos: The Operating System for Learning Content</h3>
             <div class="glass-card p-6 mb-6">
-                <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                     A suite of <strong class="text-cyan-400">100+ interactive HTML workbenches</strong> for learning, reasoning, and creativity, part of the <strong class="text-cyan-400">LLOS.AI × BeyondDictionary</strong> research initiative. Each demo blends empathy, pedagogy, and interactivity to reimagine software content as a living system.
                 </p>
                 
@@ -1817,7 +364,7 @@
                     <div class="full-content hidden">
                         <!-- GitHub Learning Series -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🌍 GitHub Learning Series: Teaching 100 Million Future Makers</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4">🌍 GitHub Learning Series: Teaching 100 Million Future Makers</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1842,7 +389,7 @@
 
                         <!-- Claude Ecosystem -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🤖 Claude Ecosystem: AI Reasoning & Applied Mastery</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4">🤖 Claude Ecosystem: AI Reasoning & Applied Mastery</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1875,7 +422,7 @@
 
                         <!-- AI Art Pedagogy -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">🎨 AI Art Pedagogy: Visual Storytelling & Creative Play</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4">🎨 AI Art Pedagogy: Visual Storytelling & Creative Play</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1904,7 +451,7 @@
 
                         <!-- Salesforce & Other Sections -->
                         <div class="mb-8">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4">☁️ Salesforce Service Cloud & API Learning</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4">☁️ Salesforce Service Cloud & API Learning</h4>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
@@ -1939,7 +486,7 @@
 
         <!-- Showcase Projects Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">📂 Showcase Projects from LLOS: Evidence of the Vision in Action</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">📂 Showcase Projects from LLOS: Evidence of the Vision in Action</h3>
             <div class="glass-card p-6">
                 <div class="expandable-content">
                     <div class="preview-text">
@@ -2000,7 +547,7 @@
                     <div class="full-content hidden">
                         <!-- Content & Learning Systems -->
                         <div class="mb-6">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-3">🧠 A. Content – Words, Knowledge, & Learning Systems</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🧠 A. Content – Words, Knowledge, & Learning Systems</h4>
                             <ul class="space-y-2 text-gray-300">
                                 <li>• <a href="https://beyonddictionary.com/dictionary/advance/Standard" target="_blank" class="text-cyan-400 hover:text-cyan-300">BeyondDictionary – Advanced Word Cards</a> | <a href="https://github.com/pawan-nayar/beyond-dictionary/blob/main/beyond-dictionary-case-study.md" target="_blank" class="text-cyan-400 hover:text-cyan-300">Case Study</a></li>
                                 <li>• <a href="https://beyonddictionary.com/cbsequiz" target="_blank" class="text-cyan-400 hover:text-cyan-300">BeyondDictionary – Quiz Engine</a> | <a href="https://github.com/pawan-nayar/beyond-dictionary/blob/main/beyond_dictionary_quiz_learn_apply_framework.md" target="_blank" class="text-cyan-400 hover:text-cyan-300">Case Study</a></li>
@@ -2013,7 +560,7 @@
 
                         <!-- Marketing & Expression -->
                         <div class="mb-6">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-3">📈 B. Marketing – Expression, SEO, & Creativity</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">📈 B. Marketing – Expression, SEO, & Creativity</h4>
                             <ul class="space-y-2 text-gray-300">
                                 <li>• <a href="https://pawan-nayar.github.io/expression-and-creativity/fashion-word-explorer.html" target="_blank" class="text-cyan-400 hover:text-cyan-300">Fashion Word Explorer</a></li>
                                 <li>• <a href="https://pawan-nayar.github.io/expression-and-creativity/kids_dictionary_animal_words.html" target="_blank" class="text-cyan-400 hover:text-cyan-300">Kids Visual Dictionary</a></li>
@@ -2024,7 +571,7 @@
 
                         <!-- Experience & Play -->
                         <div class="mb-6">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-3">🎮 C. Experience – Games, Interactivity, & Play</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🎮 C. Experience – Games, Interactivity, & Play</h4>
                             <ul class="space-y-2 text-gray-300">
                                 <li>• <a href="https://pawan-nayar.github.io/experience-playground/bodmas_trainer.html" target="_blank" class="text-cyan-400 hover:text-cyan-300">BODMAS Animated Trainer</a></li>
                                 <li>• <a href="https://pawan-nayar.github.io/experience-playground/beyond_dictionary_crossword.html" target="_blank" class="text-cyan-400 hover:text-cyan-300">Dynamic Crossword Engine</a></li>
@@ -2044,13 +591,13 @@
 
         <!-- Universal Personalized Learning Linkmap -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🌐 Universal Personalized Learning Linkmap</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">🌐 Universal Personalized Learning Linkmap</h3>
             <div class="glass-card p-6">
                 <p class="text-gray-300 mb-6">A curated journey through the lifelong learning continuum, from sensory play to philosophical synthesis.</p>
                 
                 <!-- Ages 3-12: Play -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧩 Ages 3-12: Play (Joyful Discovery & Association)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🧩 Ages 3-12: Play (Joyful Discovery & Association)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/experience-playground/counting_more_less_basic_math_for_age_3_to_5.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             📊 Counting More/Less (Ages 3-5)
@@ -2070,7 +617,7 @@
 
                 <!-- Ages 12-24: Simulation -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🧠 Ages 12-24: Simulation (Exploration & Curiosity)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🧠 Ages 12-24: Simulation (Exploration & Curiosity)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/markdown_for_non_coders.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             📝 Markdown for Non-Coders
@@ -2090,7 +637,7 @@
 
                 <!-- Ages 25-50: Reflection -->
                 <div class="mb-8">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🌍 Ages 25-50: Reflection (Mastery & Systems Learning)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🌍 Ages 25-50: Reflection (Mastery & Systems Learning)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/claude-console-interactive.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🤖 Claude Console Interactive
@@ -2107,7 +654,7 @@
 
                 <!-- Ages 50-103: Philosophy -->
                 <div class="mb-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">🔮 Ages 51-103: Philosophy (Wisdom & Synthesis)</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🔮 Ages 51-103: Philosophy (Wisdom & Synthesis)</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <a href="https://pawan-nayar.github.io/software-content-demos/anthropic/deepthink_repl_workflow.html" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">
                             🧘 DeepThink REPL Workflow
@@ -2136,38 +683,38 @@
 
         <!-- Publications Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">📚 Publications</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">📚 Publications</h3>
             <p class="text-gray-300 mb-6 text-lg">A journey through technical communication, AI storytelling, and thought leadership, spanning from early tech journalism (1998) to cutting-edge AI creativity (2025).</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">Ultimate Midjourney for Creative Professionals</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Ultimate Midjourney for Creative Professionals</h4>
                     <p class="text-cyan-400 mb-2">(Orange Education, 2025)</p>
                     <p class="text-gray-300 mb-3">An illustrated field guide to AI storytelling with 700+ images and 55+ projects.</p>
                     <a href="https://www.amazon.in/Ultimate-Midjourney-Creative-Professionals-Storytelling/dp/9348107046" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Live →</a>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">Secrets of the Buried Self: Echoes Across Time</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Secrets of the Buried Self: Echoes Across Time</h4>
                     <p class="text-cyan-400 mb-2">(2023)</p>
                     <p class="text-gray-300 mb-3">A metaphysical novel that fuses ancient philosophy and AI narrative design.</p>
                     <a href="https://www.amazon.in/Secrets-Buried-Self-Echoes-Across-ebook/dp/B0CNRCYHYF" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Live →</a>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">🟠 Content Creation & Curation Challenges</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">🟠 Content Creation & Curation Challenges</h4>
                     <p class="text-cyan-400 mb-2">STC India Conference (2013)</p>
                     <p class="text-gray-300 mb-3">In 2013, as mobile devices eclipsed desktops and cloud ecosystems redefined workplaces, this article captured the urgency of adapting content strategies to a hyperconnected world. Their prophetic line: <em>"Content is King, Curation is Kingdom"</em> became foundational for digital communicators.</p>
                     <div class="flex gap-4">
-                        <a href="STC_India_Conference_2013_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
-                        <a href="STC_India_Conference_2013_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
+                        <a href="../STC_India_Conference_2013_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
+                        <a href="../STC_India_Conference_2013_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
                     </div>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">Patent & Prior Art Research</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Patent & Prior Art Research</h4>
                     <p class="text-cyan-400 mb-2">IPCOM-000220959 (Prior Art Database, 2010)</p>
                     <p class="text-gray-300 mb-3">Method to determine a relevance-driven basket of words related by perceptive characteristics; foundational work in semantic word relationships and AI-driven content discovery.</p>
                     <a href="https://priorart.ip.com/IPCOM/000220959" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">IPCOM Database →</a>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">🟢 IEEE PCS Publications</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">🟢 IEEE PCS Publications</h4>
                     <p class="text-cyan-400 mb-2">Professional Communication Society (2001)</p>
                     <p class="text-gray-300 mb-3">Foundational research on applying instructional design principles to technical documentation; pioneering work that bridged educational theory with software documentation practices.</p>
                     <div class="flex gap-4">
@@ -2177,16 +724,16 @@
                     <p class="text-xs text-gray-500 mt-2">💡 If PDF doesn't jump to the article, manually navigate to page 21 (May-June) or page 17 (July-August)</p>
                 </div>
                 <div class="glass-card p-6">
-                    <h4 class="text-xl font-bold text-white">🟢 Exploring Windows 98</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">🟢 Exploring Windows 98</h4>
                     <p class="text-cyan-400 mb-2">PC User, Computer Today (June 1998)</p>
                     <p class="text-gray-300 mb-3">In 1998, the Internet was young, and Windows 98 promised to bring the Web to every desktop. This review chronicled Microsoft's ambition to blend Windows 95's stability with Internet Explorer's connectivity, bridging the offline-to-online leap for a generation of PC enthusiasts.</p>
                     <div class="flex gap-4">
-                        <a href="Windows98_ComputerToday_1998_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
-                        <a href="Windows98_ComputerToday_1998_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
+                        <a href="../Windows98_ComputerToday_1998_1.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 1 →</a>
+                        <a href="../Windows98_ComputerToday_1998_2.jpeg" target="_blank" class="text-cyan-400 hover:text-cyan-300 text-sm">Page 2 →</a>
                     </div>
                 </div>
                 <div class="glass-card p-6 md:col-span-2">
-                    <h4 class="text-xl font-bold text-white">Academic Research Contributions</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Academic Research Contributions</h4>
                     <p class="text-cyan-400 mb-2">IPCC 2005 Conference</p>
                     <p class="text-gray-300 mb-3"><strong>"What Part Writer? What Part Programmer? A Survey of Practices and Knowledge Used in Programmer Writing"</strong> - Contributor to pioneering study on the intersection of technical writing and programming practices, exploring how developers approach documentation and communication.</p>
                     <p class="text-sm text-gray-400 italic">This research laid early groundwork for understanding the hybrid nature of technical communication in software development.</p>
@@ -2196,14 +743,14 @@
                 <div class="glass-card p-6 md:col-span-2 border-2 border-yellow-400/30">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="text-2xl">🌟</span>
-                        <h4 class="text-xl font-bold text-white">Origin Story: Energy Conserved is Energy Generated</h4>
+                        <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Origin Story: Energy Conserved is Energy Generated</h4>
                         <span class="text-xs bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded-full">NAFEN National Prize Winner • 1988</span>
                     </div>
                     
                     <p class="text-gray-300 mb-4">At 17, while still in school, won the National Foundation of Indian Engineers (NAFEN) essay competition with a prescient vision of energy futures. Writing in the pre-internet era with limited data access, this teenage essay predicted solar energy dominance, fusion reactors, and space-based energy collection - technologies that would define the 21st century.</p>
                     
                     <div class="flex flex-wrap gap-3 mb-4">
-                        <a href="national_nafen_esay_winner_1988.pdf" target="_blank" class="inline-flex items-center gap-2 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg border border-cyan-400/30 transition-all text-sm">
+                        <a href="../national_nafen_esay_winner_1988.pdf" target="_blank" class="inline-flex items-center gap-2 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg border border-cyan-400/30 transition-all text-sm">
                             <span>📄</span> Original Essay
                         </a>
                         <button onclick="toggleSection('prophecies-section')" class="inline-flex items-center gap-2 bg-purple-400/10 hover:bg-purple-400/20 text-purple-400 px-4 py-2 rounded-lg border border-purple-400/30 transition-all text-sm">
@@ -2325,7 +872,7 @@
             
             <!-- Featured LinkedIn Articles -->
             <div class="glass-card p-6 mt-6">
-                <h4 class="text-xl font-bold text-white mb-6">📝 Featured LinkedIn Articles: Thought Leadership</h4>
+                <h4 class="text-base sm:text-lg md:text-xl font-bold text-white mb-6">📝 Featured LinkedIn Articles: Thought Leadership</h4>
                 <div class="space-y-6">
                     <div class="border-l-4 border-cyan-400 pl-4">
                         <h5 class="text-lg font-bold text-white mb-2">1️⃣ What Makes an Expression Creative?</h5>
@@ -2366,9 +913,9 @@
 
         <!-- Proprietary Research Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">💎 Proprietary Research & Future Work</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">💎 Proprietary Research & Future Work</h3>
                 <div class="glass-card p-6">
-                <p class="text-lg leading-relaxed text-gray-300 mb-4">
+                <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                     <strong class="text-cyan-400">Go2Words™</strong>, <strong class="text-cyan-400">FindYourExpression™</strong>, <strong class="text-cyan-400">Wisdom Graph</strong>, <strong class="text-cyan-400">LLOS.AI (2026)</strong>: interconnected systems forming the Lifelong Learning Operating System.
                 </p>
 
@@ -2420,7 +967,7 @@
             <div class="glass-card p-6 mt-6 border-2 border-cyan-400/30">
                 <div class="flex items-center gap-3 mb-4 card-header">
                     <span class="text-2xl">🌍</span>
-                    <h4 class="text-xl font-bold text-white">LLOS.AI: From Energy Conservation to Learning Systems</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">LLOS.AI: From Energy Conservation to Learning Systems</h4>
                     <span class="text-xs bg-cyan-400/20 text-cyan-400 px-2 py-1 rounded-full card-badge">Live Vision • 2025</span>
                 </div>
                 
@@ -2433,7 +980,7 @@
                 </div>
                 
                 <div class="flex flex-wrap gap-3 mb-4">
-                    <a href="llos_story.html" target="_blank" class="inline-flex items-center gap-2 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg border border-cyan-400/30 transition-all text-sm">
+                    <a href="../llos_story.html" target="_blank" class="inline-flex items-center gap-2 bg-cyan-400/10 hover:bg-cyan-400/20 text-cyan-400 px-4 py-2 rounded-lg border border-cyan-400/30 transition-all text-sm">
                         <span>🌍</span> Experience the Vision
                     </a>
                     <button onclick="toggleSection('llos-architecture-section')" class="inline-flex items-center gap-2 bg-purple-400/10 hover:bg-purple-400/20 text-purple-400 px-4 py-2 rounded-lg border border-purple-400/30 transition-all text-sm">
@@ -2483,9 +1030,9 @@
 
         <!-- 30-Year Evolution Map Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🌍 30-Year Evolution Map (1995–2025)</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">🌍 30-Year Evolution Map (1995–2025)</h3>
             <div class="glass-card p-6">
-                <p class="text-lg leading-relaxed text-gray-300 mb-8 text-center">
+                <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-8 text-center">
                     <em>"From Form to Infinity"</em> is an interactive journey through six transformative phases of learning, innovation, and impact.
                 </p>
                 
@@ -2615,7 +1162,7 @@
                 <div class="mt-8 glass-card p-6 border border-cyan-400/30">
                     <div class="expandable-content">
                         <div class="preview-text">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-4 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm mb-4">
                                 <div class="text-center">
                                     <p class="text-amber-400 font-semibold">1995-1999: The Fire Begins</p>
@@ -2643,7 +1190,7 @@
                             </button>
                         </div>
                         <div class="full-content hidden">
-                            <h4 class="text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
                             
                             <!-- 1995-1999: The Fire Begins -->
                             <div class="mb-8 glass-card p-6 border-l-4 border-amber-600">
@@ -2806,7 +1353,7 @@
 
         <!-- Services Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🛠️ Services & Areas of Research</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">🛠️ Services & Areas of Research</h3>
             <div class="glass-card p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-gray-800/50 p-4 rounded-lg">
@@ -2831,10 +1378,10 @@
 
         <!-- Interactive Learning Engagement -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">🎯 Interactive Learning Engagement</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">🎯 Interactive Learning Engagement</h3>
             <div class="glass-card p-6">
                 <div class="mb-6">
-                    <h4 class="text-xl font-bold text-cyan-400 mb-3">Skill of the Day: Micro-Learning for Content Engineers</h4>
+                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">Skill of the Day: Micro-Learning for Content Engineers</h4>
                     <p class="text-gray-300 mb-4">
                         A daily interactive quiz system designed to build essential skills for content engineering in the AI era. Each session combines conceptual understanding with practical application through adaptive questioning and real-time feedback.
                     </p>
@@ -2931,7 +1478,7 @@
 
         <!-- Education Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Education</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Education</h3>
             <div class="glass-card p-6">
                 <div class="space-y-6">
                     <!-- MIT Sloan -->
@@ -2940,7 +1487,7 @@
                             <img src="mit_logo.jpeg" alt="MIT Logo" class="w-full h-full object-contain">
                         </div>
                         <div class="flex-grow">
-                            <h4 class="text-xl font-bold text-white">MIT Sloan School of Management</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">MIT Sloan School of Management</h4>
                             <p class="text-cyan-400 mb-2">Executive Program in General Management (2013-14)</p>
                             <p class="text-gray-300">Advanced leadership and strategic management program focusing on global business transformation and innovation.</p>
                             <div class="mt-2">
@@ -2957,7 +1504,7 @@
                             <img src="ignou_logo.jpeg" alt="IGNOU Logo" class="w-full h-full object-contain">
                         </div>
                         <div class="flex-grow">
-                            <h4 class="text-xl font-bold text-white">Indira Gandhi National Open University</h4>
+                            <h4 class="text-base sm:text-lg md:text-xl font-bold text-white">Indira Gandhi National Open University</h4>
                             <p class="text-cyan-400 mb-2">PG Diploma in Journalism And Mass Communication, Communication and Media Studies (1995)</p>
                             <p class="text-gray-300">Comprehensive program in media studies, communication theory, and journalism practices, providing foundational expertise in content creation and mass communication strategies.</p>
                         </div>
@@ -2968,7 +1515,7 @@
 
         <!-- Global Contributions Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Global Contributions & Recognition</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Global Contributions & Recognition</h3>
             <div class="glass-card p-6">
                 <ul class="space-y-4">
                     <li class="flex items-start">
@@ -2989,7 +1536,7 @@
         
         <!-- Skills Section -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">Skills & Domains</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">Skills & Domains</h3>
             <div class="glass-card p-6">
                 <div class="flex flex-wrap gap-3 justify-center skill-tag-grid">
                     <span class="skill-tag bg-gray-800 text-gray-300 text-base font-medium px-4 py-2 rounded-full">AI-Driven Learning Systems</span>
@@ -3014,7 +1561,7 @@
 
         <!-- Copyright & Usage Notice -->
         <section class="mb-16 md:mb-24 reveal">
-            <h3 class="text-3xl font-bold text-white mb-8">⚠️ Copyright & Usage Notice</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8">⚠️ Copyright & Usage Notice</h3>
             <div class="glass-card p-6">
                 <p class="text-gray-300 leading-relaxed">
                     All demos, prototypes, articles, and interactive assets showcased here are <strong class="text-cyan-400">Copyright © Cretorial Media Services, 2020-2025</strong>.
@@ -4497,7 +3044,7 @@
 
             <!-- Content Area -->
             <div class="flex-grow p-5 overflow-y-auto">
-                <h2 id="skillTitle" class="text-2xl md:text-3xl font-bold text-white mb-2">Prompt Engineering</h2>
+                <h2 id="skillTitle" class="text-lg sm:text-2xl md:text-3xl font-bold text-white mb-2">Prompt Engineering</h2>
                 
                 <!-- Main Content: Toggles between Details and Quiz -->
                 <div id="contentContainer">
@@ -4540,7 +3087,7 @@
     <div id="quizResultModal" class="quiz-result-modal fixed inset-0 flex items-center justify-center p-4 z-50 opacity-0 invisible">
         <div class="quiz-result-content rounded-xl shadow-2xl w-full max-w-md">
             <div class="p-5 text-center">
-                <h2 id="modalTitle" class="text-xl font-bold text-white mb-2">Check Your Knowledge!</h2>
+                <h2 id="modalTitle" class="text-base sm:text-lg md:text-xl font-bold text-white mb-2">Check Your Knowledge!</h2>
                 <div id="modalBody" class="text-sm text-gray-300 space-y-3"></div>
             </div>
             <div class="bg-gray-800 bg-opacity-50 px-5 py-3 text-right rounded-b-xl">
@@ -4552,7 +3099,106 @@
     <!-- Cinematic Brain Animation Section -->
     <section class="brain-philosophy-section py-4">
         <div class="container mx-auto max-w-5xl px-6 text-center">
-            <!-- Brain Animation Container -->
+            <!-- MOBILE: Animated vertical timeline (hidden on desktop) -->
+            <div class="brain-mobile-stages">
+                <h3 class="text-lg font-bold text-white mb-2">🧠 Lifelong Learning with AI</h3>
+                <p class="text-cyan-400 text-xs mb-4 opacity-80">7 Stages of Growth</p>
+
+                <!-- Vertical Timeline -->
+                <div class="brain-timeline relative max-w-xs mx-auto">
+                    <!-- Timeline line -->
+                    <div class="timeline-line absolute left-6 top-0 w-0.5 h-full bg-gradient-to-b from-cyan-400/20 via-cyan-400/60 to-cyan-400/20"></div>
+
+                    <!-- Stage 1 -->
+                    <div class="brain-stage" data-stage="1">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">👶</span>
+                                <span class="text-white font-semibold text-sm ml-1">Infant</span>
+                                <p class="text-gray-400 text-xs">AI gentle guide</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 2 -->
+                    <div class="brain-stage" data-stage="2">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-pink-400 shadow-lg shadow-pink-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">💕</span>
+                                <span class="text-white font-semibold text-sm ml-1">Teen</span>
+                                <p class="text-gray-400 text-xs">AI creative partner</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 3 -->
+                    <div class="brain-stage" data-stage="3">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-yellow-400 shadow-lg shadow-yellow-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">🎓</span>
+                                <span class="text-white font-semibold text-sm ml-1">Young Adult</span>
+                                <p class="text-gray-400 text-xs">AI skills builder</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 4 -->
+                    <div class="brain-stage" data-stage="4">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-blue-400 shadow-lg shadow-blue-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">💼</span>
+                                <span class="text-white font-semibold text-sm ml-1">Professional</span>
+                                <p class="text-gray-400 text-xs">AI leadership</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 5 -->
+                    <div class="brain-stage" data-stage="5">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">🌿</span>
+                                <span class="text-white font-semibold text-sm ml-1">Mentor</span>
+                                <p class="text-gray-400 text-xs">AI collaborator</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 6 -->
+                    <div class="brain-stage" data-stage="6">
+                        <div class="flex items-start gap-3 relative pl-10 pb-3">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-purple-400 shadow-lg shadow-purple-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">🌟</span>
+                                <span class="text-white font-semibold text-sm ml-1">Elder</span>
+                                <p class="text-gray-400 text-xs">AI memory keeper</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stage 7 -->
+                    <div class="brain-stage" data-stage="7">
+                        <div class="flex items-start gap-3 relative pl-10 pb-2">
+                            <div class="absolute left-3 w-3 h-3 rounded-full bg-amber-400 shadow-lg shadow-amber-400/50 timeline-dot"></div>
+                            <div class="text-left">
+                                <span class="text-lg">🔮</span>
+                                <span class="text-white font-semibold text-sm ml-1">Sage</span>
+                                <p class="text-gray-400 text-xs">AI wisdom bridge</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quote (appears after all stages) -->
+                <p class="brain-quote text-gray-400 text-xs mt-4 italic opacity-0">"When learning becomes personal, it turns universal."</p>
+            </div>
+
+            <!-- DESKTOP: Brain Animation Container -->
             <div class="brain-container relative mx-auto" style="width: 900px; height: 600px;">
                 <!-- Brain SVG with proper 7-position circle -->
                 <svg id="brainSvg" width="900" height="600" viewBox="0 0 900 600" class="opacity-0">
@@ -4926,7 +3572,5 @@
             footerSignature.style.transition = 'opacity 2s ease-in-out';
             footerSignature.style.opacity = '1';
         }
-    </script>
-
-</body>
+    </script></body>
 </html>

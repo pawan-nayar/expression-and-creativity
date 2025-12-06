@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Semantic Quote Grid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --font-family: "Poppins", "Helvetica Neue", sans-serif;
@@ -21,6 +24,10 @@
       --emoji-gap: 0.5rem;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -31,7 +38,8 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     h2 {
@@ -197,38 +205,261 @@
     .fg-gray { color: #333333; }
     .fg-cream { color: #F7F4ED; }
 
-    /* Mobile Adjustments */
-    @media (max-width: 600px) {
+    /* Tablet Adjustments */
+    @media (max-width: 1024px) {
       :root {
-        --font-size-base: 1rem;
-        --card-padding: 1vh 1vw;
-        --emoji-gap: 0.3rem;
+        --font-size-small: 0.85rem;
+        --font-size-base: 1.05rem;
+        --font-size-large: 1.25rem;
+        --card-padding: 1.2vh 1.2vw;
       }
+      
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+      
+      #quote-grid {
+        height: auto;
+        min-height: 70vh;
+        width: 95vw;
+      }
+      
+      .row {
+        min-height: 22vh;
+      }
+      
+      .emoji {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+      :root {
+        --font-size-small: 0.8rem;
+        --font-size-base: 0.95rem;
+        --font-size-large: 1.1rem;
+        --card-padding: 12px 10px;
+        --card-margin: 4px;
+        --emoji-gap: 0.25rem;
+      }
+      
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+        min-height: 100vh;
+        height: auto;
+        padding: 10px 0;
+      }
+      
       h2 {
         font-size: 1.5rem;
+        margin: 0.75rem 0 0.5rem;
+        padding: 0 10px;
       }
+      
       footer {
         font-size: 0.7rem;
+        padding: 10px;
       }
+      
       #quote-grid {
         width: 96vw;
         height: auto;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: var(--card-margin);
+        min-height: auto;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
+      
       .row {
-        display: contents;
+        display: flex;
+        flex-direction: row;
+        height: auto;
+        min-height: 28vw;
+        gap: 4px;
       }
+      
       .card {
-        aspect-ratio: 1/1;
-        min-height: 20vh;
+        min-height: 28vw;
+        aspect-ratio: unset;
+        padding: 10px 8px;
+        margin: 0;
+        border-radius: 10px;
       }
+      
+      .card:hover {
+        transform: scale(1.02);
+      }
+      
+      .card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+      }
+      
       .emoji {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
-      .card[data-row="2"][data-col="2"] { display: none; }
+      
+      .quote-text {
+        font-size: var(--font-size-base) !important;
+        max-width: 95%;
+        line-height: 1.3;
+      }
+      
+      .card-content {
+        gap: 0.2rem;
+      }
+    }
+
+    /* Small Mobile Adjustments */
+    @media (max-width: 480px) {
+      :root {
+        --font-size-small: 0.7rem;
+        --font-size-base: 0.8rem;
+        --font-size-large: 0.95rem;
+        --card-padding: 8px 6px;
+        --card-margin: 3px;
+      }
+      
+      h2 {
+        font-size: 1.25rem;
+        margin: 0.5rem 0;
+      }
+      
+      footer {
+        font-size: 0.65rem;
+      }
+      
+      #quote-grid {
+        width: 98vw;
+        padding: 3px;
+        gap: 6px;
+      }
+      
+      .row {
+        min-height: 30vw;
+        gap: 3px;
+      }
+      
+      .card {
+        min-height: 30vw;
+        padding: 8px 5px;
+        border-radius: 8px;
+      }
+      
+      .emoji {
+        font-size: 1.5rem;
+      }
+      
+      .quote-text {
+        font-size: 0.75rem !important;
+        line-height: 1.25;
+        word-spacing: -1px;
+      }
+    }
+
+    /* Very Small Mobile (iPhone SE, etc) */
+    @media (max-width: 375px) {
+      :root {
+        --font-size-small: 0.65rem;
+        --font-size-base: 0.72rem;
+        --font-size-large: 0.85rem;
+      }
+      
+      h2 {
+        font-size: 1.1rem;
+      }
+      
+      .row {
+        min-height: 32vw;
+      }
+      
+      .card {
+        min-height: 32vw;
+        padding: 6px 4px;
+      }
+      
+      .emoji {
+        font-size: 1.3rem;
+      }
+      
+      .quote-text {
+        font-size: 0.68rem !important;
+        line-height: 1.2;
+      }
+    }
+
+    /* Landscape Mobile */
+    @media (max-width: 900px) and (orientation: landscape) {
+      body {
+        overflow-y: auto;
+        padding: 5px 0;
+      }
+      
+      h2 {
+        font-size: 1.2rem;
+        margin: 0.3rem 0;
+      }
+      
+      footer {
+        margin: 0.3rem 0;
+      }
+      
+      #quote-grid {
+        width: 98vw;
+        gap: 4px;
+      }
+      
+      .row {
+        min-height: 25vh;
+        gap: 4px;
+      }
+      
+      .card {
+        min-height: 25vh;
+        padding: 8px;
+      }
+      
+      .emoji {
+        font-size: 1.4rem;
+      }
+      
+      .quote-text {
+        font-size: 0.75rem !important;
+      }
+    }
+
+    /* Touch device optimization */
+    @media (hover: none) and (pointer: coarse) {
+      .card {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      
+      .card:hover {
+        transform: none;
+      }
+      
+      .card:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+      }
+    }
+
+    /* Ensure proper text rendering on all screens */
+    @media screen {
+      .quote-text {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
     }
   </style>
 </head>
@@ -881,11 +1112,63 @@
             const quoteText = card.querySelector(".quote-text")?.textContent;
             if (quoteText) {
               navigator.clipboard.writeText(quoteText).then(() => {
-                alert("Quote copied!");
+                UXEnhancer.showToast("Quote copied! ✓");
+              }).catch(() => {
+                // Fallback for older browsers
+                UXEnhancer.showToast("Tap and hold to copy");
               });
             }
           });
         });
+      },
+      showToast(message) {
+        // Remove existing toast if any
+        const existingToast = document.querySelector('.toast-notification');
+        if (existingToast) existingToast.remove();
+        
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.textContent = message;
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.85);
+          color: white;
+          padding: 12px 24px;
+          border-radius: 25px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          z-index: 9999;
+          animation: toastSlideUp 0.3s ease-out;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        `;
+        document.body.appendChild(toast);
+        
+        // Add animation keyframes if not exists
+        if (!document.querySelector('#toast-styles')) {
+          const style = document.createElement('style');
+          style.id = 'toast-styles';
+          style.textContent = `
+            @keyframes toastSlideUp {
+              from { opacity: 0; transform: translate(-50%, 20px); }
+              to { opacity: 1; transform: translate(-50%, 0); }
+            }
+            @keyframes toastFadeOut {
+              from { opacity: 1; transform: translate(-50%, 0); }
+              to { opacity: 0; transform: translate(-50%, -10px); }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        
+        // Remove toast after delay
+        setTimeout(() => {
+          toast.style.animation = 'toastFadeOut 0.3s ease-out forwards';
+          setTimeout(() => toast.remove(), 300);
+        }, 2000);
       }
     };
 
