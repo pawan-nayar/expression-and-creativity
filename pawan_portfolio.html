@@ -73,7 +73,7 @@
                             See more <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                     </div>
-                    <div class="full-content hidden">
+                    <div class="full-content">
                         <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                             My work is founded on the belief that learning shouldn't be delivered, it should be lived. Every product, article, or prototype I've built from BODMAS trainers for children, semantic engines for professionals, and markdown-GitHub-Claude systems for coders, to API content for developers, content micro-services for linguists, universal prompt systems for designers, and classroom experiences spanning pre-nursery to PhDs reflects one core conviction: <strong class="text-cyan-400">when learning becomes personal, it turns universal.</strong>
                         </p>
@@ -98,7 +98,7 @@
                             See more <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                     </div>
-                    <div class="full-content hidden">
+                    <div class="full-content">
                         <p class="text-sm sm:text-base md:text-lg leading-relaxed text-gray-300 mb-4">
                             To build the <strong class="text-cyan-400">Lifelong Learning Operating System</strong>, a global framework where content, cognition, and creativity converge. A world where next billions of learners, creators, and systems can evolve continuously through personalized intelligence, emotional design, and universal accessibility.
                         </p>
@@ -408,7 +408,7 @@
                             Explore All Demos <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                     </div>
-                    <div class="full-content hidden">
+                    <div class="full-content">
                         <!-- GitHub Learning Series -->
                         <div class="mb-8">
                             <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-4">🌍 GitHub Learning Series: Teaching 100 Million Future Makers</h4>
@@ -591,7 +591,7 @@
                             Explore All Projects <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                     </div>
-                    <div class="full-content hidden">
+                    <div class="full-content">
                         <!-- Content & Learning Systems -->
                         <div class="mb-6">
                             <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-3">🧠 A. Content – Words, Knowledge, & Learning Systems</h4>
@@ -1236,7 +1236,7 @@
                                 Explore Full Journey <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                         </div>
-                        <div class="full-content hidden">
+                        <div class="full-content">
                             <h4 class="text-base sm:text-lg md:text-xl font-bold text-cyan-400 mb-6 text-center">🧭 META CONTINUUM: "From Form to Infinity"</h4>
                             
                             <!-- 1995-1999: The Fire Begins -->
@@ -1708,9 +1708,8 @@
                     const expandableContent = btn.closest('.expandable-content');
                     const previewText = expandableContent.querySelector('.preview-text');
                     const fullContent = expandableContent.querySelector('.full-content');
-                    
+
                     previewText.style.display = 'none';
-                    fullContent.classList.remove('hidden');
                     fullContent.classList.add('show');
                 });
             });
@@ -1721,10 +1720,9 @@
                     const expandableContent = btn.closest('.expandable-content');
                     const previewText = expandableContent.querySelector('.preview-text');
                     const fullContent = expandableContent.querySelector('.full-content');
-                    
+
                     fullContent.classList.remove('show');
                     setTimeout(() => {
-                        fullContent.classList.add('hidden');
                         previewText.style.display = 'block';
                     }, 400);
                 });

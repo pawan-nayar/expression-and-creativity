@@ -1170,6 +1170,73 @@ img, svg, canvas {
         width: 36px;
         height: 36px;
     }
+
+    /* ==========================================
+       EXPERIENCE COMPACT CARDS - MOBILE FIX
+       ========================================== */
+    /* Experience section compact company rows - stack on mobile */
+    .space-y-3 > .flex.items-center.space-x-3 {
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+        padding: 0.75rem !important;
+    }
+
+    /* Company logo - fixed size */
+    .space-y-3 > .flex.items-center.space-x-3 > img {
+        flex-shrink: 0 !important;
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* Company info container - take full width on mobile */
+    .space-y-3 > .flex.items-center.space-x-3 > .flex-grow {
+        flex: 1 1 calc(100% - 50px) !important;
+        min-width: 0 !important;
+    }
+
+    /* Company name - truncate if needed */
+    .space-y-3 > .flex.items-center.space-x-3 > .flex-grow > span.text-white {
+        display: block !important;
+        font-size: 0.875rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* Years text - move to new line */
+    .space-y-3 > .flex.items-center.space-x-3 > .flex-grow > span.text-gray-400 {
+        display: block !important;
+        margin-left: 0 !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Role badge - full width row below */
+    .space-y-3 > .flex.items-center.space-x-3 > span.text-cyan-400 {
+        flex-basis: 100% !important;
+        text-align: left !important;
+        font-size: 0.75rem !important;
+        padding-left: 42px !important; /* Align with text after logo */
+        margin-top: -0.25rem !important;
+    }
+
+    /* Remove Tailwind space-x on mobile for these cards */
+    .space-y-3 > .flex.items-center.space-x-3 > * + * {
+        margin-left: 0 !important;
+    }
+
+    /* Timeline items in full content - better mobile spacing */
+    .full-content .timeline-item {
+        padding-left: 1rem !important;
+    }
+
+    .full-content .timeline-item .flex.items-center.space-x-3 {
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+
+    .full-content .timeline-item .flex.items-center.space-x-3 > * + * {
+        margin-left: 0 !important;
+    }
 }
 
 /* --- SMALL MOBILE ADJUSTMENTS (< 375px) --- */
