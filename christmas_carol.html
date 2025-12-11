@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--
+    ╔═══════════════════════════════════════════════════════════════════════════╗
+    ║                     CHRISTMAS PIANO - Holiday Music App                    ║
+    ║═══════════════════════════════════════════════════════════════════════════║
+    ║  Copyright © 2025 Pawan Nayar for Beyond Dictionary                       ║
+    ║  All rights reserved.                                                      ║
+    ║                                                                            ║
+    ║  A fun, interactive piano app for kids featuring:                         ║
+    ║  • 10 Christmas carols with auto-play                                     ║
+    ║  • Star-catching game with treasure chest                                 ║
+    ║  • Animated Christmas decorations                                         ║
+    ║  • Mobile-optimized responsive design                                     ║
+    ╚═══════════════════════════════════════════════════════════════════════════╝
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎄 Christmas Piano - Play Holiday Carols!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --christmas-red: #C41E3A;
+            --christmas-red-light: #E74C3C;
+            --christmas-green: #228B22;
+            --christmas-green-light: #2ECC71;
+            --gold: #FFD700;
+            --snow-white: #FFFAFA;
+            --ice-blue: #E8F4F8;
+            --text: #2C3E50;
+            --border: #BDC3C7;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            font-family: 'Nunito', system-ui, sans-serif;
+            background: linear-gradient(180deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* ============ ANIMATED CHRISTMAS DECORATIONS ============ 
+        
+           LESSON 1: MOBILE-FIRST THINKING
+           ════════════════════════════════
+           Don't force desktop layouts onto mobile. Plan each separately:
+           - Desktop: Can use edges/corners for decorations (more space)
+           - Mobile: Use CENTER empty space, edges get cut off
+           Always ask: "Where is the empty space on THIS screen size?"
+        */
+        
+        /* Desktop decorations - edges */
+        .deco-desktop {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Mobile decorations - centered in empty space */
+        .deco-mobile {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-12px) scale(1.05); }
+            50% { transform: translateY(-6px) scale(1); }
+            75% { transform: translateY(-10px) scale(1.02); }
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-12deg); }
+            50% { transform: rotate(12deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-8px) translateX(4px); }
+            50% { transform: translateY(-4px) translateX(-4px); }
+            75% { transform: translateY(-10px) translateX(2px); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(14deg); }
+            20% { transform: rotate(-12deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-8deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(2deg); }
+            80%, 100% { transform: rotate(0deg); }
+        }
+
+        @keyframes candy-spin {
+            0% { transform: rotate(0deg) translateY(0); }
+            25% { transform: rotate(5deg) translateY(-5px); }
+            50% { transform: rotate(0deg) translateY(0); }
+            75% { transform: rotate(-5deg) translateY(-5px); }
+            100% { transform: rotate(0deg) translateY(0); }
+        }
+
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Desktop decoration positions */
+        .deco-star-top-left {
+            top: 15px;
+            left: 20px;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        .deco-star-top-right {
+            top: 20px;
+            right: 25px;
+            animation: sparkle 1.8s ease-in-out infinite 0.3s;
+        }
+
+        .deco-bell-left {
+            top: 80px;
+            left: 15px;
+            animation: ring 2s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        .deco-candy-right {
+            top: 70px;
+            right: 20px;
+            animation: candy-spin 2.5s ease-in-out infinite;
+        }
+
+        .deco-ornament-left {
+            top: 160px;
+            left: 25px;
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        .deco-gift-right {
+            top: 150px;
+            right: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        /* Mobile center decoration positions 
+        
+           LESSON 3: DECORATION PLACEMENT STRATEGY
+           ════════════════════════════════════════
+           - Humans see TOP before BOTTOM (natural eye flow)
+           - On mobile, EDGES get cut off - use CENTER empty space
+           - On desktop, edges are visible - decorations can go there
+           - Semi-transparent (0.5-0.7 opacity) so they don't distract
+           - Gentle animations (float, bounce) not frantic ones
+        */
+        .deco-mobile-tree {
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: gentle-float 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .deco-mobile-gift {
+            top: 62%;
+            left: 25%;
+            animation: bounce 2.5s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .deco-mobile-star {
+            top: 50%;
+            right: 20%;
+            animation: sparkle 2s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        /* Desktop: show edge decorations, hide mobile ones */
+        @media (min-width: 769px) {
+            .deco-desktop { display: block; }
+            .deco-mobile { display: none; }
+        }
+
+        /* Mobile: hide edge decorations, show centered ones */
+        @media (max-width: 768px) {
+            .deco-desktop { display: none; }
+            .deco-mobile { display: block; }
+        }
+
+        @media (max-width: 480px) {
+            .deco-mobile-tree { transform: translateX(-50%) scale(0.8); }
+            .deco-mobile-gift { transform: scale(0.7); opacity: 0.5; }
+            .deco-mobile-star { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        /* Snowfall */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .screen {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            overflow: hidden;
+            position: relative;
+            z-index: 3;
+        }
+        .screen.active { display: flex; opacity: 1; }
+
+        /* Ensure piano elements don't block star dragging */
+        .piano-column, .piano-wrapper, .piano, .live-display-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-red-light) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+        }
+        .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5); }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--christmas-green) 0%, var(--christmas-green-light) 100%);
+            box-shadow: 0 4px 15px rgba(34, 139, 34, 0.4);
+        }
+
+        /* Welcome Screen */
+        #screen-welcome {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(180deg, var(--snow-white) 0%, var(--ice-blue) 100%);
+            border-radius: 24px;
+            padding: 24px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            border: 3px solid var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Carousel 
+        
+           LESSON 6: PLAY STORE STYLE ONBOARDING FOR KIDS
+           ═══════════════════════════════════════════════
+           For apps with multiple features, use carousel to show:
+           - One feature per slide (not overwhelming)
+           - Animated SVG icons (visual, not text-heavy)
+           - Simple title + subtitle (3-5 words each)
+           - Auto-advance (4 sec) + manual swipe/dots
+           
+           Kids learn by seeing, not reading. Show don't tell.
+           Each slide answers: "What can I do here?"
+        */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--christmas-red);
+            margin-bottom: 6px;
+        }
+
+        .slide-subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: var(--christmas-red);
+            transform: scale(1.2);
+        }
+
+        .carousel-dot:hover {
+            background: var(--christmas-red-light);
+        }
+
+        /* Carousel Arrows */
+        .carousel-arrows {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0 5px;
+        }
+
+        .carousel-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid var(--christmas-green);
+            color: var(--christmas-green);
+            font-size: 1.2rem;
+            cursor: pointer;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .carousel-arrow:hover {
+            background: var(--christmas-green);
+            color: white;
+        }
+
+        .welcome-title-small {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--christmas-green);
+            margin-bottom: 16px;
+        }
+
+        .welcome-buttons { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+        }
+
+        .copyright-welcome {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: rgba(100,100,100,0.4);
+        }
+
+        /* Slide Animations */
+        @keyframes piano-key-press {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.92) translateY(3px); }
+        }
+
+        @keyframes notes-float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.8; }
+            50% { transform: translateY(-10px) rotate(5deg); opacity: 1; }
+        }
+
+        @keyframes star-catch {
+            0% { transform: translateY(-20px); opacity: 0; }
+            30% { transform: translateY(0); opacity: 1; }
+            70% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(30px) scale(0.5); opacity: 0; }
+        }
+
+        @keyframes tree-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(255,215,0,0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(255,215,0,0.9)); }
+        }
+
+        .slide-piano-svg .key-animate {
+            animation: piano-key-press 1s ease-in-out infinite;
+        }
+        .slide-piano-svg .key-animate:nth-child(2) { animation-delay: 0.2s; }
+        .slide-piano-svg .key-animate:nth-child(3) { animation-delay: 0.4s; }
+
+        .slide-notes-svg .note {
+            animation: notes-float 2s ease-in-out infinite;
+        }
+        .slide-notes-svg .note:nth-child(2) { animation-delay: 0.3s; }
+        .slide-notes-svg .note:nth-child(3) { animation-delay: 0.6s; }
+
+        .slide-star-svg .falling-star {
+            animation: star-catch 2s ease-in-out infinite;
+        }
+
+        .slide-tree-svg {
+            animation: tree-glow 2s ease-in-out infinite;
+        }
+
+        @media (max-width: 480px) {
+            .welcome-card { padding: 20px 15px; }
+            .slide-icon { width: 100px; height: 100px; }
+            .slide-title { font-size: 1.3rem; }
+            .slide-subtitle { font-size: 0.9rem; }
+            .carousel-arrow { width: 30px; height: 30px; font-size: 1rem; }
+            .carousel-dot { width: 10px; height: 10px; }
+        }
+
+        /* Piano Screen */
+        #screen-piano {
+            padding: 8px;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+
+        .piano-header {
+            width: 100%;
+            text-align: center;
+            flex-shrink: 0;
+            padding: 8px;
+        }
+        .piano-title {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 4px;
+        }
+        .piano-hint {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .piano-hint.mobile-only { display: none; }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            gap: 12px;
+            margin: 0 auto;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            padding: 0 12px;
+        }
+
+        .piano-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* Piano */
+        .piano-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
+        }
+
+        .piano {
+            display: flex;
+            flex-wrap: nowrap;
+            background: linear-gradient(180deg, #8B0000 0%, #5c1515 100%);
+            padding: 14px 14px 12px 14px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 3px solid #FFD700;
+            flex-shrink: 0;
+            width: fit-content;
+        }
+
+        .key {
+            border: 1px solid #5c1515;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            transition: all 0.08s ease;
+            flex-shrink: 0;
+        }
+        .white-key {
+            width: 48px;
+            height: 145px;
+            background: linear-gradient(180deg, #FFFAFA 0%, #F0F0F0 100%);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin: 0 1px;
+            box-shadow: inset 0 -6px 0 rgba(0,0,0,0.1), 0 3px 5px rgba(0,0,0,0.2);
+            color: #666;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding-bottom: 10px;
+        }
+        .black-key {
+            width: 32px;
+            height: 90px;
+            background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: #999;
+            position: relative;
+            margin-left: -18px;
+            margin-right: -18px;
+            z-index: 1;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.5), 0 5px 8px rgba(0,0,0,0.5);
+            font-size: 0.55rem;
+            padding-bottom: 6px;
+        }
+
+        .key.active, .key.autoplay {
+            transform: scale(0.96) translateY(3px);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4) !important;
+        }
+
+        /* Scale colors */
+        .key.scale-deg-1 { background: linear-gradient(180deg, #ff6b6b 0%, #ee5a5a) !important; }
+        .key.scale-deg-2 { background: linear-gradient(180deg, #4ecdc4 0%, #3dbdb5) !important; }
+        .key.scale-deg-3 { background: linear-gradient(180deg, #ffe66d 0%, #ffd93d) !important; }
+        .key.scale-deg-4 { background: linear-gradient(180deg, #95e1d3 0%, #7ed3c4) !important; }
+        .key.scale-deg-5 { background: linear-gradient(180deg, #f38181 0%, #e67070) !important; }
+        .key.scale-deg-6 { background: linear-gradient(180deg, #a8e6cf 0%, #8fd9be) !important; }
+        .key.scale-deg-7 { background: linear-gradient(180deg, #ffd3b6 0%, #ffc4a3) !important; }
+
+        .note-label { font-weight: 700; pointer-events: none; }
+
+        /* Lyric display */
+        .current-lyric-line-display {
+            width: 100%;
+            text-align: center;
+            font-size: 0.95rem;
+            color: white;
+            font-weight: 600;
+            min-height: 1.4em;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+        }
+        .current-lyric-line-display.visible { opacity: 1; }
+
+        /* Live display */
+        .live-display-container {
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+        .live-display-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            padding: 6px 0;
+        }
+        .live-display-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .live-display-row .row-label {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--christmas-green);
+            margin-right: 8px;
+            width: 70px;
+        }
+        .display-line {
+            font-size: 0.85rem;
+            color: var(--text);
+            white-space: nowrap;
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+        .display-line span { margin-left: 6px; }
+
+        /* Tune Panel */
+        .reco-column {
+            width: 320px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.95);
+            padding: 14px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border: 2px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .reco-column h3 {
+            font-size: 1.1rem;
+            color: var(--christmas-red);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tune-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 200px;
+            border: 2px solid var(--christmas-green);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .tune-list-item {
+            padding: 12px 14px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tune-list-item:last-child { border-bottom: none; }
+        .tune-list-item:hover { background: #f0fff0; }
+        .tune-list-item.selected { background: #e8f5e9; }
+        .tune-title-in-list {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 10px;
+        }
+        .play-tune-button-small {
+            background: var(--christmas-red);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .play-tune-button-small:hover { background: var(--christmas-red-light); transform: scale(1.1); }
+
+        .tune-details {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .tune-details h4 {
+            font-size: 1rem;
+            color: var(--christmas-green);
+            margin-bottom: 8px;
+        }
+        .tune-details p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            color: #444;
+        }
+        .tune-details .shortcuts {
+            background: #f0f8f0;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            max-height: 70px;
+            overflow-y: auto;
+            border-left: 3px solid var(--christmas-green);
+        }
+        .tune-details .tip {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 8px;
+            padding: 8px;
+            background: #fff8e1;
+            border-radius: 8px;
+            border-left: 3px solid var(--gold);
+        }
+
+        /* Mobile Tune Drawer */
+        .tune-drawer-toggle {
+            display: none;
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--christmas-red);
+            color: white;
+            border: 3px solid var(--gold);
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5);
+            z-index: 100;
+        }
+        .tune-drawer-toggle.hidden { display: none !important; }
+
+        .tune-drawer-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .tune-drawer-overlay.active { opacity: 1; }
+
+        .tune-drawer {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-height: 45vh;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            padding: 16px;
+            z-index: 300;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            border-top: 3px solid var(--gold);
+        }
+        .tune-drawer.active { transform: translateY(0); }
+        .tune-drawer-handle {
+            width: 50px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 0 auto 14px;
+        }
+
+        /* Playback Ticker */
+        .playback-ticker {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, #8B0000 0%, #5c1515 100%);
+            color: white;
+            padding: 14px 18px;
+            z-index: 400;
+            box-shadow: 0 -6px 25px rgba(0,0,0,0.3);
+            border-radius: 20px 20px 0 0;
+            border-top: 3px solid var(--gold);
+        }
+        .playback-ticker.active { display: block; }
+        .playback-ticker-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .playback-ticker-info { flex: 1; }
+        .playback-ticker-title {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--gold);
+            margin-bottom: 3px;
+        }
+        .playback-ticker-lyric {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .playback-ticker-stop {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Play Again Bar */
+        .play-again-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 18px;
+            z-index: 400;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            border-radius: 20px 20px 0 0;
+            border-top: 3px solid var(--christmas-green);
+        }
+        .play-again-bar.active { display: block; }
+        .play-again-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .play-again-title { font-weight: 700; font-size: 0.95rem; }
+        .play-again-buttons { display: flex; gap: 10px; }
+        .play-again-btn {
+            background: var(--christmas-green);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .play-again-close {
+            background: transparent;
+            border: 2px solid #ddd;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ============ STAR CATCHING GAME ============ 
+        
+           LESSON 2: Z-INDEX LAYER PLANNING
+           ═════════════════════════════════
+           Plan z-index hierarchy UPFRONT before coding:
+           
+           Layer 1 (z:1)     → Snowflakes (background)
+           Layer 2 (z:2)     → Decorations (behind UI)
+           Layer 3 (z:3)     → Piano/UI elements
+           Layer 4 (z:500)   → Game container & falling stars
+           Layer 5 (z:502)   → Treasure chest
+           Layer 6 (z:503)   → Score display
+           Layer 7 (z:9999)  → Dragging star (must be ABOVE everything)
+           
+           Without this plan, elements block each other unexpectedly.
+        */
+        
+        .star-game-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 500;
+            overflow: hidden;
+        }
+
+        .catchable-star {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            cursor: grab;
+            pointer-events: auto;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+            animation: star-fall linear forwards, star-twinkle 0.5s ease-in-out infinite;
+            z-index: 501;
+            touch-action: none;
+        }
+
+        .catchable-star:active {
+            cursor: grabbing;
+        }
+
+        .catchable-star.dragging {
+            /* 
+               LESSON 4: DRAGGABLE ELEMENTS NEED FREEDOM
+               ══════════════════════════════════════════
+               When dragging, element must:
+               1. Switch to position: fixed (not absolute)
+               2. Have z-index: 9999 (above ALL other elements)
+               3. Have generous hit detection on drop target (+30px padding)
+               
+               Without this, elements get "stuck" behind UI components
+               and can't reach their destination (e.g., treasure chest).
+            */
+            animation: star-twinkle 0.3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+            transform: scale(1.2);
+            z-index: 9999;
+        }
+
+        @keyframes star-fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            5% { opacity: 1; }
+            100% { transform: translateY(calc(100vh + 50px)) rotate(360deg); opacity: 0.7; }
+        }
+
+        @keyframes star-twinkle {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)); }
+            50% { filter: drop-shadow(0 0 15px rgba(255, 255, 100, 1)); }
+        }
+
+        /* Treasure Chest */
+        .treasure-chest {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            width: 70px;
+            height: 60px;
+            z-index: 502;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .treasure-chest:hover {
+            transform: scale(1.05);
+        }
+
+        .treasure-chest.glow {
+            animation: chest-glow 0.5s ease-out;
+        }
+
+        @keyframes chest-glow {
+            0% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)) drop-shadow(0 0 40px rgba(255, 255, 0, 0.8)); transform: scale(1.15); }
+            100% { filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: scale(1); }
+        }
+
+        /* Score Display */
+        .score-display {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.9) 0%, rgba(255,180,0,0.9) 100%);
+            color: #5c4000;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4), inset 0 2px 0 rgba(255,255,255,0.3);
+            z-index: 503;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .score-display .star-icon {
+            font-size: 1.2rem;
+        }
+
+        .score-display .score-num {
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .score-display.pop {
+            animation: score-pop 0.3s ease-out;
+        }
+
+        @keyframes score-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Mobile: Move score near treasure chest 
+        
+           LESSON 5: KEEP RELATED UI ELEMENTS TOGETHER
+           ════════════════════════════════════════════
+           Desktop: Score in top-right is fine (plenty of space)
+           Mobile: Score NEAR treasure chest makes sense because:
+           - Stars go INTO chest → Score shows BESIDE it
+           - Logical visual connection (action → result)
+           - Frees up header area for clean title
+           
+           Don't blindly keep desktop positions on mobile.
+           Ask: "What makes sense spatially on this screen?"
+        */
+        @media (max-width: 900px) {
+            .score-display {
+                top: auto;
+                bottom: 15px;
+                left: 90px;
+                right: auto;
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .score-display {
+                bottom: 80px;
+                left: 70px;
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+            .score-display .star-icon {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .score-display {
+                bottom: 85px;
+                left: 60px;
+                padding: 4px 8px;
+                font-size: 0.75rem;
+                gap: 5px;
+            }
+            .score-display .star-icon {
+                font-size: 0.9rem;
+            }
+            .score-display .score-num {
+                min-width: 20px;
+            }
+        }
+
+        /* Floating +1 indicator */
+        .point-popup {
+            position: fixed;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.8), 2px 2px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 9999;
+            animation: point-float 1s ease-out forwards;
+        }
+
+        @keyframes point-float {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+
+        @media (max-width: 768px) {
+            .treasure-chest {
+                width: 55px;
+                height: 48px;
+                bottom: 80px;
+                left: 10px;
+            }
+            .catchable-star {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .treasure-chest {
+                width: 48px;
+                height: 42px;
+                bottom: 85px;
+                left: 8px;
+            }
+            .catchable-star {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* Copyright */
+        .copyright {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .reco-column { display: none; }
+            .tune-drawer-toggle { display: flex; align-items: center; justify-content: center; }
+            .tune-drawer-overlay, .tune-drawer { display: block; }
+        }
+
+        @media (max-width: 768px) {
+            .piano-hint.desktop-only { display: none; }
+            .piano-hint.mobile-only { display: block; }
+            .main-container { flex-direction: column; padding: 0 8px; }
+
+            .white-key { width: 38px; height: 110px; font-size: 0.6rem; }
+            .black-key { width: 24px; height: 68px; margin-left: -14px; margin-right: -14px; font-size: 0.45rem; }
+            .piano { padding: 8px 6px 6px 6px; }
+
+            .live-display-container { font-size: 0.75rem; padding: 8px 10px; }
+            .live-display-row .row-label { width: 55px; font-size: 0.65rem; }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-card { padding: 20px 16px; }
+            .welcome-title { font-size: 1.3rem; }
+            .welcome-emoji { font-size: 2.5rem; }
+
+            .white-key { width: 32px; height: 95px; font-size: 0.55rem; }
+            .black-key { width: 20px; height: 58px; margin-left: -12px; margin-right: -12px; font-size: 0.4rem; }
+            .piano { padding: 6px 4px 4px 4px; }
+        }
+
+        @media (max-width: 380px) {
+            .white-key { width: 28px; height: 85px; font-size: 0.5rem; }
+            .black-key { width: 18px; height: 52px; margin-left: -10px; margin-right: -10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ DESKTOP DECORATIONS (edges) ============ -->
+    <!-- Sparkling Star Top Left -->
+    <svg class="deco-desktop deco-star-top-left" width="45" height="45" viewBox="0 0 45 45">
+        <polygon points="22.5,2 27,17 42,17 30,27 34,42 22.5,33 11,42 15,27 3,17 18,17" fill="#FFD700"/>
+        <polygon points="22.5,8 25,17 34,17 27,23 29,32 22.5,27 16,32 18,23 11,17 20,17" fill="#FFF8DC"/>
+    </svg>
+
+    <!-- Sparkling Star Top Right -->
+    <svg class="deco-desktop deco-star-top-right" width="40" height="40" viewBox="0 0 40 40">
+        <polygon points="20,2 24,15 38,15 27,24 31,37 20,29 9,37 13,24 2,15 16,15" fill="#FFD700"/>
+        <polygon points="20,8 22,15 30,15 24,20 26,28 20,24 14,28 16,20 10,15 18,15" fill="#FFF8DC"/>
+    </svg>
+
+    <!-- Ringing Bell Left -->
+    <svg class="deco-desktop deco-bell-left" width="50" height="60" viewBox="0 0 50 60">
+        <ellipse cx="25" cy="8" rx="4" ry="4" fill="#FFD700"/>
+        <path d="M25,12 L25,18" stroke="#FFD700" stroke-width="3"/>
+        <path d="M10,45 Q10,20 25,18 Q40,20 40,45 L10,45" fill="#FFD700"/>
+        <ellipse cx="25" cy="45" rx="17" ry="5" fill="#DAA520"/>
+        <circle cx="25" cy="52" r="5" fill="#B8860B"/>
+        <path d="M15,30 Q25,25 35,30" stroke="#FFF8DC" stroke-width="2" fill="none" opacity="0.6"/>
+    </svg>
+
+    <!-- Candy Cane Right -->
+    <svg class="deco-desktop deco-candy-right" width="40" height="65" viewBox="0 0 40 65">
+        <path d="M12,65 L12,25 Q12,8 25,8 Q35,8 35,18 Q35,28 25,28" stroke="#ff6b6b" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M12,65 L12,25 Q12,8 25,8 Q35,8 35,18 Q35,28 25,28" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="8 8"/>
+    </svg>
+
+    <!-- Swinging Ornament Left -->
+    <svg class="deco-desktop deco-ornament-left" width="45" height="60" viewBox="0 0 45 60">
+        <line x1="22.5" y1="0" x2="22.5" y2="12" stroke="#888" stroke-width="2"/>
+        <rect x="17" y="10" width="11" height="6" rx="2" fill="#FFD700"/>
+        <circle cx="22.5" cy="38" r="20" fill="#ff6b6b"/>
+        <ellipse cx="22.5" cy="38" rx="15" ry="15" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+        <path d="M12,28 Q22.5,35 33,28" stroke="white" stroke-width="2" fill="none" opacity="0.4"/>
+        <circle cx="16" cy="32" r="3" fill="white" opacity="0.5"/>
+    </svg>
+
+    <!-- Bouncing Gift Right -->
+    <svg class="deco-desktop deco-gift-right" width="55" height="55" viewBox="0 0 55 55">
+        <rect x="5" y="18" width="45" height="35" rx="3" fill="#ff6b6b"/>
+        <rect x="5" y="18" width="45" height="10" rx="2" fill="#ff8585"/>
+        <rect x="22" y="18" width="11" height="35" fill="#4ecdc4"/>
+        <path d="M27.5,18 L27.5,5 Q18,10 12,3" stroke="#4ecdc4" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M27.5,5 Q37,10 43,3" stroke="#4ecdc4" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <ellipse cx="27.5" cy="5" rx="5" ry="3" fill="#4ecdc4"/>
+    </svg>
+
+    <!-- ============ MOBILE DECORATIONS (centered in empty space) ============ -->
+    <!-- Floating Tree -->
+    <svg class="deco-mobile deco-mobile-tree" width="60" height="70" viewBox="0 0 60 70">
+        <polygon points="30,5 50,30 42,30 55,50 45,50 58,68 2,68 15,50 5,50 18,30 10,30" fill="#228B22"/>
+        <rect x="24" y="68" width="12" height="8" fill="#8B4513"/>
+        <polygon points="30,2 33,10 27,10" fill="#FFD700"/>
+        <circle cx="22" cy="25" r="4" fill="#ff6b6b"/>
+        <circle cx="38" cy="35" r="4" fill="#4169E1"/>
+        <circle cx="25" cy="48" r="4" fill="#FFD700"/>
+        <circle cx="40" cy="55" r="3" fill="#ff6b6b"/>
+    </svg>
+
+    <!-- Floating Gift -->
+    <svg class="deco-mobile deco-mobile-gift" width="40" height="40" viewBox="0 0 40 40">
+        <rect x="5" y="14" width="30" height="24" rx="3" fill="#ff6b6b"/>
+        <rect x="5" y="14" width="30" height="6" fill="#ff8585"/>
+        <rect x="17" y="14" width="6" height="24" fill="#4ecdc4"/>
+        <path d="M20,14 L20,5 Q13,9 8,3" stroke="#4ecdc4" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M20,5 Q27,9 32,3" stroke="#4ecdc4" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <!-- Floating Star -->
+    <svg class="deco-mobile deco-mobile-star" width="35" height="35" viewBox="0 0 35 35">
+        <polygon points="17.5,2 21,13 32,13 23,20 26,31 17.5,24 9,31 12,20 3,13 14,13" fill="#FFD700"/>
+        <polygon points="17.5,8 19,13 25,13 20,17 22,23 17.5,19 13,23 15,17 10,13 16,13" fill="#FFF8DC"/>
+    </svg>
+
+    <!-- Snowfall -->
+    <div class="snowflakes" id="snowflakes"></div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="screen-welcome" class="screen">
+        <div class="welcome-card">
+            <p class="welcome-title-small">🎄 Christmas Piano 🎅</p>
+            
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Slide 1: Play Piano -->
+                    <div class="carousel-slide">
+                        <div class="slide-icon">
+                            <svg class="slide-piano-svg" viewBox="0 0 120 100" width="120" height="100">
+                                <!-- Piano body -->
+                                <rect x="10" y="30" width="100" height="60" rx="8" fill="#8B0000" stroke="#FFD700" stroke-width="2"/>
+                                <!-- White keys -->
+                                <rect class="key-animate" x="15" y="35" width="18" height="50" rx="3" fill="#FFFAFA" stroke="#ccc" stroke-width="1"/>
+                                <rect class="key-animate" x="36" y="35" width="18" height="50" rx="3" fill="#FFFAFA" stroke="#ccc" stroke-width="1"/>
+                                <rect class="key-animate" x="57" y="35" width="18" height="50" rx="3" fill="#FFFAFA" stroke="#ccc" stroke-width="1"/>
+                                <rect x="78" y="35" width="18" height="50" rx="3" fill="#FFFAFA" stroke="#ccc" stroke-width="1"/>
+                                <!-- Black keys -->
+                                <rect x="28" y="35" width="12" height="30" rx="2" fill="#1a1a1a"/>
+                                <rect x="49" y="35" width="12" height="30" rx="2" fill="#1a1a1a"/>
+                                <rect x="70" y="35" width="12" height="30" rx="2" fill="#1a1a1a"/>
+                                <!-- Hand pointer -->
+                                <circle cx="65" cy="15" r="8" fill="#FFB6C1" stroke="#FF69B4" stroke-width="2"/>
+                                <rect x="62" y="18" width="6" height="15" rx="3" fill="#FFB6C1"/>
+                            </svg>
+                        </div>
+                        <h2 class="slide-title">Play Piano</h2>
+                        <p class="slide-subtitle">Tap keys to make music!</p>
+                    </div>
+                    
+                    <!-- Slide 2: Learn Carols -->
+                    <div class="carousel-slide">
+                        <div class="slide-icon">
+                            <svg class="slide-notes-svg" viewBox="0 0 120 100" width="120" height="100">
+                                <!-- Music sheet -->
+                                <rect x="20" y="25" width="80" height="65" rx="5" fill="#FFF8DC" stroke="#DAA520" stroke-width="2"/>
+                                <!-- Staff lines -->
+                                <line x1="28" y1="40" x2="92" y2="40" stroke="#ccc" stroke-width="1"/>
+                                <line x1="28" y1="50" x2="92" y2="50" stroke="#ccc" stroke-width="1"/>
+                                <line x1="28" y1="60" x2="92" y2="60" stroke="#ccc" stroke-width="1"/>
+                                <line x1="28" y1="70" x2="92" y2="70" stroke="#ccc" stroke-width="1"/>
+                                <!-- Floating notes -->
+                                <g class="note">
+                                    <ellipse cx="35" cy="45" rx="6" ry="5" fill="#C41E3A"/>
+                                    <rect x="40" y="25" width="2" height="20" fill="#C41E3A"/>
+                                </g>
+                                <g class="note">
+                                    <ellipse cx="55" cy="55" rx="6" ry="5" fill="#228B22"/>
+                                    <rect x="60" y="35" width="2" height="20" fill="#228B22"/>
+                                </g>
+                                <g class="note">
+                                    <ellipse cx="75" cy="40" rx="6" ry="5" fill="#C41E3A"/>
+                                    <rect x="80" y="20" width="2" height="20" fill="#C41E3A"/>
+                                </g>
+                                <!-- Number 10 badge -->
+                                <circle cx="95" cy="20" r="14" fill="#C41E3A"/>
+                                <text x="95" y="25" text-anchor="middle" fill="white" font-weight="800" font-size="14">10</text>
+                            </svg>
+                        </div>
+                        <h2 class="slide-title">Learn Carols</h2>
+                        <p class="slide-subtitle">10 holiday songs to play!</p>
+                    </div>
+                    
+                    <!-- Slide 3: Catch Stars -->
+                    <div class="carousel-slide">
+                        <div class="slide-icon">
+                            <svg viewBox="0 0 120 100" width="120" height="100">
+                                <!-- Falling star -->
+                                <g class="falling-star">
+                                    <polygon points="60,5 65,20 80,20 68,30 73,45 60,35 47,45 52,30 40,20 55,20" fill="#FFD700"/>
+                                    <polygon points="60,12 63,20 72,20 65,26 68,35 60,30 52,35 55,26 48,20 57,20" fill="#FFF8DC"/>
+                                </g>
+                                <!-- Sparkle trail -->
+                                <circle cx="50" cy="25" r="2" fill="#FFD700" opacity="0.6"/>
+                                <circle cx="70" cy="20" r="1.5" fill="#FFD700" opacity="0.4"/>
+                                <!-- Treasure chest -->
+                                <rect x="35" y="65" width="50" height="28" rx="4" fill="#8B4513"/>
+                                <path d="M35,65 L35,55 Q60,42 85,55 L85,65 Z" fill="#CD853F"/>
+                                <rect x="33" y="63" width="54" height="4" fill="#DAA520"/>
+                                <rect x="55" y="65" width="10" height="28" fill="#DAA520"/>
+                                <circle cx="60" cy="78" r="5" fill="#FFD700"/>
+                                <!-- Score +1 -->
+                                <text x="95" y="60" fill="#FFD700" font-weight="800" font-size="16">+1</text>
+                            </svg>
+                        </div>
+                        <h2 class="slide-title">Catch Stars</h2>
+                        <p class="slide-subtitle">Drag stars for points!</p>
+                    </div>
+                    
+                    <!-- Slide 4: Celebrate -->
+                    <div class="carousel-slide">
+                        <div class="slide-icon">
+                            <svg class="slide-tree-svg" viewBox="0 0 120 100" width="120" height="100">
+                                <!-- Tree -->
+                                <polygon points="60,5 85,35 75,35 90,55 78,55 95,80 25,80 42,55 30,55 45,35 35,35" fill="#228B22"/>
+                                <!-- Trunk -->
+                                <rect x="50" y="80" width="20" height="15" fill="#8B4513"/>
+                                <!-- Star on top -->
+                                <polygon points="60,2 63,10 71,10 65,15 67,23 60,18 53,23 55,15 49,10 57,10" fill="#FFD700"/>
+                                <!-- Ornaments -->
+                                <circle cx="50" cy="45" r="5" fill="#C41E3A"/>
+                                <circle cx="70" cy="50" r="5" fill="#4169E1"/>
+                                <circle cx="55" cy="65" r="5" fill="#FFD700"/>
+                                <circle cx="75" cy="68" r="5" fill="#C41E3A"/>
+                                <circle cx="45" cy="72" r="4" fill="#4169E1"/>
+                                <!-- Gifts -->
+                                <rect x="20" y="82" width="18" height="14" rx="2" fill="#C41E3A"/>
+                                <rect x="27" y="82" width="4" height="14" fill="#FFD700"/>
+                                <rect x="85" y="85" width="15" height="11" rx="2" fill="#4169E1"/>
+                                <rect x="91" y="85" width="3" height="11" fill="#FFD700"/>
+                            </svg>
+                        </div>
+                        <h2 class="slide-title">Celebrate!</h2>
+                        <p class="slide-subtitle">Have a Merry Christmas!</p>
+                    </div>
+                </div>
+                
+                <!-- Carousel Arrows -->
+                <div class="carousel-arrows">
+                    <button class="carousel-arrow" id="prevSlide">‹</button>
+                    <button class="carousel-arrow" id="nextSlide">›</button>
+                </div>
+            </div>
+            
+            <!-- Carousel Dots -->
+            <div class="carousel-dots" id="carouselDots">
+                <button class="carousel-dot active" data-slide="0"></button>
+                <button class="carousel-dot" data-slide="1"></button>
+                <button class="carousel-dot" data-slide="2"></button>
+                <button class="carousel-dot" data-slide="3"></button>
+            </div>
+
+            <div class="welcome-buttons">
+                <button id="beginPianoBtn" class="btn btn-green">🎶 Start Playing!</button>
+            </div>
+            
+            <div class="copyright-welcome">© Beyond Dictionary 2025</div>
+        </div>
+    </div>
+
+    <!-- PIANO SCREEN -->
+    <div id="screen-piano" class="screen">
+        
+        <!-- Star Game Elements -->
+        <div class="star-game-container" id="starGameContainer"></div>
+        
+        <div class="score-display" id="scoreDisplay">
+            <span class="star-icon">⭐</span>
+            <span class="score-num" id="scoreNum">0</span>
+        </div>
+        
+        <!-- Treasure Chest SVG -->
+        <svg class="treasure-chest" id="treasureChest" viewBox="0 0 70 60">
+            <!-- Chest body -->
+            <rect x="5" y="25" width="60" height="32" rx="4" fill="#8B4513"/>
+            <rect x="5" y="25" width="60" height="8" fill="#A0522D"/>
+            <!-- Chest lid -->
+            <path d="M5,25 L5,15 Q35,0 65,15 L65,25 Z" fill="#A0522D"/>
+            <path d="M8,24 L8,16 Q35,4 62,16 L62,24 Z" fill="#CD853F"/>
+            <!-- Metal bands -->
+            <rect x="3" y="23" width="64" height="4" fill="#DAA520"/>
+            <rect x="30" y="25" width="10" height="32" fill="#DAA520"/>
+            <!-- Lock -->
+            <circle cx="35" cy="38" r="6" fill="#FFD700"/>
+            <rect x="33" y="38" width="4" height="8" fill="#FFD700"/>
+            <!-- Shine -->
+            <ellipse cx="20" cy="12" rx="8" ry="4" fill="white" opacity="0.2"/>
+        </svg>
+
+        <div class="piano-header">
+            <h1 class="piano-title">🎄 Christmas Piano 🎅</h1>
+            <p class="piano-hint desktop-only">Use your keyboard or click the keys • Pick a carol and press play!</p>
+            <p class="piano-hint mobile-only">Tap keys to play • Tap a carol to hear it!</p>
+        </div>
+
+        <div class="main-container">
+            <div class="piano-column">
+                <div class="piano-wrapper">
+                    <div class="piano" id="piano"></div>
+                </div>
+
+                <div class="current-lyric-line-display" id="currentLyricLineDisplay"></div>
+
+                <div class="live-display-container" id="liveDisplayContainer">
+                    <div class="live-display-cta" id="liveDisplayCta">
+                        <span style="font-size: 1.3rem;">🎹</span>
+                        <span>Play the piano or tap a carol!</span>
+                    </div>
+                    <div class="live-display-rows" id="liveDisplayRows" style="display: none;">
+                        <div class="live-display-row">
+                            <span class="row-label">Key:</span>
+                            <div class="display-line" id="computerKeyDisplay"></div>
+                        </div>
+                        <div class="live-display-row">
+                            <span class="row-label">Note:</span>
+                            <div class="display-line" id="pianoNoteDisplay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Carol Panel -->
+            <div class="reco-column" id="recoColumnDesktop">
+                <h3>🎄 Christmas Carols 🎵</h3>
+                <ul class="tune-list" id="tuneList"></ul>
+                <div class="tune-details" id="tuneDetails">
+                    <h4>Pick a carol to see the words!</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Tune Drawer -->
+        <button class="tune-drawer-toggle" id="tuneDrawerToggle">🎵</button>
+        <div class="tune-drawer-overlay" id="tuneDrawerOverlay"></div>
+        <div class="tune-drawer" id="tuneDrawer">
+            <div class="tune-drawer-handle"></div>
+            <h3 style="text-align:center; color:var(--christmas-red); margin-bottom:14px;">🎄 Christmas Carols 🎵</h3>
+            <ul class="tune-list" id="tuneListMobile" style="max-height:160px;"></ul>
+            <div class="tune-details" id="tuneDetailsMobile">
+                <h4>Pick a carol to see the words!</h4>
+            </div>
+        </div>
+
+        <!-- Playback Ticker -->
+        <div class="playback-ticker" id="playbackTicker">
+            <div class="playback-ticker-content">
+                <div class="playback-ticker-info">
+                    <div class="playback-ticker-title" id="tickerTitle">🎶 Playing...</div>
+                    <div class="playback-ticker-lyric" id="tickerLyric"></div>
+                </div>
+                <button class="playback-ticker-stop" id="tickerStop" title="Stop">⏹</button>
+            </div>
+        </div>
+
+        <!-- Play Again Bar -->
+        <div class="play-again-bar" id="playAgainBar">
+            <div class="play-again-content">
+                <div class="play-again-title" id="playAgainTitle">🎄 Carol finished!</div>
+                <div class="play-again-buttons">
+                    <button class="play-again-btn" id="playAgainBtn">▶ Play Again</button>
+                    <button class="play-again-close" id="playAgainClose">✕</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">© Beyond Dictionary 2025</div>
+    </div>
+
+    <script>
+        // Elements
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenPiano = document.getElementById('screen-piano');
+        const beginPianoBtn = document.getElementById('beginPianoBtn');
+        const pianoContainer = document.getElementById('piano');
+        const currentLyricLineDisplay = document.getElementById('currentLyricLineDisplay');
+        const computerKeyDisplay = document.getElementById('computerKeyDisplay');
+        const pianoNoteDisplay = document.getElementById('pianoNoteDisplay');
+        const tuneListContainer = document.getElementById('tuneList');
+        const tuneDetailsContainer = document.getElementById('tuneDetails');
+        const tuneDrawerToggle = document.getElementById('tuneDrawerToggle');
+        const tuneDrawerOverlay = document.getElementById('tuneDrawerOverlay');
+        const tuneDrawer = document.getElementById('tuneDrawer');
+        const tuneListMobile = document.getElementById('tuneListMobile');
+        const tuneDetailsMobile = document.getElementById('tuneDetailsMobile');
+        const playbackTicker = document.getElementById('playbackTicker');
+        const tickerTitle = document.getElementById('tickerTitle');
+        const tickerLyric = document.getElementById('tickerLyric');
+        const tickerStop = document.getElementById('tickerStop');
+        const playAgainBar = document.getElementById('playAgainBar');
+        const playAgainTitle = document.getElementById('playAgainTitle');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const playAgainClose = document.getElementById('playAgainClose');
+        const liveDisplayCta = document.getElementById('liveDisplayCta');
+        const liveDisplayRows = document.getElementById('liveDisplayRows');
+
+        let audioContext;
+        let isTunePlaying = false;
+        let stopTuneRequested = false;
+        let lastPlayedTune = null;
+        let selectedTuneId = null;
+        let currentLyricLineIndex = 0;
+
+        const noteInteractionDuration = 300;
+        const autoPlayBaseDelay = 380;
+        const autoPlayLongPauseMultiplier = 2.2;
+        const MAX_TICKER_ITEMS = 12;
+
+        let computerKeyTicker = [];
+        let pianoNoteTicker = [];
+        let keyElements = {};
+        let pressedKeyboardKeys = new Set();
+
+        // Piano Key Data
+        const pianoKeysData = [
+            { note: 'C3', label: 'C3', frequency: 130.81, type: 'white', keybind: 'z', scaleDegreeCmaj: 1 },
+            { note: 'C#3', label: 'C#3', frequency: 138.59, type: 'black', keybind: 'x', scaleDegreeCmaj: 0 },
+            { note: 'D3', label: 'D3', frequency: 146.83, type: 'white', keybind: 'c', scaleDegreeCmaj: 2 },
+            { note: 'D#3', label: 'D#3', frequency: 155.56, type: 'black', keybind: 'v', scaleDegreeCmaj: 0 },
+            { note: 'E3', label: 'E3', frequency: 164.81, type: 'white', keybind: 'b', scaleDegreeCmaj: 3 },
+            { note: 'F3', label: 'F3', frequency: 174.61, type: 'white', keybind: 'n', scaleDegreeCmaj: 4 },
+            { note: 'F#3', label: 'F#3', frequency: 185.00, type: 'black', keybind: 'm', scaleDegreeCmaj: 0 },
+            { note: 'G3', label: 'G3', frequency: 196.00, type: 'white', keybind: ',', scaleDegreeCmaj: 5 },
+            { note: 'G#3', label: 'G#3', frequency: 207.65, type: 'black', keybind: '.', scaleDegreeCmaj: 0 },
+            { note: 'A3', label: 'A3', frequency: 220.00, type: 'white', keybind: 'a', scaleDegreeCmaj: 6 },
+            { note: 'A#3', label: 'A#3', frequency: 233.08, type: 'black', keybind: 'w', scaleDegreeCmaj: 0 },
+            { note: 'B3', label: 'B3', frequency: 246.94, type: 'white', keybind: 's', scaleDegreeCmaj: 7 },
+            { note: 'C4', label: 'C4', frequency: 261.63, type: 'white', keybind: 'd', scaleDegreeCmaj: 1 },
+            { note: 'C#4', label: 'C#4', frequency: 277.18, type: 'black', keybind: 'e', scaleDegreeCmaj: 0 },
+            { note: 'D4', label: 'D4', frequency: 293.66, type: 'white', keybind: 'f', scaleDegreeCmaj: 2 },
+            { note: 'D#4', label: 'D#4', frequency: 311.13, type: 'black', keybind: 'r', scaleDegreeCmaj: 0 },
+            { note: 'E4', label: 'E4', frequency: 329.63, type: 'white', keybind: 'g', scaleDegreeCmaj: 3 },
+            { note: 'F4', label: 'F4', frequency: 349.23, type: 'white', keybind: 'h', scaleDegreeCmaj: 4 },
+            { note: 'F#4', label: 'F#4', frequency: 369.99, type: 'black', keybind: 't', scaleDegreeCmaj: 0 },
+            { note: 'G4', label: 'G4', frequency: 392.00, type: 'white', keybind: 'j', scaleDegreeCmaj: 5 },
+            { note: 'G#4', label: 'G#4', frequency: 415.30, type: 'black', keybind: 'y', scaleDegreeCmaj: 0 },
+            { note: 'A4', label: 'A4', frequency: 440.00, type: 'white', keybind: 'k', scaleDegreeCmaj: 6 },
+            { note: 'A#4', label: 'A#4', frequency: 466.16, type: 'black', keybind: 'u', scaleDegreeCmaj: 0 },
+            { note: 'B4', label: 'B4', frequency: 493.88, type: 'white', keybind: 'l', scaleDegreeCmaj: 7 },
+            { note: 'C5', label: 'C5', frequency: 523.25, type: 'white', keybind: ';', scaleDegreeCmaj: 1 },
+        ];
+        const keyDataMap = new Map(pianoKeysData.map(k => [k.keybind, k]));
+
+        // Christmas Carols
+        const christmasCarols = [
+            { id: 1, title: "🔔 Jingle Bells", shortcuts: "g-g-g--g-g-g--g-j-d-f-g--h-h-h-h-h-g-g-g-g-f-f-g-f--j--g-g-g--g-g-g--g-j-d-f-g--h-h-h-h-h-g-g-g-j-j-h-f--d", lyrics: "Jingle bells, jingle bells,\nJingle all the way!\nOh what fun it is to ride\nIn a one-horse open sleigh, hey!\nJingle bells, jingle bells,\nJingle all the way!\nOh what fun it is to ride\nIn a one-horse open sleigh!", tip: "A fun song to play fast!" },
+            { id: 2, title: "⭐ Twinkle Little Star", shortcuts: "d-d-j-j-k-k-j--h-h-g-g-f-f-d--j-j-h-h-g-g-f--j-j-h-h-g-g-f--d-d-j-j-k-k-j--h-h-g-g-f-f-d", lyrics: "Twinkle, twinkle, little star,\nHow I wonder what you are.\nUp above the world so high,\nLike a diamond in the sky.\nTwinkle, twinkle, little star,\nHow I wonder what you are.", tip: "A gentle, slow melody!" },
+            { id: 3, title: "🌙 Silent Night", shortcuts: "j-k-j-g--j-k-j-g--;-;-f--k-k-d--j-j-g--j-k-j-k-;-;-f--j-j-l-j-h-g--j-k-j-g--d-f-d-s-d--a-d", lyrics: "Silent night, holy night,\nAll is calm, all is bright.\nRound yon virgin, mother and child,\nHoly infant so tender and mild.\nSleep in heavenly peace,\nSleep in heavenly peace.", tip: "Play this one slowly and softly." },
+            { id: 4, title: "🎄 O Christmas Tree", shortcuts: "d--j-j-j--k-l-l--l-k-l-j--g-k-j--h-g-f-f-d--d--j-j-j--k-l-l--l-k-l-j--g-k-j--h-g-f-f-d", lyrics: "O Christmas tree, O Christmas tree,\nHow lovely are your branches.\nO Christmas tree, O Christmas tree,\nHow lovely are your branches.", tip: "A beautiful German carol!" },
+            { id: 5, title: "🎁 We Wish You Merry Christmas", shortcuts: "d--j-j-k-j-h-g-d-d--d-k-k-l-k-j-h-f--f-l-l-;-l-k-j-d-d-f-h-j-g--h-j--d--j-j-k-j-h-g-d-d--d-k-k-l-k-j-h-f--f-l-l-;-l-k-j-d-d-f-g-h--d", lyrics: "We wish you a merry Christmas,\nWe wish you a merry Christmas,\nWe wish you a merry Christmas,\nAnd a happy new year!", tip: "A cheerful holiday greeting!" },
+            { id: 6, title: "🦌 Rudolph", shortcuts: "j-k-j-g--d-j-h--j-k-j-k-j--l--j-k-j-g--d-j-k-j-h--j-k-j-g--d-j-h--j-k-j-k-j--l--j-k-j-g--k-l-;--j", lyrics: "Rudolph the red-nosed reindeer,\nHad a very shiny nose.\nAnd if you ever saw it,\nYou would even say it glows.", tip: "A fun song about Santa's helper!" },
+            { id: 7, title: "☃️ Frosty the Snowman", shortcuts: "j-h-j-k-j--h-g-f-d--d-f-h-k-j--j-h-j-k-j--h-g-f-g-d--j-h-j-k-j--h-g-f-d--d-f-h-k-j-l--j-k-j-h-g-d", lyrics: "Frosty the snowman,\nWas a jolly happy soul.\nWith a corncob pipe and a button nose,\nAnd two eyes made out of coal.", tip: "Imagine a dancing snowman!" },
+            { id: 8, title: "🌍 Joy to the World", shortcuts: ";-l-k-j--j-h-g--f-g-h--h-j-k--;-;-;-l-l-k-j-j-h-g--;-;-;-l-l-k-j-j-h-g--g-g-g-g-h-j--h-g-f-f-g-h--g-f-g-d", lyrics: "Joy to the world, the Lord is come!\nLet earth receive her King.\nLet every heart prepare Him room,\nAnd heaven and nature sing.", tip: "Start high and come down the scale!" },
+            { id: 9, title: "🏠 Deck the Halls", shortcuts: "l-k-j-h--g-f-g-h--g-h-j-g--h-j-k-j-h-g--l-k-j-h--g-f-g-h--g-h-j-g--h-j-k-j-h-g--h-j-k-l-;--l-k-j-h-g-f-d", lyrics: "Deck the halls with boughs of holly,\nFa la la la la, la la la la.\n'Tis the season to be jolly,\nFa la la la la, la la la la.", tip: "Sing along with the fa-la-las!" },
+            { id: 10, title: "🎂 Happy Birthday", shortcuts: "d-d-f-d-h-g--d-d-f-d-j-h--d-d-;-k-h-g-f--l-l-k-h-j-h--d-d-f-d-h-g--d-d-f-d-j-h", lyrics: "Happy birthday to you,\nHappy birthday to you,\nHappy birthday dear friend,\nHappy birthday to you!", tip: "Perfect for any celebration!" }
+        ];
+
+        // Audio
+        function initAudioContext() {
+            if (!audioContext) {
+                try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+            }
+            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+        }
+
+        function playTone(frequency, duration = 0.4) {
+            if (!audioContext) { initAudioContext(); if (!audioContext) return; }
+            if (audioContext.state !== 'running') return;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + duration + 0.05);
+        }
+
+        function switchScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            if (screen) screen.classList.add('active');
+        }
+
+        // Snowfall
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes');
+            const chars = ['❄', '❅', '❆', '✦', '•'];
+            for (let i = 0; i < 40; i++) {
+                const s = document.createElement('div');
+                s.classList.add('snowflake');
+                s.textContent = chars[Math.floor(Math.random() * chars.length)];
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.fontSize = (0.5 + Math.random() * 1) + 'rem';
+                s.style.opacity = 0.3 + Math.random() * 0.5;
+                s.style.animationDuration = (5 + Math.random() * 10) + 's';
+                s.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(s);
+            }
+        }
+
+        function highlightKey(el, data, auto = false) {
+            el.classList.add('active');
+            if (auto) el.classList.add('autoplay');
+            if (data.scaleDegreeCmaj > 0) el.classList.add(`scale-deg-${data.scaleDegreeCmaj}`);
+        }
+
+        function removeHighlightKey(el, data) {
+            el.classList.remove('active', 'autoplay');
+            if (data.scaleDegreeCmaj > 0) el.classList.remove(`scale-deg-${data.scaleDegreeCmaj}`);
+        }
+
+        function updateLiveDisplayTicker(key, note) {
+            if (liveDisplayCta.style.display !== 'none') {
+                liveDisplayCta.style.display = 'none';
+                liveDisplayRows.style.display = 'block';
+            }
+            if (key !== null) {
+                computerKeyTicker.push(key.toUpperCase());
+                if (computerKeyTicker.length > MAX_TICKER_ITEMS) computerKeyTicker.shift();
+            }
+            if (note !== null) {
+                pianoNoteTicker.push(note);
+                if (pianoNoteTicker.length > MAX_TICKER_ITEMS) pianoNoteTicker.shift();
+            }
+            computerKeyDisplay.innerHTML = computerKeyTicker.map(k => `<span>${k}</span>`).join('');
+            pianoNoteDisplay.innerHTML = pianoNoteTicker.map(n => `<span>${n}</span>`).join('');
+        }
+
+        function clearLiveDisplay() {
+            computerKeyTicker = [];
+            pianoNoteTicker = [];
+            computerKeyDisplay.innerHTML = '';
+            pianoNoteDisplay.innerHTML = '';
+            liveDisplayCta.style.display = 'flex';
+            liveDisplayRows.style.display = 'none';
+        }
+
+        function updateTickerLyric(text) {
+            tickerLyric.textContent = text || '';
+            if (text && text.trim()) {
+                currentLyricLineDisplay.textContent = text;
+                currentLyricLineDisplay.classList.add('visible');
+            } else {
+                currentLyricLineDisplay.textContent = '';
+                currentLyricLineDisplay.classList.remove('visible');
+            }
+        }
+
+        function renderPiano() {
+            pianoContainer.innerHTML = '';
+            pianoKeysData.forEach(data => {
+                const key = document.createElement('div');
+                key.classList.add('key', data.type === 'white' ? 'white-key' : 'black-key');
+                key.dataset.note = data.note;
+                const label = document.createElement('span');
+                label.classList.add('note-label');
+                label.textContent = data.label.replace(/\d/, '');
+                key.appendChild(label);
+
+                const play = () => {
+                    if (isTunePlaying && !key.classList.contains('autoplay')) return;
+                    initAudioContext();
+                    playTone(data.frequency);
+                    highlightKey(key, data);
+                    if (!isTunePlaying) updateLiveDisplayTicker(data.keybind || '👆', data.label);
+                };
+                const release = () => removeHighlightKey(key, data);
+
+                key.addEventListener('mousedown', play);
+                key.addEventListener('mouseup', release);
+                key.addEventListener('mouseleave', release);
+                key.addEventListener('touchstart', e => { e.preventDefault(); play(); }, { passive: false });
+                key.addEventListener('touchend', release);
+
+                pianoContainer.appendChild(key);
+                if (data.keybind) keyElements[data.keybind.toLowerCase()] = { element: key, ...data };
+                keyElements[data.note] = { element: key, ...data };
+            });
+        }
+
+        window.addEventListener('keydown', e => {
+            if (!screenPiano.classList.contains('active') || e.repeat) return;
+            const info = keyElements[e.key.toLowerCase()];
+            if (info && !pressedKeyboardKeys.has(e.key.toLowerCase())) {
+                initAudioContext();
+                playTone(info.frequency);
+                highlightKey(info.element, info);
+                if (!isTunePlaying) updateLiveDisplayTicker(info.keybind, info.label);
+                pressedKeyboardKeys.add(e.key.toLowerCase());
+            }
+        });
+
+        window.addEventListener('keyup', e => {
+            const info = keyElements[e.key.toLowerCase()];
+            if (info) {
+                removeHighlightKey(info.element, info);
+                pressedKeyboardKeys.delete(e.key.toLowerCase());
+            }
+        });
+
+        function showPlaybackTicker(title, lyric) {
+            tickerTitle.textContent = `🎶 ${title}`;
+            tickerLyric.textContent = lyric || '';
+            playbackTicker.classList.add('active');
+            tuneDrawerToggle.classList.add('hidden');
+            playAgainBar.classList.remove('active');
+        }
+
+        function hidePlaybackTicker() {
+            playbackTicker.classList.remove('active');
+            tuneDrawerToggle.classList.remove('hidden');
+        }
+
+        function showPlayAgainBar(title) {
+            playAgainTitle.textContent = `🎄 "${title}" finished!`;
+            playAgainBar.classList.add('active');
+            hidePlaybackTicker();
+        }
+
+        function hidePlayAgainBar() { playAgainBar.classList.remove('active'); }
+
+        async function playTuneAutomatically(shortcuts, lyrics, title) {
+            if (isTunePlaying) return;
+            isTunePlaying = true;
+            stopTuneRequested = false;
+            lastPlayedTune = { shortcuts, lyrics, title };
+            closeTuneDrawer();
+            clearLiveDisplay();
+            hidePlayAgainBar();
+
+            const lines = lyrics.split('\n');
+            currentLyricLineIndex = 0;
+            showPlaybackTicker(title, lines[0] || '');
+            document.querySelectorAll('.play-tune-button-small').forEach(b => b.disabled = true);
+
+            let i = 0;
+            while (i < shortcuts.length && !stopTuneRequested) {
+                let ch = shortcuts[i];
+                let delay = autoPlayBaseDelay;
+                if (ch !== '-') {
+                    const info = keyDataMap.get(ch.toLowerCase());
+                    if (info) {
+                        initAudioContext();
+                        playTone(info.frequency, noteInteractionDuration / 1000);
+                        const el = keyElements[info.keybind.toLowerCase()]?.element;
+                        if (el) highlightKey(el, info, true);
+                        updateLiveDisplayTicker(info.keybind, info.label);
+                        if (el) setTimeout(() => removeHighlightKey(el, info), noteInteractionDuration);
+                    }
+                }
+                i++;
+                if (i < shortcuts.length && shortcuts[i] === '-') {
+                    i++;
+                    if (i < shortcuts.length && shortcuts[i] === '-') {
+                        delay = autoPlayBaseDelay * autoPlayLongPauseMultiplier;
+                        i++;
+                        currentLyricLineIndex++;
+                        updateTickerLyric(currentLyricLineIndex < lines.length ? lines[currentLyricLineIndex] : '');
+                    }
+                }
+                await new Promise(r => setTimeout(r, delay));
+            }
+
+            isTunePlaying = false;
+            document.querySelectorAll('.play-tune-button-small').forEach(b => b.disabled = false);
+            if (!stopTuneRequested) showPlayAgainBar(title);
+            else hidePlaybackTicker();
+            clearLiveDisplay();
+        }
+
+        tickerStop.addEventListener('click', () => { stopTuneRequested = true; });
+        playAgainBtn.addEventListener('click', () => { if (lastPlayedTune) playTuneAutomatically(lastPlayedTune.shortcuts, lastPlayedTune.lyrics, lastPlayedTune.title); });
+        playAgainClose.addEventListener('click', hidePlayAgainBar);
+
+        function displayTuneDetails(id, container) {
+            const tune = christmasCarols.find(t => t.id === id);
+            if (!tune) return;
+            container.innerHTML = `
+                <h4>${tune.title}</h4>
+                <p><strong>Keys:</strong></p>
+                <p><span class="shortcuts">${tune.shortcuts}</span></p>
+                <p><strong>Lyrics:</strong></p>
+                <p>${tune.lyrics.replace(/\n/g, '<br>')}</p>
+                <p class="tip">💡 ${tune.tip}</p>
+            `;
+            selectedTuneId = id;
+            document.querySelectorAll('.tune-list-item').forEach(item => {
+                item.classList.toggle('selected', parseInt(item.dataset.tuneId) === id);
+            });
+        }
+
+        function renderTuneList() {
+            [tuneListContainer, tuneListMobile].forEach(container => {
+                container.innerHTML = '';
+                christmasCarols.forEach((tune, idx) => {
+                    const li = document.createElement('li');
+                    li.classList.add('tune-list-item');
+                    li.dataset.tuneId = tune.id;
+                    const title = document.createElement('span');
+                    title.classList.add('tune-title-in-list');
+                    title.textContent = `${idx + 1}. ${tune.title}`;
+                    const btn = document.createElement('button');
+                    btn.classList.add('play-tune-button-small');
+                    btn.innerHTML = '▶';
+                    li.addEventListener('click', () => {
+                        if (!isTunePlaying) {
+                            initAudioContext();
+                            displayTuneDetails(tune.id, container === tuneListContainer ? tuneDetailsContainer : tuneDetailsMobile);
+                            playTuneAutomatically(tune.shortcuts, tune.lyrics, tune.title);
+                        }
+                    });
+                    li.appendChild(title);
+                    li.appendChild(btn);
+                    container.appendChild(li);
+                });
+            });
+            if (christmasCarols.length > 0) {
+                displayTuneDetails(christmasCarols[0].id, tuneDetailsContainer);
+                displayTuneDetails(christmasCarols[0].id, tuneDetailsMobile);
+            }
+        }
+
+        function openTuneDrawer() {
+            tuneDrawerOverlay.style.display = 'block';
+            tuneDrawer.style.display = 'block';
+            setTimeout(() => {
+                tuneDrawerOverlay.classList.add('active');
+                tuneDrawer.classList.add('active');
+            }, 10);
+        }
+
+        function closeTuneDrawer() {
+            tuneDrawerOverlay.classList.remove('active');
+            tuneDrawer.classList.remove('active');
+            setTimeout(() => {
+                tuneDrawerOverlay.style.display = 'none';
+                tuneDrawer.style.display = 'none';
+            }, 300);
+        }
+
+        tuneDrawerToggle.addEventListener('click', () => {
+            tuneDrawer.classList.contains('active') ? closeTuneDrawer() : openTuneDrawer();
+        });
+        tuneDrawerOverlay.addEventListener('click', closeTuneDrawer);
+
+        beginPianoBtn.addEventListener('click', () => {
+            initAudioContext();
+            switchScreen(screenPiano);
+        });
+
+        createSnowflakes();
+        renderPiano();
+        switchScreen(screenWelcome);
+        renderTuneList();
+
+        // ============ CAROUSEL ============
+        const carouselTrack = document.getElementById('carouselTrack');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        const prevSlideBtn = document.getElementById('prevSlide');
+        const nextSlideBtn = document.getElementById('nextSlide');
+        let currentSlide = 0;
+        const totalSlides = 4;
+        let carouselInterval = null;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function goToSlide(index) {
+            currentSlide = (index + totalSlides) % totalSlides;
+            carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+            carouselDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        function startCarouselAutoPlay() {
+            carouselInterval = setInterval(nextSlide, 4000);
+        }
+
+        function resetCarouselAutoPlay() {
+            clearInterval(carouselInterval);
+            startCarouselAutoPlay();
+        }
+
+        prevSlideBtn.addEventListener('click', () => {
+            prevSlide();
+            resetCarouselAutoPlay();
+        });
+
+        nextSlideBtn.addEventListener('click', () => {
+            nextSlide();
+            resetCarouselAutoPlay();
+        });
+
+        carouselDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToSlide(parseInt(dot.dataset.slide));
+                resetCarouselAutoPlay();
+            });
+        });
+
+        // Touch/swipe support for carousel
+        carouselTrack.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+
+        carouselTrack.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+                resetCarouselAutoPlay();
+            }
+        }, { passive: true });
+
+        // Start auto-play
+        startCarouselAutoPlay();
+
+        ['click', 'touchstart', 'keydown'].forEach(type => {
+            document.body.addEventListener(type, function init() {
+                initAudioContext();
+                document.body.removeEventListener(type, init);
+            }, { once: true });
+        });
+
+        // ============ STAR CATCHING GAME ============
+        const starGameContainer = document.getElementById('starGameContainer');
+        const treasureChest = document.getElementById('treasureChest');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const scoreNum = document.getElementById('scoreNum');
+        
+        let gameScore = 0;
+        let starSpawnInterval = null;
+        let activeStars = [];
+
+        function playChimeSound() {
+            if (!audioContext) initAudioContext();
+            if (!audioContext || audioContext.state !== 'running') return;
+            
+            // Play a pleasant chime (C5 + E5 + G5 arpeggio)
+            const notes = [523.25, 659.25, 783.99];
+            notes.forEach((freq, i) => {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.start(audioContext.currentTime);
+                    osc.stop(audioContext.currentTime + 0.4);
+                }, i * 80);
+            });
+        }
+
+        function showPointPopup(x, y) {
+            const popup = document.createElement('div');
+            popup.classList.add('point-popup');
+            popup.textContent = '+1';
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        function addScore(starX, starY) {
+            // BONUS LESSON: SMART AUDIO FEEDBACK
+            // Don't play sounds that compete with main audio (music playing)
+            // Instead use visual feedback (glow) when audio is busy
+            // Play chime only when no tune is playing
+            
+            gameScore++;
+            scoreNum.textContent = gameScore;
+            
+            // Pop animation on score
+            scoreDisplay.classList.remove('pop');
+            void scoreDisplay.offsetWidth;
+            scoreDisplay.classList.add('pop');
+            
+            // Glow animation on chest
+            treasureChest.classList.remove('glow');
+            void treasureChest.offsetWidth;
+            treasureChest.classList.add('glow');
+            
+            // Show +1 popup
+            showPointPopup(starX, starY);
+            
+            // Play chime only if no tune is playing
+            if (!isTunePlaying) {
+                initAudioContext();
+                playChimeSound();
+            }
+        }
+
+        function isOverChest(starRect) {
+            const chestRect = treasureChest.getBoundingClientRect();
+            const starCenterX = starRect.left + starRect.width / 2;
+            const starCenterY = starRect.top + starRect.height / 2;
+            
+            // Generous hit area for kids
+            const hitPadding = 30;
+            return (
+                starCenterX >= chestRect.left - hitPadding && 
+                starCenterX <= chestRect.right + hitPadding &&
+                starCenterY >= chestRect.top - hitPadding && 
+                starCenterY <= chestRect.bottom + hitPadding
+            );
+        }
+
+        function createCatchableStar() {
+            if (!screenPiano.classList.contains('active')) return;
+            
+            const star = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            star.classList.add('catchable-star');
+            star.setAttribute('viewBox', '0 0 40 40');
+            star.innerHTML = `
+                <polygon points="20,2 25,15 38,15 27,23 31,36 20,28 9,36 13,23 2,15 15,15" fill="#FFD700"/>
+                <polygon points="20,8 23,15 30,15 25,20 27,28 20,24 13,28 15,20 10,15 17,15" fill="#FFF8DC"/>
+            `;
+            
+            // Random horizontal position
+            const startX = 60 + Math.random() * (window.innerWidth - 120);
+            star.style.left = startX + 'px';
+            star.style.top = '-50px';
+            
+            const fallDuration = 8 + Math.random() * 4;
+            star.style.animationDuration = `${fallDuration}s, 0.5s`;
+            
+            let isDragging = false;
+            let currentX = startX;
+            let currentY = -50;
+
+            function startDrag(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDragging = true;
+                star.classList.add('dragging');
+                star.style.animation = 'none';
+                
+                const touch = e.touches ? e.touches[0] : e;
+                const rect = star.getBoundingClientRect();
+                currentX = rect.left;
+                currentY = rect.top;
+                
+                // Switch to fixed positioning so star can go anywhere on screen
+                star.style.position = 'fixed';
+                star.style.left = currentX + 'px';
+                star.style.top = currentY + 'px';
+                
+                star._offsetX = touch.clientX - rect.left;
+                star._offsetY = touch.clientY - rect.top;
+            }
+
+            function moveDrag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                
+                const touch = e.touches ? e.touches[0] : e;
+                currentX = touch.clientX - star._offsetX;
+                currentY = touch.clientY - star._offsetY;
+                
+                star.style.left = currentX + 'px';
+                star.style.top = currentY + 'px';
+            }
+
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                star.classList.remove('dragging');
+                
+                const starRect = star.getBoundingClientRect();
+                
+                if (isOverChest(starRect)) {
+                    // Success! Star caught!
+                    const centerX = starRect.left + starRect.width / 2;
+                    const centerY = starRect.top;
+                    addScore(centerX, centerY);
+                    star.remove();
+                    activeStars = activeStars.filter(s => s !== star);
+                } else {
+                    // Missed - fade out
+                    star.style.transition = 'opacity 0.5s';
+                    star.style.opacity = '0';
+                    setTimeout(() => {
+                        star.remove();
+                        activeStars = activeStars.filter(s => s !== star);
+                    }, 500);
+                }
+                
+                // Clean up listeners
+                window.removeEventListener('mousemove', moveDrag);
+                window.removeEventListener('mouseup', endDrag);
+                window.removeEventListener('touchmove', moveDrag);
+                window.removeEventListener('touchend', endDrag);
+            }
+
+            // Mouse events
+            star.addEventListener('mousedown', (e) => {
+                startDrag(e);
+                window.addEventListener('mousemove', moveDrag);
+                window.addEventListener('mouseup', endDrag);
+            });
+
+            // Touch events
+            star.addEventListener('touchstart', (e) => {
+                startDrag(e);
+                window.addEventListener('touchmove', moveDrag, { passive: false });
+                window.addEventListener('touchend', endDrag);
+            }, { passive: false });
+
+            starGameContainer.appendChild(star);
+            activeStars.push(star);
+
+            // Remove star after it falls off screen
+            setTimeout(() => {
+                if (star.parentNode && !isDragging) {
+                    star.remove();
+                    activeStars = activeStars.filter(s => s !== star);
+                }
+            }, fallDuration * 1000 + 500);
+        }
+
+        function startStarGame() {
+            // Star spawns every 3 seconds - balance between:
+            // - Too fast: overwhelming for kids
+            // - Too slow: boring/forgettable
+            // First star appears after 500ms to teach the mechanic early
+            if (starSpawnInterval) return;
+            starSpawnInterval = setInterval(createCatchableStar, 3000);
+            setTimeout(createCatchableStar, 500);
+        }
+
+        function stopStarGame() {
+            if (starSpawnInterval) {
+                clearInterval(starSpawnInterval);
+                starSpawnInterval = null;
+            }
+            // Remove all active stars
+            activeStars.forEach(star => star.remove());
+            activeStars = [];
+        }
+
+        // Start game when piano screen is shown
+        const originalSwitchScreen = switchScreen;
+        switchScreen = function(screen) {
+            originalSwitchScreen(screen);
+            if (screen === screenPiano) {
+                startStarGame();
+            } else {
+                stopStarGame();
+            }
+        };
+
+        /*
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+        ║                    LESSONS LEARNED - QUICK REFERENCE                       ║
+        ╠═══════════════════════════════════════════════════════════════════════════╣
+        ║ 1. MOBILE-FIRST: Plan layouts separately, don't force desktop on mobile   ║
+        ║ 2. Z-INDEX PLAN: Define layer hierarchy upfront (1→9999)                  ║
+        ║ 3. DECORATIONS: Mobile=center, Desktop=edges, humans see top first        ║
+        ║ 4. DRAGGABLES: position:fixed + z-index:9999 + generous hit detection     ║
+        ║ 5. RELATED UI: Keep connected elements together (chest + score)           ║
+        ║ 6. ONBOARDING: Carousel with animated icons, show don't tell              ║
+        ╠═══════════════════════════════════════════════════════════════════════════╣
+        ║ Copyright © 2025 Pawan Nayar for Beyond Dictionary                        ║
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+        */
+    </script>
+</body>
+</html>
