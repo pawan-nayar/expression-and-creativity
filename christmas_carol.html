@@ -972,20 +972,21 @@
         }
 
         .catchable-star.dragging {
-            /* 
+            /*
                LESSON 4: DRAGGABLE ELEMENTS NEED FREEDOM
                ══════════════════════════════════════════
                When dragging, element must:
                1. Switch to position: fixed (not absolute)
                2. Have z-index: 9999 (above ALL other elements)
                3. Have generous hit detection on drop target (+30px padding)
-               
+
                Without this, elements get "stuck" behind UI components
                and can't reach their destination (e.g., treasure chest).
+
+               NOTE: Scale is applied via JavaScript to avoid offset issues.
             */
-            animation: star-twinkle 0.3s ease-in-out infinite;
+            animation: star-twinkle 0.3s ease-in-out infinite !important;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
-            transform: scale(1.2);
             z-index: 9999;
         }
 
@@ -2119,31 +2120,41 @@
                 e.preventDefault();
                 e.stopPropagation();
                 isDragging = true;
-                star.classList.add('dragging');
-                star.style.animation = 'none';
-                
+
                 const touch = e.touches ? e.touches[0] : e;
+
+                // Get the star's VISUAL position BEFORE stopping animation
                 const rect = star.getBoundingClientRect();
-                currentX = rect.left;
-                currentY = rect.top;
-                
-                // Switch to fixed positioning so star can go anywhere on screen
+
+                // Stop the animation AFTER getting position
+                star.style.animation = 'none';
+                star.classList.add('dragging');
+
+                // Switch to fixed positioning with no transform
                 star.style.position = 'fixed';
+                star.style.transform = 'none';
+
+                // Center the star on the touch/cursor point for intuitive dragging
+                const halfWidth = 20;  // Star is 40px wide
+                const halfHeight = 20; // Star is 40px tall
+                currentX = touch.clientX - halfWidth;
+                currentY = touch.clientY - halfHeight;
+
                 star.style.left = currentX + 'px';
                 star.style.top = currentY + 'px';
-                
-                star._offsetX = touch.clientX - rect.left;
-                star._offsetY = touch.clientY - rect.top;
             }
 
             function moveDrag(e) {
                 if (!isDragging) return;
                 e.preventDefault();
-                
+
                 const touch = e.touches ? e.touches[0] : e;
-                currentX = touch.clientX - star._offsetX;
-                currentY = touch.clientY - star._offsetY;
-                
+                // Center the star on the touch/cursor point
+                const halfWidth = 20;
+                const halfHeight = 20;
+                currentX = touch.clientX - halfWidth;
+                currentY = touch.clientY - halfHeight;
+
                 star.style.left = currentX + 'px';
                 star.style.top = currentY + 'px';
             }
