@@ -711,6 +711,7 @@
             min-height: 100px;
             overflow-x: auto;
             overflow-y: hidden;
+            scroll-behavior: smooth;
         }
         
         /* Simple two-row layout */
@@ -736,6 +737,7 @@
             align-items: center;
             flex-wrap: nowrap;
             overflow-x: auto;
+            scroll-behavior: smooth;
         }
         .note-item {
             display: inline-block;
@@ -2353,8 +2355,25 @@
             // Move to next reference note index
             currentReferenceNoteIndex++;
             
-            // Auto-scroll both rows together
-            musicStaff.scrollLeft = musicStaff.scrollWidth - musicStaff.clientWidth;
+            // Smooth auto-scroll to keep current note visible - matches playing speed
+            setTimeout(() => {
+                // Scroll to show the newly added note smoothly
+                // Use scrollWidth to calculate the end position
+                const scrollWidth = userRowContent.scrollWidth;
+                const clientWidth = musicStaff.clientWidth;
+                const currentScroll = musicStaff.scrollLeft;
+                
+                // Target: show the new note with 60px padding on right
+                const targetScroll = scrollWidth - clientWidth + 60;
+                
+                // Only scroll if we need to (note is beyond visible area)
+                if (targetScroll > currentScroll) {
+                    musicStaff.scrollTo({
+                        left: targetScroll,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 50); // Small delay to ensure DOM is updated and scrollWidth is accurate
         }
 
         function updateTickerLyric(text) {
