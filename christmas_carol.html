@@ -1562,25 +1562,32 @@
                 transform: scale(1.1);
             }
             
-            /* Show tune drawer as overlay in landscape */
+            /* Show tune drawer as overlay in landscape - hidden by default */
             .tune-drawer {
-                display: block !important;
+                display: none !important; /* Hidden by default */
                 position: fixed;
                 top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%) scale(0.9);
                 max-width: 85vw;
                 max-height: 70vh;
                 z-index: 2000;
                 box-shadow: 0 10px 40px rgba(0,0,0,0.5);
                 border-radius: 16px;
-            }
-            .tune-drawer-overlay {
-                display: block !important;
-                z-index: 1999;
+                opacity: 0;
+                transition: opacity 0.3s ease, transform 0.3s ease;
             }
             .tune-drawer.active {
-                transform: translate(-50%, -50%);
+                display: block !important; /* Show when active */
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            .tune-drawer-overlay {
+                display: none !important; /* Hidden by default */
+                z-index: 1999;
+            }
+            .tune-drawer-overlay.active {
+                display: block !important; /* Show when drawer is active */
             }
             .tune-list {
                 max-height: calc(3 * 60px); /* 3 rows visible */
@@ -2613,21 +2620,34 @@
         }
 
         function openTuneDrawer() {
-            tuneDrawerOverlay.style.display = 'block';
-            tuneDrawer.style.display = 'block';
-            setTimeout(() => {
+            // In landscape mode, CSS handles display via active class
+            if (isLandscapeMode()) {
                 tuneDrawerOverlay.classList.add('active');
                 tuneDrawer.classList.add('active');
-            }, 10);
+            } else {
+                // Regular mobile mode
+                tuneDrawerOverlay.style.display = 'block';
+                tuneDrawer.style.display = 'block';
+                setTimeout(() => {
+                    tuneDrawerOverlay.classList.add('active');
+                    tuneDrawer.classList.add('active');
+                }, 10);
+            }
         }
 
         function closeTuneDrawer() {
             tuneDrawerOverlay.classList.remove('active');
             tuneDrawer.classList.remove('active');
-            setTimeout(() => {
-                tuneDrawerOverlay.style.display = 'none';
-                tuneDrawer.style.display = 'none';
-            }, 300);
+            if (isLandscapeMode()) {
+                // In landscape, CSS handles hiding via active class removal
+                // No need for setTimeout since CSS transition handles it
+            } else {
+                // Regular mobile mode
+                setTimeout(() => {
+                    tuneDrawerOverlay.style.display = 'none';
+                    tuneDrawer.style.display = 'none';
+                }, 300);
+            }
         }
 
         tuneDrawerToggle.addEventListener('click', () => {
