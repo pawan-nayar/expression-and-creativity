@@ -502,6 +502,19 @@
             justify-content: flex-start;
         }
 
+        /* Mobile: Add breathing room at top so piano doesn't feel cramped */
+        @media (max-width: 768px) {
+            #screen-piano {
+                padding-top: max(2vh, 12px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #screen-piano {
+                padding-top: max(3vh, 15px);
+            }
+        }
+
         .piano-header {
             width: 100%;
             text-align: center;
@@ -1001,7 +1014,12 @@
             50% { filter: drop-shadow(0 0 15px rgba(255, 255, 100, 1)); }
         }
 
-        /* Treasure Chest */
+        /* Treasure Chest
+           DEDICATED ZONES LAYOUT:
+           - Desktop: Bottom-left corner (plenty of space)
+           - Mobile: Bottom-left, but above playback ticker zone
+           - During playback: Slides up to stay visible above ticker
+        */
         .treasure-chest {
             position: fixed;
             bottom: 15px;
@@ -1010,7 +1028,7 @@
             height: 60px;
             z-index: 502;
             cursor: pointer;
-            transition: transform 0.2s, filter 0.2s;
+            transition: transform 0.3s ease, filter 0.2s, bottom 0.3s ease, left 0.3s ease;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
 
@@ -1020,6 +1038,11 @@
 
         .treasure-chest.glow {
             animation: chest-glow 0.5s ease-out;
+        }
+
+        /* During playback: Move chest above the ticker bar */
+        .treasure-chest.playback-mode {
+            bottom: 85px;
         }
 
         @keyframes chest-glow {
@@ -1067,8 +1090,8 @@
             100% { transform: scale(1); }
         }
 
-        /* Mobile: Move score near treasure chest 
-        
+        /* Mobile: Move score near treasure chest
+
            LESSON 5: KEEP RELATED UI ELEMENTS TOGETHER
            ════════════════════════════════════════════
            Desktop: Score in top-right is fine (plenty of space)
@@ -1076,27 +1099,35 @@
            - Stars go INTO chest → Score shows BESIDE it
            - Logical visual connection (action → result)
            - Frees up header area for clean title
-           
+
            Don't blindly keep desktop positions on mobile.
            Ask: "What makes sense spatially on this screen?"
         */
         @media (max-width: 900px) {
             .score-display {
                 top: auto;
-                bottom: 15px;
+                bottom: 20px;
                 left: 90px;
                 right: auto;
                 padding: 6px 12px;
                 font-size: 0.9rem;
+                transition: all 0.3s ease;
+            }
+            /* During playback: move score up with chest */
+            .score-display.playback-mode {
+                bottom: 95px;
             }
         }
 
         @media (max-width: 768px) {
             .score-display {
-                bottom: 80px;
+                bottom: 22px;
                 left: 70px;
                 padding: 5px 10px;
                 font-size: 0.85rem;
+            }
+            .score-display.playback-mode {
+                bottom: 92px;
             }
             .score-display .star-icon {
                 font-size: 1rem;
@@ -1105,11 +1136,14 @@
 
         @media (max-width: 480px) {
             .score-display {
-                bottom: 85px;
+                bottom: 20px;
                 left: 60px;
                 padding: 4px 8px;
                 font-size: 0.75rem;
                 gap: 5px;
+            }
+            .score-display.playback-mode {
+                bottom: 88px;
             }
             .score-display .star-icon {
                 font-size: 0.9rem;
@@ -1140,8 +1174,12 @@
             .treasure-chest {
                 width: 55px;
                 height: 48px;
-                bottom: 80px;
+                bottom: 20px;
                 left: 10px;
+            }
+            /* During playback on mobile: move chest above ticker */
+            .treasure-chest.playback-mode {
+                bottom: 90px;
             }
             .catchable-star {
                 width: 35px;
@@ -1153,8 +1191,11 @@
             .treasure-chest {
                 width: 48px;
                 height: 42px;
-                bottom: 85px;
+                bottom: 18px;
                 left: 8px;
+            }
+            .treasure-chest.playback-mode {
+                bottom: 85px;
             }
             .catchable-star {
                 width: 30px;
@@ -1780,11 +1821,17 @@
             playbackTicker.classList.add('active');
             tuneDrawerToggle.classList.add('hidden');
             playAgainBar.classList.remove('active');
+            // Move game elements (chest + score) above ticker
+            treasureChest.classList.add('playback-mode');
+            scoreDisplay.classList.add('playback-mode');
         }
 
         function hidePlaybackTicker() {
             playbackTicker.classList.remove('active');
             tuneDrawerToggle.classList.remove('hidden');
+            // Return game elements to normal position
+            treasureChest.classList.remove('playback-mode');
+            scoreDisplay.classList.remove('playback-mode');
         }
 
         function showPlayAgainBar(title) {
