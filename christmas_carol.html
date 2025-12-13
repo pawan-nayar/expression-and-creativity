@@ -1490,18 +1490,12 @@
                 padding: 2px 5px;
             }
             
-            /* Smaller treasure chest and score */
+            /* Hide treasure chest and score in landscape (no star game) */
             .treasure-chest {
-                width: 40px;
-                height: 35px;
-                bottom: 5px;
-                left: 5px;
+                display: none !important;
             }
             .score-display {
-                bottom: 5px;
-                left: 50px;
-                padding: 4px 8px;
-                font-size: 0.75rem;
+                display: none !important;
             }
             
             /* Tiny copyright */
@@ -1590,10 +1584,10 @@
                 display: block !important; /* Show when drawer is active */
             }
             .tune-list {
-                max-height: calc(3 * 60px); /* 3 rows visible */
+                max-height: calc(4 * 60px); /* 4 rows visible */
             }
             #tuneListMobile {
-                max-height: calc(3 * 60px) !important; /* 3 rows visible in landscape */
+                max-height: calc(4 * 60px) !important; /* 4 rows visible in landscape */
             }
             
             .landscape-overlay-backdrop {
